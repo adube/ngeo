@@ -31,6 +31,7 @@ goog.require('ngeo');
  *
  * @return {angular.Directive} The directive specs.
  * @ngInject
+ * @ngdoc directive
  */
 ngeo.btngroupDirective = function() {
   return {

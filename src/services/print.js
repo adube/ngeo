@@ -27,6 +27,7 @@ goog.require('ol.tilegrid.WMTS');
 
 /**
  * @typedef {function(string):!ngeo.Print}
+ * @ngdoc service
  */
 ngeo.CreatePrint;
 

@@ -7,6 +7,7 @@ goog.require('ngeo.popupDirective');
 
 /**
  * @typedef {function():!ngeo.Popup}
+ * @ngdoc service
  */
 ngeo.CreatePopup;
 

@@ -18,6 +18,7 @@ goog.require('ol.style.StyleFunction');
  *  styleFunction: ol.style.StyleFunction,
  *  features: Object.<string, ol.Feature>
  * }}
+ * @ngdoc service
  */
 ngeo.FeatureOverlayGroup;
 

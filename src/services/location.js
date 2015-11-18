@@ -8,6 +8,7 @@ goog.require('ngeo');
 
 /**
  * @typedef {function(angular.$locationProvider)}
+ * @ngdoc service
  */
 ngeo.MockLocationProvider;
 

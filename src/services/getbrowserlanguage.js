@@ -11,6 +11,7 @@ goog.require('ngeo');
  * `ngeo/externs/closure-compiler.js` has to be included.
  *
  * @typedef {function(Array.<string>):string}
+ * @ngdoc service
  */
 ngeo.GetBrowserLanguage;
 

@@ -26,6 +26,7 @@ goog.require('ngeo');
  *
  * @typedef {function(Array, Array, boolean, angular.Scope,
  *     function(?):boolean)}
+ * @ngdoc service
  */
 ngeo.SyncArrays;
 

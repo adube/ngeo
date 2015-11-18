@@ -15,6 +15,7 @@ goog.require('ngeo');
  *
  * @return {angular.Directive} Directive Definition Object.
  * @ngInject
+ * @ngdoc directive
  */
 ngeo.searchDirective = function() {
   return {

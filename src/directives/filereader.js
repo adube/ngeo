@@ -17,6 +17,7 @@ goog.require('ngeo');
  * @param {angular.$window} $window The Angular $window service.
  * @return {angular.Directive} Directive Definition Object.
  * @ngInject
+ * @ngdoc directive
  */
 ngeo.filereaderDirective = function($window) {
   return {
