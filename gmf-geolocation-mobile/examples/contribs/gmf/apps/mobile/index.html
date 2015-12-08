@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" href="../../build/mobile.css" type="text/css">
+    <link rel="stylesheet/less" href="less/mobile.less" type="text/css">
     <style>
     #desc {
       display: none;
@@ -30,12 +30,12 @@
         ng-click="mainCtrl.toggleRightNavVisibility()">
       </button>
       <div class="overlay" ng-click="mainCtrl.hideNav()"></div>
-      <gmf-mobile-geolocation
-        gmf-mobile-geolocation-map="::mainCtrl.map"
-        gmf-mobile-geolocation-options="::mainCtrl.mobileGeolocationOptions">
-      </gmf-mobile-geolocation>
+      <button class="ngeo-mobile-geolocation" ngeo-mobile-geolocation="::"
+        ngeo-mobile-geolocation-map="::mainCtrl.map"
+        ngeo-mobile-geolocation-options="::mainCtrl.mobileGeolocationOptions">
+      </button>
     </main>
-    <nav class="nav-left" gmf-nav>
+    <nav class="nav-left" gmf-mobile-nav>
       <header>
         <a class="go-back" href="#"></a>
       </header>
@@ -71,7 +71,7 @@
         <span>Themes</span>
       </div>
     </nav>
-    <nav class="nav-right" gmf-nav>
+    <nav class="nav-right" gmf-mobile-nav>
       <header>
         <a class="go-back" href="#"></a>
       </header>

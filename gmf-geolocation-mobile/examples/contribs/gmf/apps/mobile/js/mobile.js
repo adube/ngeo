@@ -12,17 +12,20 @@ goog.provide('app_mobile');
 
 goog.require('app');
 goog.require('gmf.mapDirective');
-goog.require('gmf.mobileGeolocationDirective');
 goog.require('gmf.mobileNavDirective');
 goog.require('gmf.proj.EPSG21781');
 goog.require('gmf.searchDirective');
 goog.require('ngeo.FeatureOverlayMgr');
+goog.require('ngeo.mobileGeolocationDirective');
 goog.require('ol.Map');
 goog.require('ol.View');
 goog.require('ol.control.ScaleLine');
 goog.require('ol.control.Zoom');
 goog.require('ol.layer.Tile');
 goog.require('ol.source.OSM');
+
+
+gmfModule.constant('isMobile', true);
 
 
 
@@ -75,7 +78,7 @@ app.MobileController = function(ngeoFeatureOverlayMgr, serverVars) {
   });
 
   /**
-   * @type {gmfx.MobileGeolocationDirectiveOptions}
+   * @type {ngeox.MobileGeolocationDirectiveOptions}
    * @export
    */
   this.mobileGeolocationOptions = {
@@ -164,4 +167,4 @@ app.MobileController.prototype.rightNavIsVisible = function() {
 };
 
 
-app.module.controller('MobileController', app.MobileController);
+appModule.controller('MobileController', app.MobileController);
