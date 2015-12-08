@@ -62,13 +62,13 @@
   top: .5em;
   right: .5em;
   -webkit-transition: opacity .25s linear, visibility 0s linear;
-          transition: opacity .25s linear, visibility 0s linear;
+  transition: opacity .25s linear, visibility 0s linear;
 }
 .ol-rotate.ol-hidden {
   opacity: 0;
   visibility: hidden;
   -webkit-transition: opacity .25s linear, visibility 0s linear .25s;
-          transition: opacity .25s linear, visibility 0s linear .25s;
+  transition: opacity .25s linear, visibility 0s linear .25s;
 }
 .ol-zoom-extent {
   top: 4.643em;
@@ -6159,7 +6159,9 @@ button.close {
   -ms-transform: translate(0, -25%);
   transform: translate(0, -25%);
   -webkit-transition: -webkit-transform 0.3s ease-out;
+  transition: -webkit-transform 0.3s ease-out;
   transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
 }
 .modal.in .modal-dialog {
   -webkit-transform: translate(0, 0);
@@ -6522,7 +6524,9 @@ button.close {
 @media all and (transform-3d), (-webkit-transform-3d) {
   .carousel-inner > .item {
     -webkit-transition: -webkit-transform 0.6s ease-in-out;
+    transition: -webkit-transform 0.6s ease-in-out;
     transition: transform 0.6s ease-in-out;
+    transition: transform 0.6s ease-in-out, -webkit-transform 0.6s ease-in-out;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -webkit-perspective: 1000px;
@@ -7018,8 +7022,8 @@ a {
 }
 @font-face {
   font-family: "gmf-icons";
-  src: url("../webfonts/gmf-icons.eot");
-  src: url("../webfonts/gmf-icons.eot?#iefix") format("embedded-opentype"), url("../webfonts/gmf-icons.woff") format("woff"), url("../webfonts/gmf-icons.ttf") format("truetype"), url("../webfonts/gmf-icons.svg#gmf-icons") format("svg");
+  src: url("../fonts/gmf-icons.eot");
+  src: url("../fonts/gmf-icons.eot?#iefix") format("embedded-opentype"), url("../fonts/gmf-icons.woff") format("woff"), url("../fonts/gmf-icons.ttf") format("truetype"), url("../fonts/gmf-icons.svg#gmf-icons") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -7039,10 +7043,9 @@ main button:before {
   font-family: gmf-icons;
   color: black;
   font-size: 29px;
-  margin-left: 4px;
+  line-height: 0.5em;
 }
 main button:hover {
-  background-color: #808080;
   cursor: pointer;
 }
 gmf-map {
@@ -7071,7 +7074,7 @@ gmf-map > div {
   color: black;
 }
 .ol-zoom button:hover {
-  background-color: #808080;
+  background-color: white;
 }
 .ol-zoom:hover {
   background-color: transparent;
@@ -7105,6 +7108,25 @@ gmf-map > div {
   border-width: 0 1px;
   border-radius: 0;
 }
+.search .clear-button {
+  position: absolute;
+  top: 13px;
+  left: 0;
+  right: 0;
+  margin: -6px auto 0 158px;
+  width: 1.5em;
+}
+.search .clear-button:after {
+  content: 'e';
+  color: grey;
+  font-family: gmf-icons;
+  font-size: 1.5em;
+  font-weight: bold;
+  line-height: 0.5em;
+}
+.search .clear-button:hover {
+  cursor: pointer;
+}
 .nav-trigger {
   top: 13px;
   margin-top: 2px;
@@ -7113,21 +7135,34 @@ gmf-map > div {
   z-index: 3;
 }
 .nav-left-trigger {
-  margin-left: -102px;
+  margin-left: -104px;
 }
 .nav-left-trigger:after {
   content: 'a';
 }
 .nav-right-trigger {
-  margin-left: 77px;
+  margin-left: 76px;
 }
 .nav-right-trigger:after {
   content: 'd';
 }
+gmf-mobile-geolocation {
+  right: 13px;
+  top: 135px;
+}
+gmf-mobile-geolocation button:after {
+  content: 'b';
+}
 @media (min-width: 768px) {
+  main button:hover {
+    background-color: #cccccc;
+  }
   .ol-zoom {
     top: auto;
     bottom: 36px;
+  }
+  .ol-zoom button:hover {
+    background-color: #cccccc;
   }
   .search {
     left: 55px;
@@ -7147,7 +7182,11 @@ gmf-map > div {
     font-family: gmf-icons;
     color: grey;
     font-size: 1.5em;
+    line-height: 0.6em;
     width: 0.5em;
+  }
+  .search .clear-button {
+    margin: -8px auto 0 170px;
   }
   .nav-trigger {
     top: 13px;
@@ -7162,6 +7201,13 @@ gmf-map > div {
     left: auto;
     right: 13px;
   }
+  gmf-mobile-geolocation {
+    bottom: 12px;
+    top: auto;
+  }
+  gmf-mobile-geolocation button:after {
+    content: 'b';
+  }
 }
 main {
   position: relative;
@@ -7173,7 +7219,9 @@ main {
   -webkit-transform: translateZ(0);
           transform: translateZ(0);
   -webkit-transition: -webkit-transform 0.3s;
-          transition: transform 0.3s;
+  transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  transition: transform 0.3s, -webkit-transform 0.3s;
   will-change: transform;
 }
 .nav-left-is-visible main {
@@ -7220,7 +7268,8 @@ nav.nav-right {
   width: 260px;
   height: 100%;
   background-color: white;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 1;
 }
@@ -7237,7 +7286,7 @@ nav.nav-right header .go-back {
   left: 0;
   z-index: 2;
   -webkit-transition: opacity 1s;
-          transition: opacity 1s;
+  transition: opacity 1s;
   will-change: opacity, visibility;
   opacity: 0;
   visibility: hidden;
@@ -7266,8 +7315,10 @@ nav.nav-right header > nav {
   -webkit-transform: translateX(0);
       -ms-transform: translateX(0);
           transform: translateX(0);
-  -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
-          transition: transform 0.3s, opacity 0.3s;
+  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
   will-change: transform, opacity;
   opacity: 0;
   text-align: center;
@@ -7374,8 +7425,10 @@ nav.nav-right .slide {
   -webkit-transform: translateX(100%);
       -ms-transform: translateX(100%);
           transform: translateX(100%);
-  -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
-          transition: transform 0.3s, opacity 0.3s;
+  -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: opacity 0.3s, -webkit-transform 0.3s;
+  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.3s, opacity 0.3s, -webkit-transform 0.3s;
   will-change: transform, opacity;
   opacity: 0;
 }
@@ -7399,4 +7452,45 @@ nav.nav-right .slide.slide-out {
 }
 .nav-right {
   right: 0;
+}
+.tt-menu {
+  position: fixed!important;
+  left: 0;
+  right: 0;
+  top: 48px!important;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100vw;
+  background-color: white;
+  border: solid 1px black;
+}
+.tt-menu .search-header {
+  display: none;
+}
+.tt-menu .search-datum {
+  border-bottom: solid 1px black;
+  margin: 0;
+  padding: 10px 13px;
+  text-align: left;
+}
+.tt-menu .search-datum:hover {
+  cursor: pointer;
+  background-color: #cccccc;
+}
+.tt-menu .search-datum p {
+  margin: 0;
+}
+.tt-menu .search-datum .search-label {
+  color: black;
+}
+.tt-menu .search-datum .search-group {
+  color: #808080;
+  font-size: 0.8em;
+}
+@media (min-width: 768px) {
+  .tt-menu {
+    top: 43px!important;
+    width: 33vw;
+  }
 }
