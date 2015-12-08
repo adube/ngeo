@@ -122502,7 +122502,9 @@ ngeoModule.directive('ngeoMobileGeolocation', ngeo.mobileGeolocationDirective);
 ngeo.MobileGeolocationController = function($scope, $element,
     ngeoDecorateGeolocation, ngeoFeatureOverlayMgr) {
 
+  console.log(1);
   $element.on('click', goog.bind(this.toggleTracking, this));
+  console.log(2);
 
   var map = $scope['getMobileMapFn']();
   goog.asserts.assertInstanceof(map, ol.Map);
@@ -122583,6 +122585,8 @@ ngeo.MobileGeolocationController = function($scope, $element,
  * @export
  */
 ngeo.MobileGeolocationController.prototype.toggleTracking = function() {
+  console.log(3);
+
   if (this.geolocation_.getTracking()) {
     // if map center is different than geolocation position, then track again
     var currentPosition = this.geolocation_.getPosition();
