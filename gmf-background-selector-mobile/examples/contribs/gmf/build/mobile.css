@@ -7182,7 +7182,7 @@ button[ngeo-mobile-geolocation] button:after {
   height: 60px;
   width: 60px;
 }
-.gmf-mobile-background-layer-selector .gmf-spacer {
+.gmf-mobile-background-layer-selector .gmf-eol {
   clear: left;
 }
 @media (min-width: 768px) {
