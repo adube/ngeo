@@ -11,8 +11,8 @@ app.module = angular.module('app', ['gmf']);
 
 app.module.constant(
     'authenticationBaseUrl',
-    //'http://geomapfish-demo.camptocamp.net/2.0/wsgi');
-    'wsgi-local');
+    //'wsgi-local');
+    'https://geomapfish-demo.camptocamp.net/2.0/wsgi');
 
 
 
