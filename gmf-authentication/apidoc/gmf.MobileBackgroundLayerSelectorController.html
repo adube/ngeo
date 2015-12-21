@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MapController <small>controller:GmfMapController</small></title>
+    <title>JSDoc: Class: MobileBackgroundLayerSelectorController <small>controller:GmfMobileBackgroundLayerSelectorController</small></title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MapController <small>controller:GmfMapController</small></h1>
+    <h1 class="page-title">Class: MobileBackgroundLayerSelectorController <small>controller:GmfMobileBackgroundLayerSelectorController</small></h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2 id="MapController">
-            <span class="ancestors">gmf.</span>MapController
+        <h2 id="MobileBackgroundLayerSelectorController">
+            <span class="ancestors">gmf.</span>MobileBackgroundLayerSelectorController
         </h2>
         
     
@@ -42,7 +42,7 @@
 
     
 
-    <h4 class="name" id="MapController"><span class="type-signature"></span>new MapController<span class="signature">($scope, ngeoLocation, ngeoDebounce)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="MobileBackgroundLayerSelectorController"><span class="type-signature"></span>new MobileBackgroundLayerSelectorController<span class="signature">($scope, ngeoBackgroundLayerMgr, gmfThemes)</span><span class="type-signature"></span></h4>
 
     
 
@@ -104,13 +104,13 @@
 
         <tr>
             
-                <td class="name"><code>ngeoLocation</code></td>
+                <td class="name"><code>ngeoBackgroundLayerMgr</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="ngeo.Location.html">ngeo.Location</a></span>
+<span class="param-type"><a href="ngeo.BackgroundLayerMgr.html">ngeo.BackgroundLayerMgr</a></span>
 
 
             
@@ -120,20 +120,21 @@
 
             
 
-            <td class="description last"><p>ngeo Location service.</p></td>
+            <td class="description last"><p>Background layer
+    manager.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>ngeoDebounce</code></td>
+                <td class="name"><code>gmfThemes</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="ngeo.Debounce.html">ngeo.Debounce</a></span>
+<span class="param-type"><a href="gmf.Themes.html">gmf.Themes</a></span>
 
 
             
@@ -143,7 +144,7 @@
 
             
 
-            <td class="description last"><p>ngeo Debounce service.</p></td>
+            <td class="description last"><p>Themes service.</p></td>
         </tr>
 
     
@@ -184,7 +185,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="contribs_gmf_src_directives_map.js.html">contribs/gmf/src/directives/map.js</a>, <a href="contribs_gmf_src_directives_map.js.html#line47">line 47</a>
+        <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html">contribs/gmf/src/directives/mobilebackgroundlayerselector.js</a>, <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -228,7 +229,7 @@
 
         
             
-<h4 class="name" id="map"><span class="type-signature">(non-null) </span>map<span class="type-signature"> :<a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span></h4>
+<h4 class="name" id="bgLayer"><span class="type-signature"></span>bgLayer<span class="type-signature"> :<a href="http://openlayers.org/en/master/apidoc/ol.layer.Base.html">ol.layer.Base</a></span></h4>
 
 
 
@@ -239,7 +240,7 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span>
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Base.html">ol.layer.Base</a></span>
 
 
         </li>
@@ -278,7 +279,75 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="contribs_gmf_src_directives_map.js.html">contribs/gmf/src/directives/map.js</a>, <a href="contribs_gmf_src_directives_map.js.html#line56">line 56</a>
+        <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html">contribs/gmf/src/directives/mobilebackgroundlayerselector.js</a>, <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html#line85">line 85</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="bgLayers"><span class="type-signature"></span>bgLayers<span class="type-signature"> :Array.&lt;<a href="http://openlayers.org/en/master/apidoc/ol.layer.Base.html">ol.layer.Base</a>></span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;<a href="http://openlayers.org/en/master/apidoc/ol.layer.Base.html">ol.layer.Base</a>></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html">contribs/gmf/src/directives/mobilebackgroundlayerselector.js</a>, <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html#line91">line 91</a>
     </li></ul></dd>
     
 
@@ -297,6 +366,137 @@
         
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="setLayer"><span class="type-signature"></span>setLayer<span class="signature">(layer)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>layer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Base.html">ol.layer.Base</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Layer.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html">contribs/gmf/src/directives/mobilebackgroundlayerselector.js</a>, <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html#line125">line 125</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     

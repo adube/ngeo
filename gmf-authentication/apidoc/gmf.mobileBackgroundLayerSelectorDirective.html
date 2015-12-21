@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MapController <small>controller:GmfMapController</small></title>
+    <title>JSDoc: Class: mobileBackgroundLayerSelectorDirective <small>directive:gmfMobileBackgroundLayerSelector</small></title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MapController <small>controller:GmfMapController</small></h1>
+    <h1 class="page-title">Class: mobileBackgroundLayerSelectorDirective <small>directive:gmfMobileBackgroundLayerSelector</small></h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2 id="MapController">
-            <span class="ancestors">gmf.</span>MapController
+        <h2 id="mobileBackgroundLayerSelectorDirective">
+            <span class="ancestors">gmf.</span>mobileBackgroundLayerSelectorDirective
         </h2>
         
     
@@ -42,11 +42,15 @@
 
     
 
-    <h4 class="name" id="MapController"><span class="type-signature"></span>new MapController<span class="signature">($scope, ngeoLocation, ngeoDebounce)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="mobileBackgroundLayerSelectorDirective"><span class="type-signature"></span>new mobileBackgroundLayerSelectorDirective<span class="signature">(gmfMobileBackgroundLayerSelectorTemplateUrl)</span><span class="type-signature"> &rarr; {angular.Directive}</span></h4>
 
     
 
 
+
+<div class="description">
+    <p>Provide a &quot;mobile background layer selector&quot; directive.</p>
+</div>
 
 
 
@@ -81,13 +85,13 @@
 
         <tr>
             
-                <td class="name"><code>$scope</code></td>
+                <td class="name"><code>gmfMobileBackgroundLayerSelectorTemplateUrl</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="https://docs.angularjs.org/guide/scope">angular.Scope</a></span>
+<span class="param-type">string</span>
 
 
             
@@ -97,53 +101,7 @@
 
             
 
-            <td class="description last"><p>The directive's scope.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ngeoLocation</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="ngeo.Location.html">ngeo.Location</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>ngeo Location service.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ngeoDebounce</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="ngeo.Debounce.html">ngeo.Debounce</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>ngeo Debounce service.</p></td>
+            <td class="description last"><p>Url to template.</p></td>
         </tr>
 
     
@@ -184,7 +142,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="contribs_gmf_src_directives_map.js.html">contribs/gmf/src/directives/map.js</a>, <a href="contribs_gmf_src_directives_map.js.html#line47">line 47</a>
+        <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html">contribs/gmf/src/directives/mobilebackgroundlayerselector.js</a>, <a href="contribs_gmf_src_directives_mobilebackgroundlayerselector.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -207,6 +165,35 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The Directive Definition Object.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">angular.Directive</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>&lt;gmf-mobile-background-layer-selector
+  gmf-mobile-background-layer-selector-map="::ctrl.map">
+&lt;/gmf-mobile-background-layer-selector></code></pre>
 
 
 
@@ -223,78 +210,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="map"><span class="type-signature">(non-null) </span>map<span class="type-signature"> :<a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="contribs_gmf_src_directives_map.js.html">contribs/gmf/src/directives/map.js</a>, <a href="contribs_gmf_src_directives_map.js.html#line56">line 56</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
     
 
     
