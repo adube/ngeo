@@ -172,22 +172,13 @@ gmf.Themes.prototype.getBgLayers = function() {
                             requestEncoding: 'REST'
                           });
                       layer = new ol.layer.Tile({
-                        label: item['name'],
-                        metadata: item['metadata'],
-                        source: new ol.source.WMTS(options)
+                        'label': item['name'],
+                        'metadata': item['metadata'],
+                        'source': new ol.source.WMTS(options)
                       });
                     }
-                    // TODO - Support WMS
 
-                    // for dev purpose
-                    // FIXME - remove this
-                    /*
-                    layer = new ol.layer.Tile({
-                      label: 'success1',
-                      metadata: {thumbnail: 'success1'},
-                      source: new ol.source.OSM()
-                    });
-                    */
+                    // TODO - Support WMS
 
                     deferred.resolve(layer);
                   },
@@ -206,6 +197,14 @@ gmf.Themes.prototype.getBgLayers = function() {
 
     .then(goog.bind(function(values) {
         var layers = [];
+
+        // (1) add a blank layer
+        layers.push(new ol.layer.Tile({
+          'label': 'blank',
+          'metadata': {'thumbnail': ''}
+        }));
+
+        // (2) add layers that were returned by the capabilities reading
         values.forEach(function(item) {
           if (item) {
             layers.push(item);
