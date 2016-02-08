@@ -41,7 +41,7 @@ app.module.directive('appQueryresult', app.queryresultDirective);
 
 
 /**
- * @param {ngeo.QueryResult} ngeoQueryResult Query service
+ * @param {ngeo.QueryResult} ngeoQueryResult The ngeo query service.
  * @constructor
  * @ngInject
  */
@@ -62,8 +62,9 @@ app.module.controller('AppQueryresultController', app.QueryresultController);
 
 /**
  * @param {angular.Scope} $scope Scope.
- * @param {ngeo.Query} ngeoQuery Query service
- * @param {ngeo.ToolActivateMgr} ngeoToolActivateMgr ToolActivate manager.
+ * @param {ngeo.Query} ngeoQuery The ngeo query service
+ * @param {ngeo.ToolActivateMgr} ngeoToolActivateMgr The ngeo ToolActivate
+ *     manager.
  * @constructor
  * @ngInject
  */

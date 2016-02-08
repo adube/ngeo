@@ -51,7 +51,7 @@ app.module.directive('appQueryresult', app.queryresultDirective);
 
 
 /**
- * @param {ngeo.QueryResult} ngeoQueryResult Query service
+ * @param {ngeo.QueryResult} ngeoQueryResult Query service.
  * @constructor
  * @ngInject
  */
@@ -72,10 +72,12 @@ app.module.controller('AppQueryresultController', app.QueryresultController);
 
 /**
  * @constructor
- * @param {gmf.Themes} gmfThemes
- * @param {gmf.QueryManager} gmfQueryManager
+ * @param {gmf.Themes} gmfThemes The gme themes service.
+ * @param {gmf.QueryManager} gmfQueryManager The gmf query manager service.
  */
 app.MainController = function(gmfThemes, gmfQueryManager) {
+
+  gmfThemes.loadThemes();
 
   var projection = ol.proj.get('EPSG:21781');
   projection.setExtent([485869.5728, 76443.1884, 837076.5648, 299941.7864]);
