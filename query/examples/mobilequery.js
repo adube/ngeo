@@ -71,12 +71,6 @@ app.module.controller('AppQueryresultController', app.QueryresultController);
 app.MainController = function($scope, ngeoQuery, ngeoToolActivateMgr) {
 
   /**
-   * @type {ngeo.ToolActivateMgr}
-   * @private
-   */
-  this.ngeoToolActivateMgr_ = ngeoToolActivateMgr;
-
-  /**
    * @type {boolean}
    * @export
    */
@@ -137,41 +131,11 @@ app.MainController = function($scope, ngeoQuery, ngeoToolActivateMgr) {
     })
   });
 
-  var queryToolActivate = new ngeo.ToolActivate(
-      'mapTools',
-      function() {
-        this.queryActive = true;
-      }.bind(this),
-      function() {
-        this.queryActive = false;
-      }.bind(this),
-      true);
-  ngeoToolActivateMgr.registerTool(queryToolActivate);
+  var queryToolActivate = new ngeo.ToolActivate(this, 'queryActive');
+  ngeoToolActivateMgr.registerTool('mapTools', queryToolActivate, true);
 
-  /**
-   * @type {ngeo.ToolActivate}
-   * @private
-   */
-  this.queryToolActivate_ = queryToolActivate;
-
-  var dummyToolActivate = new ngeo.ToolActivate(
-      'mapTools',
-      function() {
-        this.dummyActive = true;
-      }.bind(this),
-      function() {
-        this.dymmyActive = false;
-      }.bind(this),
-      false);
-  ngeoToolActivateMgr.registerTool(dummyToolActivate);
-
-  /**
-   * @type {ngeo.ToolActivate}
-   * @private
-   */
-  this.dummyToolActivate_ = dummyToolActivate;
-
-  this.ngeoToolActivateMgr_.activateTool(this.queryToolActivate_);
+  var dummyToolActivate = new ngeo.ToolActivate(this, 'dummyActive');
+  ngeoToolActivateMgr.registerTool('mapTools', dummyToolActivate);
 
 };
 
@@ -184,13 +148,6 @@ app.MainController = function($scope, ngeoQuery, ngeoToolActivateMgr) {
 app.MainController.prototype.getSetDummyActive = function(val) {
   if (val !== undefined) {
     this.dummyActive = val;
-
-    if (this.dummyActive) {
-      this.ngeoToolActivateMgr_.activateTool(this.dummyToolActivate_);
-    } else {
-      this.ngeoToolActivateMgr_.deactivateTool(this.dummyToolActivate_);
-    }
-
   } else {
     return this.dummyActive;
   }
