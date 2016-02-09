@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html ng-app='app'>
   <head>
-    <title>Mobile Measure example</title>
+    <title>Mobile Measure Length example</title>
     <meta charset="utf-8">
     <meta name="viewport"
           content="initial-scale=1.0, user-scalable=no, width=device-width">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="stylesheet" href="lib/ngeo.css" type="text/css">
-    <link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="../../lib/ngeo.css" type="text/css">
+    <link rel="stylesheet" href="../../lib/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="../../lib/bootstrap.min.css" type="text/css">
     <style>
         #map {
           width: 800px;
           height: 400px;
+          max-width:100%;
         }
         [ngeo-btn-group] {
           padding: 5px;
@@ -54,13 +56,15 @@
   <body ng-controller="MainController as ctrl">
     <div id="map" ngeo-map="::ctrl.map"></div>
     <div
-        app-measuretools
-        app-measuretools-map="::ctrl.map">
+        app-mobile-measure-length
+        app-mobile-measure-length-map="::ctrl.map">
     </div>
-    <p id="desc">In progress...</p>
-    <script src="lib/angular.min.js"></script>
-    <script src="lib/ngeo.js"></script>
-    <script src="mobilemeasure.js"></script>
-    <script src="lib/watchwatchers.js"></script>
+    <p id="desc">This example shows how to use the <code>gmf-mobile-measure-length</code> directive in combination with a <code>ngeo.interaction.MobileDraw</code> to allow mobile users to measure distances on mobile.</p>
+    <script src="../../lib/angular.min.js"></script>
+    <script src="../../lib/gmf.js"></script>
+    <script src="mobilemeasurelength.js"></script>
+    <script src="../../lib/watchwatchers.js"></script>
+    <script src="../../lib/angular-gettext.min.js"></script>
   </body>
 </html>
+

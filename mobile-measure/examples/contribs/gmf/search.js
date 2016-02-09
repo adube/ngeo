@@ -8,15 +8,20 @@ var app = {};
 /** @type {!angular.Module} **/
 app.module = angular.module('app', ['gmf']);
 
+app.module.constant('gmfTreeUrl', 'data/themes.json');
+
 
 
 /**
  * @param {ngeo.FeatureOverlayMgr} ngeoFeatureOverlayMgr The ngeo feature
  *     overlay manager service.
+ * @param {gmf.Themes} gmfThemes Themes service.
  * @constructor
  * @ngInject
  */
-app.MainController = function(ngeoFeatureOverlayMgr) {
+app.MainController = function(ngeoFeatureOverlayMgr, gmfThemes) {
+
+  gmfThemes.loadThemes();
 
   proj4.defs('EPSG:21781',
       '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 ' +
@@ -28,13 +33,13 @@ app.MainController = function(ngeoFeatureOverlayMgr) {
    * @export
    */
   this.searchDatasources = [{
-    datasetTitle: 'From demo 1.6',
+    datasetTitle: 'From demo 2.0',
     labelKey: 'label',
     projection: 'EPSG:21781',
     typeaheadDatasetOptions: {
       limit: 7
     },
-    url: 'https://geomapfish-demo.camptocamp.net/1.6/wsgi/fulltextsearch?' +
+    url: 'https://geomapfish-demo.camptocamp.net/2.0/wsgi/fulltextsearch?' +
         'query=%QUERY'
   }];
 

@@ -6,30 +6,31 @@ var app = {};
 
 
 /** @type {!angular.Module} **/
-app.module = angular.module('app', ['ngeo']);
+app.module = angular.module('app', ['gmf']);
 
 
 /**
- * App-specific directive wrapping the measure tools. The directive's
+ * App-specific directive wrapping the line measure tools. The directive's
  * controller has a property "map" including a reference to the OpenLayers
  * map.
  *
- * @return {angular.Directive} The directive specs.
+ * @return {angular.Directive} The Directive Definition Object.
  */
-app.measuretoolsDirective = function() {
+app.mobileMeasureLengthDirective = function() {
   return {
     restrict: 'A',
     scope: {
-      'map': '=appMeasuretoolsMap'
+      'map': '=appMobileMeasureLengthMap'
     },
-    controller: 'AppMeasuretoolsController',
+    controller: 'AppMobileMeasureLengthController',
     controllerAs: 'ctrl',
     bindToController: true,
-    templateUrl: 'partials/mobilemeasuretools.html'
+    templateUrl: 'partials/mobilemeasurelength.html'
   };
 };
 
-app.module.directive('appMeasuretools', app.measuretoolsDirective);
+app.module.directive('appMobileMeasureLength',
+                     app.mobileMeasureLengthDirective);
 
 
 
@@ -42,7 +43,7 @@ app.module.directive('appMeasuretools', app.measuretoolsDirective);
  * @constructor
  * @ngInject
  */
-app.MeasuretoolsController = function($scope, $compile, $sce,
+app.MobileMeasureLengthController = function($scope, $compile, $sce, 
     ngeoDecorateInteraction) {
 
   /**
@@ -54,30 +55,18 @@ app.MeasuretoolsController = function($scope, $compile, $sce,
   var map = this.map;
 
   /**
-   * @type {ngeo.interaction.MobileDraw}
+   * @type {ngeo.interaction.MeasureLengthMobile}
    * @export
    */
-  this.mobileDrawLine = new ngeo.interaction.MobileDraw({
-    'type': /** @type {ol.geom.GeometryType<string>} */ ('LineString')
-  });
+  this.measureLength = new ngeo.interaction.MeasureLengthMobile();
 
-  var mobileDrawLine = this.mobileDrawLine;
-  mobileDrawLine.setActive(false);
-  ngeoDecorateInteraction(mobileDrawLine);
-  map.addInteraction(mobileDrawLine);
-
+  var measureLength = this.measureLength;
+  measureLength.setActive(false);
+  ngeoDecorateInteraction(measureLength);
+  map.addInteraction(measureLength);
 };
-
-
-/**
- * Add current sketch point
- * @export
- */
-app.MeasuretoolsController.prototype.addPointToLine = function() {
-  this.mobileDrawLine.addToDrawing();
-};
-
-app.module.controller('AppMeasuretoolsController', app.MeasuretoolsController);
+app.module.controller('AppMobileMeasureLengthController',
+                      app.MobileMeasureLengthController);
 
 
 

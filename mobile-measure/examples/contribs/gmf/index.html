@@ -16,16 +16,34 @@
       </div>
       <hr>
       <div>
-        <a href="asitvd.html">ASITVD source example</a>
+        <a href="apps/desktop/index.html"><b>Desktop application</b></a>
+        <p>The desktop example application for GeoMapFish.</p>
+      </div>
+      <hr>
+      <div>
+        <a href="layertree.html">GeoMapFish Layer Tree Example</a>
+        <p>This example shows how to use the <code>gmf.Layertree</code> directive. This layertree needs a source object (that can change) that describes layers like the c2cgeoportal themes service. The wmsUrl is used by internals WMS layers but you can use WMS externals layers and WMTS layers too.</p>
+      </div>
+      <hr>
+      <div>
+        <a href="mobilequery.html">GeoMapFish Mobile Query example</a>
         <p>
-      This example shows how to use the <code>gmf.source.AsitVD</code> source to access tiles from the
-      <a href="http://asitvd.ch/index.php?option=com_content&amp;view=article&amp;id=214&amp;Itemid=154&amp;lang=en">ASIT VD tile server</a>.
+      This example shows how to use the <code>ngeo-mobile-query</code>
+      directive in combination with the <code>gmf.QueryManager</code>.
+      The QueryManager fetches the themes returned by the theme service and
+      adds one source to the query service per layer definition found. In this
+      example, the layer tree is responsible of creating the layer. You can
+      switch theme and turn on/off layers to see the impact it has on results
+      returned by the query service.
     </p>
       </div>
       <hr>
       <div>
-        <a href="locationchooser.html">GeoMapFish's location chooser example</a>
-        <p>This example shows how to use the <code>gmf-locationchooser</code> directive to jump between some predefined areas.</p>
+        <a href="asitvd.html">ASITVD source example</a>
+        <p>
+      This example shows how to use the <code>gmf.source.AsitVD</code> source to access tiles from the
+      <a href="https://asitvd.ch/chercher/geoservices/fond-de-plan-asit-vd.html">ASIT VD tile server</a>.
+    </p>
       </div>
       <hr>
       <div>
@@ -35,15 +53,18 @@
       </div>
       <hr>
       <div>
-        <a href="mobilebackgroundlayerselector.html">GeoMapFish's Mobile Background Layer Selector example</a>
-        <p>This example shows how to use the
-    <code>gmf-mobile-background-layer-selector</code>
-    directive to select the map background layer.</p>
+        <a href="simple.html">Simple GeoMapFish example</a>
+        <p>This example shows how to use the <code>gmf-map</code> directive to insert an OpenLayers map in a GeoMapFish page.</p>
       </div>
       <hr>
       <div>
-        <a href="layertree.html">GeoMapFish Layer Tree Example</a>
-        <p>This example shows how to use the <code>gmf.Layertree</code> directive. This layertree needs a source object (that can change) that describes layers like the c2cgeoportal themes service. The wmsUrl is used by internals WMS layers but you can use WMS externals layers and WMTS layers too.</p>
+        <a href="mobilemeasurelength.html">Mobile Measure Length example</a>
+        <p>This example shows how to use the <code>gmf-mobile-measure-length</code> directive in combination with a <code>ngeo.interaction.MobileDraw</code> to allow mobile users to measure distances on mobile.</p>
+      </div>
+      <hr>
+      <div>
+        <a href="themeselector.html">GeoMapFish Theme Selector Example</a>
+        <p>This example shows how to use the <code>gmf.themeselector</code> directive from a c2c geoportal theme service.</p>
       </div>
       <hr>
       <div>
@@ -55,13 +76,10 @@
       </div>
       <hr>
       <div>
-        <a href="themeselector.html">GeoMapFish Theme Selector Example</a>
-        <p>This example shows how to use the <code>gmf.themeselector</code> directive from a c2c geoportal theme service.</p>
-      </div>
-      <hr>
-      <div>
-        <a href="simple.html">Simple GeoMapFish example</a>
-        <p>This example shows how to use the <code>gmf-map</code> directive to insert an OpenLayers map in a GeoMapFish page.</p>
+        <a href="mobilebackgroundlayerselector.html">GeoMapFish's Mobile Background Layer Selector example</a>
+        <p>This example shows how to use the
+    <code>gmf-mobile-background-layer-selector</code>
+    directive to select the map background layer.</p>
       </div>
       <hr>
     </div>

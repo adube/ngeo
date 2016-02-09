@@ -7,7 +7,7 @@
           content="initial-scale=1.0, user-scalable=no, width=device-width">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="../../lib/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../lib/font-awesome.min.css" type="text/css">
     <style>
       .gmf-theme-selector {
         list-style: none;
@@ -28,8 +28,8 @@
         margin: 15px 5px 0 0;
         width: 20px;
       }
-      .gmf-theme-selector .gmf-check.active {
-        background-color: green;
+      .gmf-theme-selector .gmf-check .gmf-icon.gmf-icon-check:after {
+        content: 'o';
       }
       .gmf-theme-selector .gmf-text {
         margin: 15px 10px 0 0;
@@ -50,6 +50,7 @@
   <body ng-controller="MainController as ctrl">
     <div class="container">
       <gmf-themeselector
+              gmf-themeselector-defaulttheme="OSM"
               gmf-themeselector-currenttheme="ctrl.theme"
               gmf-themeselector-filter="::ctrl.filter">
       </gmf-themeselector>
