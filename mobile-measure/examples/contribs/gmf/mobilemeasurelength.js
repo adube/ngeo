@@ -43,7 +43,7 @@ app.module.directive('appMobileMeasureLength',
  * @constructor
  * @ngInject
  */
-app.MobileMeasureLengthController = function($scope, $compile, $sce, 
+app.MobileMeasureLengthController = function($scope, $compile, $sce,
     ngeoDecorateInteraction) {
 
   /**
