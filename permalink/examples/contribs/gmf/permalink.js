@@ -45,9 +45,6 @@ app.MainController = function(gmfPermalink) {
       zoom: zoom
     })
   });
-
-  gmfPermalink.setMap(this.map);
-
 };
 
 app.module.controller('MainController', app.MainController);
