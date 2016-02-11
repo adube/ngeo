@@ -35,7 +35,7 @@ goog.require('ngeo.interaction.MobileDraw');
 
 /**
  * @classdesc
- * Interaction dedicated to measure length.
+ * Interaction dedicated to measure length on mobile devices.
  *
  * @constructor
  * @extends {ngeo.interaction.MeasureLength}
@@ -45,17 +45,6 @@ goog.require('ngeo.interaction.MobileDraw');
 ngeo.interaction.MeasureLengthMobile = function(opt_options) {
 
   var options = goog.isDef(opt_options) ? opt_options : {};
-
-  /**
-   * The draw interaction to be used.
-   * @type {ngeo.interaction.MobileDraw}
-   */
-  this.mobileDrawLine = null;
-
-  /**
-   * @type {boolean}
-   */
-  this.active = false;
 
   goog.object.extend(options, {displayHelpTooltip: false});
 
@@ -69,24 +58,13 @@ goog.inherits(ngeo.interaction.MeasureLengthMobile,
 /**
  * @inheritDoc
  */
-ngeo.interaction.MeasureLengthMobile.prototype.getDrawInteraction =
+ngeo.interaction.MeasureLengthMobile.prototype.createDrawInteraction =
     function(style, source) {
-  var mobileDraw = new ngeo.interaction.MobileDraw({
+  return new ngeo.interaction.MobileDraw({
     'type': /** @type {ol.geom.GeometryType&lt;string>} */ ('LineString'),
     'style': style,
     'source': source
   });
-  this.mobileDrawLine = mobileDraw;
-
-  ol.events.listen(
-      mobileDraw,
-      ol.Object.getChangeEventType(ol.interaction.InteractionProperty.ACTIVE),
-      function() {
-        this.active = this.mobileDrawLine.getActive();
-      },
-      this
-  );
-  return mobileDraw;
 };
 </code></pre>
         </article>

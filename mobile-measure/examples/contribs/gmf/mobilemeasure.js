@@ -25,7 +25,7 @@ app.mobileMeasureLengthDirective = function() {
     controller: 'AppMobileMeasureLengthController',
     controllerAs: 'ctrl',
     bindToController: true,
-    templateUrl: 'partials/mobilemeasurelength.html'
+    templateUrl: 'partials/mobilemeasure.html'
   };
 };
 

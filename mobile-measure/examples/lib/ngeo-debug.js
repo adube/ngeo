@@ -118950,9 +118950,18 @@ ngeo.interaction.Measure = function(opt_options) {
    * @type {ol.interaction.Draw|ngeo.interaction.DrawAzimut|ngeo.interaction.MobileDraw}
    * @private
    */
-  this.drawInteraction_ = this.getDrawInteraction(options.sketchStyle,
+  this.drawInteraction_ = this.createDrawInteraction(options.sketchStyle,
       this.vectorLayer_.getSource());
 
+  /**
+   * @type {boolean}
+   * @private
+   */
+  this.shouldHandleDrawInteractionActiveChange_ = true;
+
+  ol.events.listen(this.drawInteraction_,
+      ol.Object.getChangeEventType(ol.interaction.InteractionProperty.ACTIVE),
+      this.handleDrawInteractionActiveChange_, this);
   ol.events.listen(this.drawInteraction_,
       ol.interaction.DrawEventType.DRAWSTART, this.onDrawStart_, this);
   ol.events.listen(this.drawInteraction_,
@@ -119044,6 +119053,15 @@ ngeo.interaction.Measure.handleEvent_ = function(evt) {
 
 
 /**
+ * @return {ol.interaction.Draw|ngeo.interaction.DrawAzimut|ngeo.interaction.MobileDraw}
+ * @export
+ */
+ngeo.interaction.Measure.prototype.getDrawInteraction = function() {
+  return this.drawInteraction_;
+};
+
+
+/**
  * Creates the draw interaction.
  * @param {ol.style.Style|Array.<ol.style.Style>|ol.style.StyleFunction|undefined}
  *     style The sketchStyle used for the drawing interaction.
@@ -119051,7 +119069,7 @@ ngeo.interaction.Measure.handleEvent_ = function(evt) {
  * @return {ol.interaction.Draw|ngeo.interaction.DrawAzimut|ngeo.interaction.MobileDraw}
  * @protected
  */
-ngeo.interaction.Measure.prototype.getDrawInteraction = goog.abstractMethod;
+ngeo.interaction.Measure.prototype.createDrawInteraction = goog.abstractMethod;
 
 
 /**
@@ -119189,7 +119207,9 @@ ngeo.interaction.Measure.prototype.removeMeasureTooltip_ = function() {
  */
 ngeo.interaction.Measure.prototype.updateState_ = function() {
   var active = this.getActive();
+  this.shouldHandleDrawInteractionActiveChange_ = false;
   this.drawInteraction_.setActive(active);
+  this.shouldHandleDrawInteractionActiveChange_ = true;
   if (!this.getMap()) {
     return;
   }
@@ -119221,6 +119241,21 @@ ngeo.interaction.Measure.prototype.handleMeasure = goog.abstractMethod;
  */
 ngeo.interaction.Measure.prototype.getTooltipElement = function() {
   return this.measureTooltipElement_;
+};
+
+
+/**
+ * Called when the draw interaction `active` property changes. If the
+ * change is due to something else than this measure interactino, then
+ * update follow the its active state accordingly.
+ *
+ * @private
+ */
+ngeo.interaction.Measure.prototype.handleDrawInteractionActiveChange_ =
+    function() {
+  if (this.shouldHandleDrawInteractionActiveChange_) {
+    this.setActive(this.drawInteraction_.getActive());
+  }
 };
 
 goog.provide('ngeo.interaction.MeasureArea');
@@ -119263,7 +119298,7 @@ goog.inherits(ngeo.interaction.MeasureArea, ngeo.interaction.Measure);
 /**
  * @inheritDoc
  */
-ngeo.interaction.MeasureArea.prototype.getDrawInteraction = function(style,
+ngeo.interaction.MeasureArea.prototype.createDrawInteraction = function(style,
     source) {
 
   return new ol.interaction.Draw(
@@ -119344,7 +119379,7 @@ goog.inherits(ngeo.interaction.MeasureAzimut, ngeo.interaction.Measure);
 /**
  * @inheritDoc
  */
-ngeo.interaction.MeasureAzimut.prototype.getDrawInteraction = function(style,
+ngeo.interaction.MeasureAzimut.prototype.createDrawInteraction = function(style,
     source) {
 
   return new ngeo.interaction.DrawAzimut({
@@ -119732,7 +119767,7 @@ goog.inherits(ngeo.interaction.MeasureLength, ngeo.interaction.Measure);
 /**
  * @inheritDoc
  */
-ngeo.interaction.MeasureLength.prototype.getDrawInteraction = function(style,
+ngeo.interaction.MeasureLength.prototype.createDrawInteraction = function(style,
     source) {
 
   return new ol.interaction.Draw(
@@ -120216,7 +120251,7 @@ goog.require('ngeo.interaction.MobileDraw');
 
 /**
  * @classdesc
- * Interaction dedicated to measure length.
+ * Interaction dedicated to measure length on mobile devices.
  *
  * @constructor
  * @extends {ngeo.interaction.MeasureLength}
@@ -120226,17 +120261,6 @@ goog.require('ngeo.interaction.MobileDraw');
 ngeo.interaction.MeasureLengthMobile = function(opt_options) {
 
   var options = goog.isDef(opt_options) ? opt_options : {};
-
-  /**
-   * The draw interaction to be used.
-   * @type {ngeo.interaction.MobileDraw}
-   */
-  this.mobileDrawLine = null;
-
-  /**
-   * @type {boolean}
-   */
-  this.active = false;
 
   goog.object.extend(options, {displayHelpTooltip: false});
 
@@ -120250,24 +120274,13 @@ goog.inherits(ngeo.interaction.MeasureLengthMobile,
 /**
  * @inheritDoc
  */
-ngeo.interaction.MeasureLengthMobile.prototype.getDrawInteraction =
+ngeo.interaction.MeasureLengthMobile.prototype.createDrawInteraction =
     function(style, source) {
-  var mobileDraw = new ngeo.interaction.MobileDraw({
+  return new ngeo.interaction.MobileDraw({
     'type': /** @type {ol.geom.GeometryType<string>} */ ('LineString'),
     'style': style,
     'source': source
   });
-  this.mobileDrawLine = mobileDraw;
-
-  ol.events.listen(
-      mobileDraw,
-      ol.Object.getChangeEventType(ol.interaction.InteractionProperty.ACTIVE),
-      function() {
-        this.active = this.mobileDrawLine.getActive();
-      },
-      this
-  );
-  return mobileDraw;
 };
 
 goog.provide('ngeo.BackgroundEvent');

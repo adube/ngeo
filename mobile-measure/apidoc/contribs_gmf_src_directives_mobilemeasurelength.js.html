@@ -85,15 +85,15 @@ gmfModule.directive('gmfMobileMeasureLength',
 /**
  * @param {angularGettext.Catalog} gettextCatalog Gettext catalog.
  * @param {!angular.Scope} $scope Angular scope.
- * @param {angular.$compile} $compile Angular compile service.
- * @param {angular.$sce} $sce Angular sce service.
+ * @param {ngeo.DecorateInteraction} ngeoDecorateInteraction Decorate
+ *     interaction service.
  * @constructor
  * @ngInject
  * @ngdoc controller
  * @ngname GmfMobileMeasureLengthController
  */
-gmf.MobileMeasureLengthController = function(gettextCatalog, $scope, $compile,
-    $sce) {
+gmf.MobileMeasureLengthController = function(gettextCatalog, $scope,
+    ngeoDecorateInteraction) {
 
   /**
    * @type {ol.Map}
@@ -114,6 +114,7 @@ gmf.MobileMeasureLengthController = function(gettextCatalog, $scope, $compile,
   this.mobileDrawLine;
 
   var mobileDrawLine = this.mobileDrawLine;
+  ngeoDecorateInteraction(mobileDrawLine);
 
   Object.defineProperty(this, 'hasPoints', {
     get: function() {
@@ -138,12 +139,6 @@ gmf.MobileMeasureLengthController = function(gettextCatalog, $scope, $compile,
    * @export
    */
   this.valid = false;
-
-  /**
-   * @type {boolean}
-   * @export
-   */
-  this.active = false;
 
   ol.events.listen(
       mobileDrawLine,
@@ -181,16 +176,6 @@ gmf.MobileMeasureLengthController = function(gettextCatalog, $scope, $compile,
       },
       this
   );
-
-  ol.events.listen(
-      mobileDrawLine,
-      ol.Object.getChangeEventType(ol.interaction.InteractionProperty.ACTIVE),
-      function() {
-        this.active = mobileDrawLine.getActive();
-      },
-      this
-  );
-
 };
 
 

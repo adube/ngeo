@@ -78,7 +78,7 @@ goog.inherits(ngeo.interaction.MeasureAzimut, ngeo.interaction.Measure);
 /**
  * @inheritDoc
  */
-ngeo.interaction.MeasureAzimut.prototype.getDrawInteraction = function(style,
+ngeo.interaction.MeasureAzimut.prototype.createDrawInteraction = function(style,
     source) {
 
   return new ngeo.interaction.DrawAzimut({
