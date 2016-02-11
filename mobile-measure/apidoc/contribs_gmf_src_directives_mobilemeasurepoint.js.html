@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: src/directives/popup.js</title>
+    <title>JSDoc: Source: contribs/gmf/src/directives/mobilemeasurepoint.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: src/directives/popup.js</h1>
+    <h1 class="page-title">Source: contribs/gmf/src/directives/mobilemeasurepoint.js</h1>
 
     
 
@@ -26,74 +26,207 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>goog.provide('ngeo.popupDirective');
+            <pre class="prettyprint source linenums"><code>goog.provide('gmf.MobileMeasurePointController');
+goog.provide('gmf.mobileMeasurePointDirective');
 
-goog.require('ngeo');
+goog.require('gmf');
+goog.require('ngeo.interaction.MobileDraw');
 
-
-ngeoModule.value('ngeoPopupTemplateUrl',
+gmfModule.value('gmfMobileMeasurePointTemplateUrl',
     /**
      * @param {angular.JQLite} element Element.
      * @param {angular.Attributes} attrs Attributes.
      */
     function(element, attrs) {
-      var templateUrl = attrs['ngeoPopupTemplateurl'];
+      var templateUrl = attrs['gmfMobileMeasurePointTemplateurl'];
       return templateUrl !== undefined ? templateUrl :
-          ngeo.baseTemplateUrl + '/popup.html';
+          gmf.baseTemplateUrl + '/mobilemeasurepoint.html';
     });
 
 
 /**
- * Provides a directive used to show a popup over the page with
- * a title and content.
+ * Provide a "mobile measure" directive.
  *
+ * @example
+ * &lt;div gmf-mobile-measure-point=""
+ *   gmf-mobile-measure-point-map="ctrl.map"
+ *   gmf-mobile-measure-point-draw-interaction="ctrl.drawInteraction">
+ * &lt;/div>
  *
- * Things to know about this directive:
- *
- * - This directive is intented to be used along with the popup service.
- *
- * - By default the directive uses "popup.html" as its templateUrl. This can be
- *   changed by redefining the "ngeoPopupTemplateUrl" value.
- *
- * - The directive doesn't create any scope but relies on its parent scope.
- *   Properties like 'content', 'title' or 'open' come from the parent scope.
- *
- * @param {string} ngeoPopupTemplateUrl URL to popup template.
- * @return {angular.Directive} Directive Definition Object.
+ * @param {string|function(!angular.JQLite=, !angular.Attributes=)}
+ *     gmfMobileMeasurePointTemplateUrl Template URL for the directive.
+ * @return {angular.Directive} The Directive Definition Object.
  * @ngInject
  * @ngdoc directive
- * @ngname ngeoPopup
+ * @ngname gmfMobileMeasurePoint
  */
-ngeo.popupDirective = function(ngeoPopupTemplateUrl) {
+gmf.mobileMeasurePointDirective =
+    function(gmfMobileMeasurePointTemplateUrl) {
   return {
     restrict: 'A',
-    templateUrl: ngeoPopupTemplateUrl,
-    link:
-        /**
-         * @param {angular.Scope} scope Scope.
-         * @param {angular.JQLite} element Element.
-         * @param {angular.Attributes} attrs Attributes.
-         */
-        function(scope, element, attrs) {
-          element.addClass('popover');
-
-          scope.close = function(evt) {
-            if (evt) {
-              evt.stopPropagation();
-              evt.preventDefault();
-            }
-            element.addClass('hidden');
-          };
-
-          // Watch the open property
-          scope.$watch('open', function(newVal, oldVal) {
-            element.css('display', newVal ? 'block' : 'none');
-          });
-        }
+    scope: {
+      'map': '=gmfMobileMeasurePointMap',
+      'drawInteraction': '=gmfMobileMeasurePointDrawInteraction'
+    },
+    controller: 'GmfMobileMeasurePointController',
+    controllerAs: 'ctrl',
+    bindToController: true,
+    templateUrl: gmfMobileMeasurePointTemplateUrl
   };
+
 };
 
-ngeoModule.directive('ngeoPopup', ngeo.popupDirective);
+
+gmfModule.directive('gmfMobileMeasurePoint',
+                    gmf.mobileMeasurePointDirective);
+
+
+
+/**
+ * @param {angularGettext.Catalog} gettextCatalog Gettext catalog.
+ * @param {!angular.Scope} $scope Angular scope.
+ * @param {ngeo.DecorateInteraction} ngeoDecorateInteraction Decorate
+ *     interaction service.
+ * @constructor
+ * @ngInject
+ * @ngdoc controller
+ * @ngname GmfMobileMeasurePointController
+ */
+gmf.MobileMeasurePointController = function(gettextCatalog, $scope,
+    ngeoDecorateInteraction) {
+
+  /**
+   * @type {ol.Map}
+   * @export
+   */
+  this.map;
+
+  /**
+   * @type {angularGettext.Catalog}
+   * @private
+   */
+  this.gettextCatalog_ = gettextCatalog;
+
+  /**
+   * @type {ngeo.interaction.MobileDraw}
+   * @export
+   */
+  this.drawInteraction;
+
+  var drawInteraction = this.drawInteraction;
+  ngeoDecorateInteraction(drawInteraction);
+
+  Object.defineProperty(this, 'hasPoints', {
+    get: function() {
+      return !goog.isNull(this.drawInteraction.getFeature());
+    }
+  });
+
+  /**
+   * @type {boolean}
+   * @export
+   */
+  this.dirty = false;
+
+  /**
+   * @type {boolean}
+   * @export
+   */
+  this.drawing = false;
+
+  /**
+   * @type {boolean}
+   * @export
+   */
+  this.valid = false;
+
+  ol.events.listen(
+      drawInteraction,
+      ol.Object.getChangeEventType(
+          ngeo.interaction.MobileDrawProperty.DIRTY),
+      function() {
+        this.dirty = drawInteraction.getDirty();
+
+        // this is where the angular scope is forced to be applied. We
+        // only need to do this when dirty, as going to "no being dirty"
+        // is made by a click on a button where Angular is within scope
+        if (this.dirty) {
+          $scope.$apply();
+        }
+      },
+      this
+  );
+
+  ol.events.listen(
+      drawInteraction,
+      ol.Object.getChangeEventType(
+          ngeo.interaction.MobileDrawProperty.DRAWING),
+      function() {
+        this.drawing = drawInteraction.getDrawing();
+      },
+      this
+  );
+
+  ol.events.listen(
+      drawInteraction,
+      ol.Object.getChangeEventType(
+          ngeo.interaction.MobileDrawProperty.VALID),
+      function() {
+        this.valid = drawInteraction.getValid();
+      },
+      this
+  );
+};
+
+
+/**
+ * Add current sketch point to point measure
+ * @export
+ */
+gmf.MobileMeasurePointController.prototype.addPoint = function() {
+  this.drawInteraction.addToDrawing();
+};
+
+
+/**
+ * Clear the sketch feature
+ * @export
+ */
+gmf.MobileMeasurePointController.prototype.clear = function() {
+  this.drawInteraction.clearDrawing();
+};
+
+
+/**
+ * Finish point measure
+ * @export
+ */
+gmf.MobileMeasurePointController.prototype.finish = function() {
+  this.drawInteraction.finishDrawing();
+};
+
+
+/**
+ * Close point measure
+ * @export
+ */
+gmf.MobileMeasurePointController.prototype.deactivate = function() {
+  this.drawInteraction.setActive(false);
+};
+
+
+/**
+ * @param {string} str String to translate.
+ * @return {string}
+ * @export
+ */
+gmf.MobileMeasurePointController.prototype.translate = function(str) {
+  return this.gettextCatalog_.getString(str);
+};
+
+
+gmfModule.controller('GmfMobileMeasurePointController',
+                     gmf.MobileMeasurePointController);
 </code></pre>
         </article>
     </section>

@@ -119026,6 +119026,24 @@ ngeo.interaction.Measure.getFormattedLength =
 
 
 /**
+ * Return a formatted string of the point.
+ * @param {ol.geom.Point} point Point.
+ * @param {ol.proj.Projection} projection Projection of the line string coords.
+ * @return {string} Formatted string of coordinate.
+ */
+ngeo.interaction.Measure.getFormattedPoint = function(point, projection) {
+  var coordinates = point.getCoordinates();
+  var lonLat = ol.proj.transform(coordinates, projection, 'EPSG:4326');
+  return [
+    'x: ',
+    lonLat[0],
+    ', y: ',
+    lonLat[1]
+  ].join('');
+};
+
+
+/**
  * Handle map browser event.
  * @param {ol.MapBrowserEvent} evt Map browser event.
  * @return {boolean} `false` if event propagation should be stopped.
@@ -119214,8 +119232,10 @@ ngeo.interaction.Measure.prototype.updateState_ = function() {
     return;
   }
   if (active) {
-    this.createMeasureTooltip_();
-    this.createHelpTooltip_();
+    if (!this.measureTooltipOverlay_) {
+      this.createMeasureTooltip_();
+      this.createHelpTooltip_();
+    }
   } else {
     this.vectorLayer_.getSource().clear(true);
     this.getMap().removeOverlay(this.measureTooltipOverlay_);
@@ -119820,6 +119840,10 @@ ngeo.interaction.MobileDrawProperty = {
  * Interaction for drawing feature geometries from a mobile device using the
  * center of the map view as entry for points added.
  *
+ * Supports:
+ * - point
+ * - line string
+ *
  * @constructor
  * @fires ol.interaction.DrawEvent
  * @extends {ol.interaction.Interaction}
@@ -119999,15 +120023,26 @@ ngeo.interaction.MobileDraw.prototype.addToDrawing = function() {
     return;
   }
 
-  // TODO - support point
-  if (this.type_ === ol.geom.GeometryType.POINT) {
-    return;
-  }
-
+  var sketchFeatureGeom;
   var sketchPointGeom = this.getSketchPointGeometry_();
   var coordinate = sketchPointGeom.getCoordinates();
   var coordinates;
 
+  // == point ==
+  if (this.type_ === ol.geom.GeometryType.POINT) {
+    if (!this.sketchFeature_) {
+      this.sketchFeature_ = new ol.Feature(new ol.geom.Point(coordinate));
+      this.dispatchEvent(new ol.interaction.DrawEvent(
+          ol.interaction.DrawEventType.DRAWSTART, this.sketchFeature_));
+
+    }
+    sketchFeatureGeom = this.sketchFeature_.getGeometry();
+    goog.asserts.assertInstanceof(sketchFeatureGeom, ol.geom.SimpleGeometry);
+    sketchFeatureGeom.setCoordinates(coordinate);
+    return;
+  }
+
+  // == line string ==
   if (this.type_ === ol.geom.GeometryType.LINE_STRING) {
     this.sketchPoints_.push(this.sketchPoint_);
     if (!this.sketchFeature_) {
@@ -120016,7 +120051,7 @@ ngeo.interaction.MobileDraw.prototype.addToDrawing = function() {
       this.dispatchEvent(new ol.interaction.DrawEvent(
           ol.interaction.DrawEventType.DRAWSTART, this.sketchFeature_));
     } else {
-      var sketchFeatureGeom = this.sketchFeature_.getGeometry();
+      sketchFeatureGeom = this.sketchFeature_.getGeometry();
       goog.asserts.assertInstanceof(sketchFeatureGeom, ol.geom.SimpleGeometry);
       coordinates = sketchFeatureGeom.getCoordinates();
       coordinates.push(coordinate.slice());
@@ -120097,6 +120132,10 @@ ngeo.interaction.MobileDraw.prototype.startDrawing_ = function() {
   this.set(ngeo.interaction.MobileDrawProperty.DRAWING, true);
   this.createOrUpdateSketchPoint_();
   this.updateSketchFeatures_();
+
+  if (this.type_ === ol.geom.GeometryType.POINT) {
+    this.addToDrawing();
+  }
 };
 
 
@@ -120178,8 +120217,13 @@ ngeo.interaction.MobileDraw.prototype.handleViewCenterChange_ = function(evt) {
   }
 
   this.createOrUpdateSketchPoint_();
-  this.modifyDrawing_();
-  this.updateSketchFeatures_();
+
+  if (this.type_ === ol.geom.GeometryType.POINT) {
+    this.addToDrawing();
+  } else {
+    this.modifyDrawing_();
+    this.updateSketchFeatures_();
+  }
 };
 
 
@@ -120281,6 +120325,61 @@ ngeo.interaction.MeasureLengthMobile.prototype.createDrawInteraction =
     'style': style,
     'source': source
   });
+};
+
+goog.provide('ngeo.interaction.MeasurePointMobile');
+
+goog.require('ngeo.interaction.Measure');
+goog.require('ngeo.interaction.MobileDraw');
+goog.require('ol.geom.Point');
+
+
+
+/**
+ * @classdesc
+ * Interaction dedicated to measure by coordinate (point) on mobile devices.
+ *
+ * @constructor
+ * @extends {ngeo.interaction.Measure}
+ * @param {ngeox.interaction.MeasureOptions=} opt_options Options
+ * @export
+ */
+ngeo.interaction.MeasurePointMobile = function(opt_options) {
+
+  var options = goog.isDef(opt_options) ? opt_options : {};
+
+  goog.object.extend(options, {displayHelpTooltip: false});
+
+  goog.base(this, options);
+
+};
+goog.inherits(ngeo.interaction.MeasurePointMobile, ngeo.interaction.Measure);
+
+
+/**
+ * @inheritDoc
+ */
+ngeo.interaction.MeasurePointMobile.prototype.createDrawInteraction =
+    function(style, source) {
+  return new ngeo.interaction.MobileDraw({
+    'type': /** @type {ol.geom.GeometryType<string>} */ ('Point'),
+    'style': style,
+    'source': source
+  });
+};
+
+
+/**
+ * @inheritDoc
+ */
+ngeo.interaction.MeasurePointMobile.prototype.handleMeasure =
+    function(callback) {
+  var geom = /** @type {ol.geom.Point} */
+      (this.sketchFeature.getGeometry());
+  var proj = this.getMap().getView().getProjection();
+  var output = ngeo.interaction.Measure.getFormattedPoint(geom, proj);
+  var coord = geom.getLastCoordinate();
+  callback(output, coord);
 };
 
 goog.provide('ngeo.BackgroundEvent');

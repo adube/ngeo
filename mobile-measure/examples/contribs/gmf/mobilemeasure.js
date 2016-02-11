@@ -16,21 +16,21 @@ app.module = angular.module('app', ['gmf']);
  *
  * @return {angular.Directive} The Directive Definition Object.
  */
-app.mobileMeasureLengthDirective = function() {
+app.mobileMeasureDirective = function() {
   return {
     restrict: 'A',
     scope: {
-      'map': '=appMobileMeasureLengthMap'
+      'map': '=appMobileMeasureMap'
     },
-    controller: 'AppMobileMeasureLengthController',
+    controller: 'AppMobileMeasureController',
     controllerAs: 'ctrl',
     bindToController: true,
     templateUrl: 'partials/mobilemeasure.html'
   };
 };
 
-app.module.directive('appMobileMeasureLength',
-                     app.mobileMeasureLengthDirective);
+app.module.directive('appMobileMeasure',
+                     app.mobileMeasureDirective);
 
 
 
@@ -40,7 +40,7 @@ app.module.directive('appMobileMeasureLength',
  * @constructor
  * @ngInject
  */
-app.MobileMeasureLengthController = function(ngeoDecorateInteraction) {
+app.MobileMeasureController = function(ngeoDecorateInteraction) {
 
   /**
    * @type {ol.Map}
@@ -63,12 +63,30 @@ app.MobileMeasureLengthController = function(ngeoDecorateInteraction) {
    * @type {ngeo.interaction.MobileDraw}
    * @export
    */
-  this.drawInteraction = /** @type {ngeo.interaction.MobileDraw} */ (
+  this.drawLength = /** @type {ngeo.interaction.MobileDraw} */ (
       this.measureLength.getDrawInteraction());
 
+  /**
+   * @type {ngeo.interaction.MeasurePointMobile}
+   * @export
+   */
+  this.measurePoint = new ngeo.interaction.MeasurePointMobile();
+
+  var measurePoint = this.measurePoint;
+  measurePoint.setActive(false);
+  ngeoDecorateInteraction(measurePoint);
+  this.map.addInteraction(measurePoint);
+
+  /**
+   * @type {ngeo.interaction.MobileDraw}
+   * @export
+   */
+  this.drawPoint = /** @type {ngeo.interaction.MobileDraw} */ (
+      this.measurePoint.getDrawInteraction());
+
 };
-app.module.controller('AppMobileMeasureLengthController',
-                      app.MobileMeasureLengthController);
+app.module.controller('AppMobileMeasureController',
+                      app.MobileMeasureController);
 
 
 

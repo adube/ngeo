@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: src/directives/popup.js</title>
+    <title>JSDoc: Class: mobileMeasurePointDirective <small>directive:gmfMobileMeasurePoint</small></title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,86 +17,163 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: src/directives/popup.js</h1>
+    <h1 class="page-title">Class: mobileMeasurePointDirective <small>directive:gmfMobileMeasurePoint</small></h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>goog.provide('ngeo.popupDirective');
+        <h2 id="mobileMeasurePointDirective">
+            <span class="ancestors">gmf.</span>mobileMeasurePointDirective
+        </h2>
+        
+    
+</header>
 
-goog.require('ngeo');
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="mobileMeasurePointDirective"><span class="type-signature"></span>new mobileMeasurePointDirective<span class="signature">(gmfMobileMeasurePointTemplateUrl)</span><span class="type-signature"> &rarr; {<a href="https://docs.angularjs.org/guide/directive">angular.Directive</a>}</span></h4>
+
+    
 
 
-ngeoModule.value('ngeoPopupTemplateUrl',
-    /**
-     * @param {angular.JQLite} element Element.
-     * @param {angular.Attributes} attrs Attributes.
-     */
-    function(element, attrs) {
-      var templateUrl = attrs['ngeoPopupTemplateurl'];
-      return templateUrl !== undefined ? templateUrl :
-          ngeo.baseTemplateUrl + '/popup.html';
-    });
+
+<div class="description">
+    <p>Provide a &quot;mobile measure&quot; directive.</p>
+</div>
 
 
-/**
- * Provides a directive used to show a popup over the page with
- * a title and content.
- *
- *
- * Things to know about this directive:
- *
- * - This directive is intented to be used along with the popup service.
- *
- * - By default the directive uses "popup.html" as its templateUrl. This can be
- *   changed by redefining the "ngeoPopupTemplateUrl" value.
- *
- * - The directive doesn't create any scope but relies on its parent scope.
- *   Properties like 'content', 'title' or 'open' come from the parent scope.
- *
- * @param {string} ngeoPopupTemplateUrl URL to popup template.
- * @return {angular.Directive} Directive Definition Object.
- * @ngInject
- * @ngdoc directive
- * @ngname ngeoPopup
- */
-ngeo.popupDirective = function(ngeoPopupTemplateUrl) {
-  return {
-    restrict: 'A',
-    templateUrl: ngeoPopupTemplateUrl,
-    link:
-        /**
-         * @param {angular.Scope} scope Scope.
-         * @param {angular.JQLite} element Element.
-         * @param {angular.Attributes} attrs Attributes.
-         */
-        function(scope, element, attrs) {
-          element.addClass('popover');
 
-          scope.close = function(evt) {
-            if (evt) {
-              evt.stopPropagation();
-              evt.preventDefault();
-            }
-            element.addClass('hidden');
-          };
 
-          // Watch the open property
-          scope.$watch('open', function(newVal, oldVal) {
-            element.css('display', newVal ? 'block' : 'none');
-          });
-        }
-  };
-};
 
-ngeoModule.directive('ngeoPopup', ngeo.popupDirective);
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobilemeasurepoint.js.html">contribs/gmf/src/directives/mobilemeasurepoint.js</a>, <a href="contribs_gmf_src_directives_mobilemeasurepoint.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The Directive Definition Object.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="https://docs.angularjs.org/guide/directive">angular.Directive</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>&lt;div gmf-mobile-measure-point=""
+  gmf-mobile-measure-point-map="ctrl.map"
+  gmf-mobile-measure-point-draw-interaction="ctrl.drawInteraction">
+&lt;/div></code></pre>
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

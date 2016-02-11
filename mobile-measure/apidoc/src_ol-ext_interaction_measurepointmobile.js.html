@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: src/directives/popup.js</title>
+    <title>JSDoc: Source: src/ol-ext/interaction/measurepointmobile.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: src/directives/popup.js</h1>
+    <h1 class="page-title">Source: src/ol-ext/interaction/measurepointmobile.js</h1>
 
     
 
@@ -26,74 +26,60 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>goog.provide('ngeo.popupDirective');
+            <pre class="prettyprint source linenums"><code>goog.provide('ngeo.interaction.MeasurePointMobile');
 
-goog.require('ngeo');
+goog.require('ngeo.interaction.Measure');
+goog.require('ngeo.interaction.MobileDraw');
+goog.require('ol.geom.Point');
 
-
-ngeoModule.value('ngeoPopupTemplateUrl',
-    /**
-     * @param {angular.JQLite} element Element.
-     * @param {angular.Attributes} attrs Attributes.
-     */
-    function(element, attrs) {
-      var templateUrl = attrs['ngeoPopupTemplateurl'];
-      return templateUrl !== undefined ? templateUrl :
-          ngeo.baseTemplateUrl + '/popup.html';
-    });
 
 
 /**
- * Provides a directive used to show a popup over the page with
- * a title and content.
+ * @classdesc
+ * Interaction dedicated to measure by coordinate (point) on mobile devices.
  *
- *
- * Things to know about this directive:
- *
- * - This directive is intented to be used along with the popup service.
- *
- * - By default the directive uses "popup.html" as its templateUrl. This can be
- *   changed by redefining the "ngeoPopupTemplateUrl" value.
- *
- * - The directive doesn't create any scope but relies on its parent scope.
- *   Properties like 'content', 'title' or 'open' come from the parent scope.
- *
- * @param {string} ngeoPopupTemplateUrl URL to popup template.
- * @return {angular.Directive} Directive Definition Object.
- * @ngInject
- * @ngdoc directive
- * @ngname ngeoPopup
+ * @constructor
+ * @extends {ngeo.interaction.Measure}
+ * @param {ngeox.interaction.MeasureOptions=} opt_options Options
+ * @export
  */
-ngeo.popupDirective = function(ngeoPopupTemplateUrl) {
-  return {
-    restrict: 'A',
-    templateUrl: ngeoPopupTemplateUrl,
-    link:
-        /**
-         * @param {angular.Scope} scope Scope.
-         * @param {angular.JQLite} element Element.
-         * @param {angular.Attributes} attrs Attributes.
-         */
-        function(scope, element, attrs) {
-          element.addClass('popover');
+ngeo.interaction.MeasurePointMobile = function(opt_options) {
 
-          scope.close = function(evt) {
-            if (evt) {
-              evt.stopPropagation();
-              evt.preventDefault();
-            }
-            element.addClass('hidden');
-          };
+  var options = goog.isDef(opt_options) ? opt_options : {};
 
-          // Watch the open property
-          scope.$watch('open', function(newVal, oldVal) {
-            element.css('display', newVal ? 'block' : 'none');
-          });
-        }
-  };
+  goog.object.extend(options, {displayHelpTooltip: false});
+
+  goog.base(this, options);
+
+};
+goog.inherits(ngeo.interaction.MeasurePointMobile, ngeo.interaction.Measure);
+
+
+/**
+ * @inheritDoc
+ */
+ngeo.interaction.MeasurePointMobile.prototype.createDrawInteraction =
+    function(style, source) {
+  return new ngeo.interaction.MobileDraw({
+    'type': /** @type {ol.geom.GeometryType&lt;string>} */ ('Point'),
+    'style': style,
+    'source': source
+  });
 };
 
-ngeoModule.directive('ngeoPopup', ngeo.popupDirective);
+
+/**
+ * @inheritDoc
+ */
+ngeo.interaction.MeasurePointMobile.prototype.handleMeasure =
+    function(callback) {
+  var geom = /** @type {ol.geom.Point} */
+      (this.sketchFeature.getGeometry());
+  var proj = this.getMap().getView().getProjection();
+  var output = ngeo.interaction.Measure.getFormattedPoint(geom, proj);
+  var coord = geom.getLastCoordinate();
+  callback(output, coord);
+};
 </code></pre>
         </article>
     </section>
