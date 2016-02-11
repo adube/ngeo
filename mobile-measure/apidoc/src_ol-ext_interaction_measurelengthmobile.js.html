@@ -57,6 +57,8 @@ ngeo.interaction.MeasureLengthMobile = function(opt_options) {
    */
   this.active = false;
 
+  goog.object.extend(options, {displayHelpTooltip: false});
+
   goog.base(this, options);
 
 };

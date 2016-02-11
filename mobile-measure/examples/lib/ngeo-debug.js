@@ -118891,6 +118891,15 @@ ngeo.interaction.Measure = function(opt_options) {
    */
   this.continueMsg = null;
 
+
+  /**
+   * Whether or not to display any tooltip
+   * @type {boolean}
+   * @private
+   */
+  this.displayHelpTooltip_ = goog.isDef(options.displayHelpTooltip) ?
+      options.displayHelpTooltip : true;
+
   /**
    * The message to show when user is about to start drawing.
    * @type {Element}
@@ -119024,9 +119033,11 @@ ngeo.interaction.Measure.handleEvent_ = function(evt) {
     helpMsg = this.continueMsg;
   }
 
-  goog.dom.removeChildren(this.helpTooltipElement_);
-  goog.dom.appendChild(this.helpTooltipElement_, helpMsg);
-  this.helpTooltipOverlay_.setPosition(evt.coordinate);
+  if (this.displayHelpTooltip_) {
+    goog.dom.removeChildren(this.helpTooltipElement_);
+    goog.dom.appendChild(this.helpTooltipElement_, helpMsg);
+    this.helpTooltipOverlay_.setPosition(evt.coordinate);
+  }
 
   return true;
 };
@@ -119111,14 +119122,16 @@ ngeo.interaction.Measure.prototype.onDrawEnd_ = function(evt) {
  */
 ngeo.interaction.Measure.prototype.createHelpTooltip_ = function() {
   this.removeHelpTooltip_();
-  this.helpTooltipElement_ = goog.dom.createDom(goog.dom.TagName.DIV);
-  goog.dom.classlist.add(this.helpTooltipElement_, 'tooltip');
-  this.helpTooltipOverlay_ = new ol.Overlay({
-    element: this.helpTooltipElement_,
-    offset: [15, 0],
-    positioning: 'center-left'
-  });
-  this.getMap().addOverlay(this.helpTooltipOverlay_);
+  if (this.displayHelpTooltip_) {
+    this.helpTooltipElement_ = goog.dom.createDom(goog.dom.TagName.DIV);
+    goog.dom.classlist.add(this.helpTooltipElement_, 'tooltip');
+    this.helpTooltipOverlay_ = new ol.Overlay({
+      element: this.helpTooltipElement_,
+      offset: [15, 0],
+      positioning: 'center-left'
+    });
+    this.getMap().addOverlay(this.helpTooltipOverlay_);
+  }
 };
 
 
@@ -119127,12 +119140,14 @@ ngeo.interaction.Measure.prototype.createHelpTooltip_ = function() {
  * @private
  */
 ngeo.interaction.Measure.prototype.removeHelpTooltip_ = function() {
-  this.getMap().removeOverlay(this.helpTooltipOverlay_);
-  if (!goog.isNull(this.helpTooltipElement_)) {
-    this.helpTooltipElement_.parentNode.removeChild(this.helpTooltipElement_);
+  if (this.displayHelpTooltip_) {
+    this.getMap().removeOverlay(this.helpTooltipOverlay_);
+    if (!goog.isNull(this.helpTooltipElement_)) {
+      this.helpTooltipElement_.parentNode.removeChild(this.helpTooltipElement_);
+    }
+    this.helpTooltipElement_ = null;
+    this.helpTooltipOverlay_ = null;
   }
-  this.helpTooltipElement_ = null;
-  this.helpTooltipOverlay_ = null;
 };
 
 
@@ -119815,7 +119830,14 @@ ngeo.interaction.MobileDraw = function(options) {
   this.sketchFeature_ = null;
 
   /**
-   * Sketch point.
+   * Previous sketch points, saved to be able to display them on the layer.
+   * @type {Array.<ol.Feature>}
+   * @private
+   */
+  this.sketchPoints_ = [];
+
+  /**
+   * Current sketch point.
    * @type {ol.Feature}
    * @private
    */
@@ -119952,6 +119974,7 @@ ngeo.interaction.MobileDraw.prototype.addToDrawing = function() {
   var coordinates;
 
   if (this.type_ === ol.geom.GeometryType.LINE_STRING) {
+    this.sketchPoints_.push(this.sketchPoint_);
     if (!this.sketchFeature_) {
       coordinates = [coordinate.slice(), coordinate.slice()];
       this.sketchFeature_ = new ol.Feature(new ol.geom.LineString(coordinates));
@@ -120078,11 +120101,12 @@ ngeo.interaction.MobileDraw.prototype.modifyDrawing_ = function() {
  */
 ngeo.interaction.MobileDraw.prototype.abortDrawing_ = function() {
   var sketchFeature = this.sketchFeature_;
-  if (sketchFeature) {
+  if (sketchFeature || this.sketchPoints_.length > 0) {
     this.sketchFeature_ = null;
     this.sketchPoint_ = null;
     this.overlay_.getSource().clear(true);
   }
+  this.sketchPoints_ = [];
   this.set(ngeo.interaction.MobileDrawProperty.DIRTY, false);
   this.set(ngeo.interaction.MobileDrawProperty.DRAWING, false);
   this.set(ngeo.interaction.MobileDrawProperty.VALID, false);
@@ -120155,6 +120179,7 @@ ngeo.interaction.MobileDraw.prototype.updateSketchFeatures_ = function() {
   var overlaySource = this.overlay_.getSource();
   overlaySource.clear(true);
   overlaySource.addFeatures(sketchFeatures);
+  overlaySource.addFeatures(this.sketchPoints_);
 };
 
 
@@ -120212,6 +120237,8 @@ ngeo.interaction.MeasureLengthMobile = function(opt_options) {
    * @type {boolean}
    */
   this.active = false;
+
+  goog.object.extend(options, {displayHelpTooltip: false});
 
   goog.base(this, options);
 

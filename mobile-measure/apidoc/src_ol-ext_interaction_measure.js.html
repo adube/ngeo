@@ -158,6 +158,15 @@ ngeo.interaction.Measure = function(opt_options) {
    */
   this.continueMsg = null;
 
+
+  /**
+   * Whether or not to display any tooltip
+   * @type {boolean}
+   * @private
+   */
+  this.displayHelpTooltip_ = goog.isDef(options.displayHelpTooltip) ?
+      options.displayHelpTooltip : true;
+
   /**
    * The message to show when user is about to start drawing.
    * @type {Element}
@@ -291,9 +300,11 @@ ngeo.interaction.Measure.handleEvent_ = function(evt) {
     helpMsg = this.continueMsg;
   }
 
-  goog.dom.removeChildren(this.helpTooltipElement_);
-  goog.dom.appendChild(this.helpTooltipElement_, helpMsg);
-  this.helpTooltipOverlay_.setPosition(evt.coordinate);
+  if (this.displayHelpTooltip_) {
+    goog.dom.removeChildren(this.helpTooltipElement_);
+    goog.dom.appendChild(this.helpTooltipElement_, helpMsg);
+    this.helpTooltipOverlay_.setPosition(evt.coordinate);
+  }
 
   return true;
 };
@@ -378,14 +389,16 @@ ngeo.interaction.Measure.prototype.onDrawEnd_ = function(evt) {
  */
 ngeo.interaction.Measure.prototype.createHelpTooltip_ = function() {
   this.removeHelpTooltip_();
-  this.helpTooltipElement_ = goog.dom.createDom(goog.dom.TagName.DIV);
-  goog.dom.classlist.add(this.helpTooltipElement_, 'tooltip');
-  this.helpTooltipOverlay_ = new ol.Overlay({
-    element: this.helpTooltipElement_,
-    offset: [15, 0],
-    positioning: 'center-left'
-  });
-  this.getMap().addOverlay(this.helpTooltipOverlay_);
+  if (this.displayHelpTooltip_) {
+    this.helpTooltipElement_ = goog.dom.createDom(goog.dom.TagName.DIV);
+    goog.dom.classlist.add(this.helpTooltipElement_, 'tooltip');
+    this.helpTooltipOverlay_ = new ol.Overlay({
+      element: this.helpTooltipElement_,
+      offset: [15, 0],
+      positioning: 'center-left'
+    });
+    this.getMap().addOverlay(this.helpTooltipOverlay_);
+  }
 };
 
 
@@ -394,12 +407,14 @@ ngeo.interaction.Measure.prototype.createHelpTooltip_ = function() {
  * @private
  */
 ngeo.interaction.Measure.prototype.removeHelpTooltip_ = function() {
-  this.getMap().removeOverlay(this.helpTooltipOverlay_);
-  if (!goog.isNull(this.helpTooltipElement_)) {
-    this.helpTooltipElement_.parentNode.removeChild(this.helpTooltipElement_);
+  if (this.displayHelpTooltip_) {
+    this.getMap().removeOverlay(this.helpTooltipOverlay_);
+    if (!goog.isNull(this.helpTooltipElement_)) {
+      this.helpTooltipElement_.parentNode.removeChild(this.helpTooltipElement_);
+    }
+    this.helpTooltipElement_ = null;
+    this.helpTooltipOverlay_ = null;
   }
-  this.helpTooltipElement_ = null;
-  this.helpTooltipOverlay_ = null;
 };
 
 
