@@ -48,12 +48,34 @@ app.MobileMeasureController = function(ngeoDecorateInteraction) {
    */
   this.map;
 
+  var style = new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'rgba(255, 255, 255, 0.2)'
+    }),
+    stroke: new ol.style.Stroke({
+      color: 'rgba(0, 0, 0, 0.5)',
+      lineDash: [10, 10],
+      width: 2
+    }),
+    image: new ol.style.RegularShape({
+      stroke: new ol.style.Stroke({
+        color: 'rgba(0, 0, 0, 0.7)',
+        width: 2
+      }),
+      points: 4,
+      radius: 8,
+      radius2: 0,
+      angle: 0
+    })
+  });
+
   /**
    * @type {ngeo.interaction.MeasureLengthMobile}
    * @export
    */
   this.measureLength = new ngeo.interaction.MeasureLengthMobile({
-    decimals: 2
+    decimals: 2,
+    sketchStyle: style
   });
 
   var measureLength = this.measureLength;
@@ -73,7 +95,8 @@ app.MobileMeasureController = function(ngeoDecorateInteraction) {
    * @export
    */
   this.measurePoint = new ngeo.interaction.MeasurePointMobile({
-    decimals: 2
+    decimals: 2,
+    sketchStyle: style
   });
 
   var measurePoint = this.measurePoint;
