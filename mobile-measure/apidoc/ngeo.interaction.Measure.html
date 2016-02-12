@@ -327,7 +327,80 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line329">line 329</a>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line357">line 357</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="decimals"><span class="type-signature">(protected, nullable) </span>decimals<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>Defines the number of decimals to keep in the measurement. If not defined,
+then the default behaviour occurs depending on the measure type.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -390,7 +463,7 @@ where to place the tooltip and determine which help message to display.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line494">line 494</a>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line522">line 522</a>
     </li></ul></dd>
     
 
@@ -534,7 +607,7 @@ where to place the tooltip and determine which help message to display.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line146">line 146</a>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line153">line 153</a>
     </li></ul></dd>
     
 
@@ -561,7 +634,7 @@ where to place the tooltip and determine which help message to display.</p>
 
     
 
-    <h4 class="name" id=".getFormattedArea"><span class="type-signature">(static) </span>getFormattedArea<span class="signature">(polygon, projection)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
+    <h4 class="name" id=".getFormattedArea"><span class="type-signature">(static) </span>getFormattedArea<span class="signature">(polygon, projection, decimals<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
 
     
 
@@ -593,6 +666,8 @@ of the area.</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -618,6 +693,14 @@ of the area.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -641,10 +724,51 @@ of the area.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Projection of the polygon coords.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>decimals</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Decimals.</p></td>
         </tr>
 
     
@@ -687,7 +811,7 @@ of the area.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line223">line 223</a>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line231">line 231</a>
     </li></ul></dd>
     
 
@@ -740,7 +864,7 @@ of the area.</p>
 
     
 
-    <h4 class="name" id=".getFormattedLength"><span class="type-signature">(static) </span>getFormattedLength<span class="signature">(lineString, projection)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
+    <h4 class="name" id=".getFormattedLength"><span class="type-signature">(static) </span>getFormattedLength<span class="signature">(lineString, projection, decimals<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
 
     
 
@@ -772,6 +896,8 @@ string of the length.</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -797,6 +923,14 @@ string of the length.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -820,10 +954,51 @@ string of the length.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Projection of the line string coords.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>decimals</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Decimals.</p></td>
         </tr>
 
     
@@ -866,7 +1041,7 @@ string of the length.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line246">line 246</a>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line265">line 265</a>
     </li></ul></dd>
     
 
@@ -919,7 +1094,7 @@ string of the length.</p>
 
     
 
-    <h4 class="name" id=".getFormattedPoint"><span class="type-signature">(static) </span>getFormattedPoint<span class="signature">(point, projection)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
+    <h4 class="name" id=".getFormattedPoint"><span class="type-signature">(static) </span>getFormattedPoint<span class="signature">(point, projection, decimals<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
 
     
 
@@ -950,6 +1125,8 @@ string of the length.</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -975,6 +1152,14 @@ string of the length.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -998,10 +1183,51 @@ string of the length.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Projection of the line string coords.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>decimals</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Decimals.</p></td>
         </tr>
 
     
@@ -1044,7 +1270,7 @@ string of the length.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line273">line 273</a>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line301">line 301</a>
     </li></ul></dd>
     
 
@@ -1146,7 +1372,7 @@ string of the length.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line316">line 316</a>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line344">line 344</a>
     </li></ul></dd>
     
 
@@ -1254,7 +1480,7 @@ string of the length.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line501">line 501</a>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line529">line 529</a>
     </li></ul></dd>
     
 
@@ -1352,7 +1578,7 @@ string of the length.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line335">line 335</a>
+        <a href="src_ol-ext_interaction_measure.js.html">src/ol-ext/interaction/measure.js</a>, <a href="src_ol-ext_interaction_measure.js.html#line363">line 363</a>
     </li></ul></dd>
     
 

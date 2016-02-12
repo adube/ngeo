@@ -118891,6 +118891,13 @@ ngeo.interaction.Measure = function(opt_options) {
    */
   this.continueMsg = null;
 
+  /**
+   * Defines the number of decimals to keep in the measurement. If not defined,
+   * then the default behaviour occurs depending on the measure type.
+   * @type {?number}
+   * @protected
+   */
+  this.decimals = options.decimals !== undefined ? options.decimals : null;
 
   /**
    * Whether or not to display any tooltip
@@ -118979,19 +118986,30 @@ goog.inherits(ngeo.interaction.Measure, ol.interaction.Interaction);
  * of the area.
  * @param {ol.geom.Polygon} polygon Polygon.
  * @param {ol.proj.Projection} projection Projection of the polygon coords.
+ * @param {?number} decimals Decimals.
  * @return {string} Formatted string of the area.
  */
-ngeo.interaction.Measure.getFormattedArea = function(polygon, projection) {
+ngeo.interaction.Measure.getFormattedArea = function(
+    polygon, projection, decimals) {
   var geom = /** @type {ol.geom.Polygon} */ (
       polygon.clone().transform(projection, 'EPSG:4326'));
   var coordinates = geom.getLinearRing(0).getCoordinates();
   var area = Math.abs(ol.sphere.WGS84.geodesicArea(coordinates));
   var output;
   if (area > 1000000) {
-    output = parseFloat((area / 1000000).toPrecision(3)) +
-        ' ' + 'km<sup>2</sup>';
+    if (decimals !== null) {
+      output = goog.string.padNumber(area / 1000000, 0, decimals);
+    } else {
+      output = parseFloat((area / 1000000).toPrecision(3));
+    }
+    output += ' ' + 'km<sup>2</sup>';
   } else {
-    output = parseFloat(area.toPrecision(3)) + ' ' + 'm<sup>2</sup>';
+    if (decimals !== null) {
+      output = goog.string.padNumber(area, 0, decimals);
+    } else {
+      output = parseFloat(area.toPrecision(3));
+    }
+    output += ' ' + 'm<sup>2</sup>';
   }
   return output;
 };
@@ -119002,10 +119020,11 @@ ngeo.interaction.Measure.getFormattedArea = function(polygon, projection) {
  * string of the length.
  * @param {ol.geom.LineString} lineString Line string.
  * @param {ol.proj.Projection} projection Projection of the line string coords.
+ * @param {?number} decimals Decimals.
  * @return {string} Formatted string of length.
  */
 ngeo.interaction.Measure.getFormattedLength =
-    function(lineString, projection) {
+    function(lineString, projection, decimals) {
   var length = 0;
   var coordinates = lineString.getCoordinates();
   for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
@@ -119015,11 +119034,19 @@ ngeo.interaction.Measure.getFormattedLength =
   }
   var output;
   if (length > 1000) {
-    output = parseFloat((length / 1000).toPrecision(3)) +
-        ' ' + 'km';
+    if (decimals !== null) {
+      output = goog.string.padNumber(length / 1000, 0, decimals);
+    } else {
+      output = parseFloat((length / 1000).toPrecision(3));
+    }
+    output += ' ' + 'km';
   } else {
-    output = parseFloat(length.toPrecision(3)) +
-        ' ' + 'm';
+    if (decimals !== null) {
+      output = goog.string.padNumber(length, 0, decimals);
+    } else {
+      output = parseFloat(length.toPrecision(3));
+    }
+    output += ' ' + 'm';
   }
   return output;
 };
@@ -119029,17 +119056,18 @@ ngeo.interaction.Measure.getFormattedLength =
  * Return a formatted string of the point.
  * @param {ol.geom.Point} point Point.
  * @param {ol.proj.Projection} projection Projection of the line string coords.
+ * @param {?number} decimals Decimals.
  * @return {string} Formatted string of coordinate.
  */
-ngeo.interaction.Measure.getFormattedPoint = function(point, projection) {
+ngeo.interaction.Measure.getFormattedPoint = function(
+    point, projection, decimals) {
   var coordinates = point.getCoordinates();
-  var lonLat = ol.proj.transform(coordinates, projection, 'EPSG:4326');
-  return [
-    'x: ',
-    lonLat[0],
-    ', y: ',
-    lonLat[1]
-  ].join('');
+  var x = coordinates[0];
+  var y = coordinates[1];
+  decimals = decimals !== null ? decimals : 0;
+  x = goog.string.padNumber(x, 0, decimals);
+  y = goog.string.padNumber(y, 0, decimals);
+  return ['X: ', x, ', Y: ', y].join('');
 };
 
 
@@ -119338,7 +119366,8 @@ ngeo.interaction.MeasureArea.prototype.handleMeasure = function(callback) {
   var geom = /** @type {ol.geom.Polygon} */
       (this.sketchFeature.getGeometry());
   var proj = this.getMap().getView().getProjection();
-  var output = ngeo.interaction.Measure.getFormattedArea(geom, proj);
+  var dec = this.decimals;
+  var output = ngeo.interaction.Measure.getFormattedArea(geom, proj, dec);
   var verticesCount = geom.getCoordinates()[0].length;
   var coord = null;
   if (verticesCount > 2) {
@@ -119438,7 +119467,9 @@ ngeo.interaction.MeasureAzimut.prototype.formatMeasure_ = function(line) {
   var azimut = Math.round(factor * rad * 180 / Math.PI) % 360;
   var output = azimut + '°';
   var proj = this.getMap().getView().getProjection();
-  output += '<br/>' + ngeo.interaction.Measure.getFormattedLength(line, proj);
+  var dec = this.decimals;
+  output += '<br/>' + ngeo.interaction.Measure.getFormattedLength(
+      line, proj, dec);
   return output;
 };
 
@@ -119807,7 +119838,8 @@ ngeo.interaction.MeasureLength.prototype.handleMeasure = function(callback) {
   var geom = /** @type {ol.geom.LineString} */
       (this.sketchFeature.getGeometry());
   var proj = this.getMap().getView().getProjection();
-  var output = ngeo.interaction.Measure.getFormattedLength(geom, proj);
+  var dec = this.decimals;
+  var output = ngeo.interaction.Measure.getFormattedLength(geom, proj, dec);
   var coord = geom.getLastCoordinate();
   callback(output, coord);
 };
@@ -120377,7 +120409,8 @@ ngeo.interaction.MeasurePointMobile.prototype.handleMeasure =
   var geom = /** @type {ol.geom.Point} */
       (this.sketchFeature.getGeometry());
   var proj = this.getMap().getView().getProjection();
-  var output = ngeo.interaction.Measure.getFormattedPoint(geom, proj);
+  var dec = this.decimals;
+  var output = ngeo.interaction.Measure.getFormattedPoint(geom, proj, dec);
   var coord = geom.getLastCoordinate();
   callback(output, coord);
 };

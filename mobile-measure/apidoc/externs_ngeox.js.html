@@ -249,6 +249,7 @@ ngeox.interaction;
  * @typedef {{
  *    startMsg: (Element|undefined),
  *    continueMsg: (Element|undefined),
+ *    decimals: (number|undefined),
  *    style: (ol.style.Style|Array.&lt;ol.style.Style>|ol.style.StyleFunction|undefined),
  *    sketchStyle: (ol.style.Style|Array.&lt;ol.style.Style>|ol.style.StyleFunction|undefined)
  * }}
@@ -270,6 +271,14 @@ ngeox.interaction.MeasureOptions.prototype.startMsg;
  * @type {Element|undefined}
  */
 ngeox.interaction.MeasureOptions.prototype.continueMsg;
+
+
+/**
+ * Defines the number of decimals to keep in the measurement. If not defined,
+ * then the default behaviour occurs depending on the measure type.
+ * @type {number|undefined}
+ */
+ngeox.interaction.MeasureOptions.prototype.decimals;
 
 
 /**

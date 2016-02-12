@@ -52,7 +52,9 @@ app.MobileMeasureController = function(ngeoDecorateInteraction) {
    * @type {ngeo.interaction.MeasureLengthMobile}
    * @export
    */
-  this.measureLength = new ngeo.interaction.MeasureLengthMobile();
+  this.measureLength = new ngeo.interaction.MeasureLengthMobile({
+    decimals: 2
+  });
 
   var measureLength = this.measureLength;
   measureLength.setActive(false);
@@ -63,14 +65,16 @@ app.MobileMeasureController = function(ngeoDecorateInteraction) {
    * @type {ngeo.interaction.MobileDraw}
    * @export
    */
-  this.drawLength = /** @type {ngeo.interaction.MobileDraw} */ (
+  this.drawLine = /** @type {ngeo.interaction.MobileDraw} */ (
       this.measureLength.getDrawInteraction());
 
   /**
    * @type {ngeo.interaction.MeasurePointMobile}
    * @export
    */
-  this.measurePoint = new ngeo.interaction.MeasurePointMobile();
+  this.measurePoint = new ngeo.interaction.MeasurePointMobile({
+    decimals: 2
+  });
 
   var measurePoint = this.measurePoint;
   measurePoint.setActive(false);

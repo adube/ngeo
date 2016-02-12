@@ -76,7 +76,8 @@ ngeo.interaction.MeasurePointMobile.prototype.handleMeasure =
   var geom = /** @type {ol.geom.Point} */
       (this.sketchFeature.getGeometry());
   var proj = this.getMap().getView().getProjection();
-  var output = ngeo.interaction.Measure.getFormattedPoint(geom, proj);
+  var dec = this.decimals;
+  var output = ngeo.interaction.Measure.getFormattedPoint(geom, proj, dec);
   var coord = geom.getLastCoordinate();
   callback(output, coord);
 };

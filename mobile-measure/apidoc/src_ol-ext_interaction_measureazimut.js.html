@@ -117,7 +117,9 @@ ngeo.interaction.MeasureAzimut.prototype.formatMeasure_ = function(line) {
   var azimut = Math.round(factor * rad * 180 / Math.PI) % 360;
   var output = azimut + '°';
   var proj = this.getMap().getView().getProjection();
-  output += '&lt;br/>' + ngeo.interaction.Measure.getFormattedLength(line, proj);
+  var dec = this.decimals;
+  output += '&lt;br/>' + ngeo.interaction.Measure.getFormattedLength(
+      line, proj, dec);
   return output;
 };
 
