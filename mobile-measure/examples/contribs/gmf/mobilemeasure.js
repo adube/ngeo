@@ -9,6 +9,11 @@ var app = {};
 app.module = angular.module('app', ['gmf']);
 
 
+app.module.constant(
+    'gmfAltitudeUrl',
+    'altitude.json');
+
+
 /**
  * App-specific directive wrapping the line measure tools. The directive's
  * controller has a property "map" including a reference to the OpenLayers
