@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: contribs/gmf/externs/gmf-themes.js</title>
+    <title>JSDoc: Class: Altitude <small>service:gmfAltitude</small></title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,96 +17,356 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: contribs/gmf/externs/gmf-themes.js</h1>
+    <h1 class="page-title">Class: Altitude <small>service:gmfAltitude</small></h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Externs for the GeoMapFish "themes" web service.
- *
- * @externs
- */
+        <h2 id="Altitude">
+            <span class="ancestors">gmf.</span>Altitude
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="Altitude"><span class="type-signature"></span>new Altitude<span class="signature">($http, gmfAltitudeUrl)</span><span class="type-signature"></span></h4>
+
+    
 
 
 
-/**
- * @constructor
- */
-var GmfThemesNode = function() {};
 
 
-/**
- * @type {number}
- */
-GmfThemesNode.prototype.id;
 
 
-/**
- * @type {Array.&lt;GmfThemesNode>}
- */
-GmfThemesNode.prototype.children;
 
 
-/**
- * @type {Object.&lt;string, string>}
- */
-GmfThemesNode.prototype.childLayers;
 
 
-/**
- * @type {string}
- */
-GmfThemesNode.prototype.layers;
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>$http</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://docs.angularjs.org/api/ng/service/$http">angular.$http</a></span>
 
 
-/**
- * @type {number}
- */
-GmfThemesNode.prototype.maxResolutionHint;
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Angular http service.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>gmfAltitudeUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
 
 
-/**
- * @type {Object.&lt;string, string>}
- */
-GmfThemesNode.prototype.metadata;
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>URL to the altitude server</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
-/**
- * @type {number}
- */
-GmfThemesNode.prototype.minResolutionHint;
 
 
-/**
- * @type {string}
- */
-GmfThemesNode.prototype.name;
 
 
-/**
- * @type {string}
- */
-GmfThemesNode.prototype.type;
 
 
-/**
- * @type {string|undefined}
- */
-GmfThemesNode.prototype.url;
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_services_altitude.js.html">contribs/gmf/src/services/altitude.js</a>, <a href="contribs_gmf_src_services_altitude.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
-/**
- * @type {string|undefined}
- */
-GmfThemesNode.prototype.wmsUrl;
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="getAltitude"><span class="type-signature"></span>getAltitude<span class="signature">(coordinate)</span><span class="type-signature"> &rarr; {<a href="https://docs.angularjs.org/api/ng/service/$q#the-promise-api">angular.$q.Promise</a>}</span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>coordinate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.html#.Coordinate">ol.Coordinate</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Coordinate.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_services_altitude.js.html">contribs/gmf/src/services/altitude.js</a>, <a href="contribs_gmf_src_services_altitude.js.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Promise.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="https://docs.angularjs.org/api/ng/service/$q#the-promise-api">angular.$q.Promise</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

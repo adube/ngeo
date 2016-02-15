@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: contribs/gmf/externs/gmf-themes.js</title>
+    <title>JSDoc: Source: contribs/gmf/src/services/altitude.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: contribs/gmf/externs/gmf-themes.js</h1>
+    <h1 class="page-title">Source: contribs/gmf/src/services/altitude.js</h1>
 
     
 
@@ -27,83 +27,78 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Externs for the GeoMapFish "themes" web service.
- *
- * @externs
+ * @fileoverview This file defines the Altitude service, which uses the
+ * c2cgeoportal's raster to obtain different kinds of altitude information
+ * at a specific coordinate.
  */
+goog.provide('gmf.Altitude');
+
+goog.require('gmf');
+
+
+/**
+ * @enum {string}
+ */
+gmf.AltitudeParam = {
+  X: 'lon',
+  Y: 'lat'
+};
 
 
 
 /**
  * @constructor
+ * @param {angular.$http} $http Angular http service.
+ * @param {string} gmfAltitudeUrl URL to the altitude server
+ * @ngInject
+ * @ngdoc service
+ * @ngname gmfAltitude
  */
-var GmfThemesNode = function() {};
+gmf.Altitude = function($http, gmfAltitudeUrl) {
+
+  /**
+   * @type {angular.$http}
+   * @private
+   */
+  this.$http_ = $http;
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.url_ = gmfAltitudeUrl;
+};
 
 
 /**
- * @type {number}
+ * @param {ol.Coordinate} coordinate Coordinate.
+ * @return {angular.$q.Promise} Promise.
+ * @export
  */
-GmfThemesNode.prototype.id;
+gmf.Altitude.prototype.getAltitude = function(coordinate) {
+
+  var params = {};
+  params[gmf.AltitudeParam.X] = coordinate[0];
+  params[gmf.AltitudeParam.Y] = coordinate[1];
+
+  return this.$http_.get(this.url_, {
+    params: params,
+    withCredentials: true
+  }).then(goog.bind(this.handleGetAltitude_, this));
+};
 
 
 /**
- * @type {Array.&lt;GmfThemesNode>}
+ * @param {angular.$http.Response} resp Ajax response.
+ * @return {Object.&lt;string, number>}
+ * @private
  */
-GmfThemesNode.prototype.children;
+gmf.Altitude.prototype.handleGetAltitude_ = function(resp) {
+  return resp.data;
+};
 
 
-/**
- * @type {Object.&lt;string, string>}
- */
-GmfThemesNode.prototype.childLayers;
-
-
-/**
- * @type {string}
- */
-GmfThemesNode.prototype.layers;
-
-
-/**
- * @type {number}
- */
-GmfThemesNode.prototype.maxResolutionHint;
-
-
-/**
- * @type {Object.&lt;string, string>}
- */
-GmfThemesNode.prototype.metadata;
-
-
-/**
- * @type {number}
- */
-GmfThemesNode.prototype.minResolutionHint;
-
-
-/**
- * @type {string}
- */
-GmfThemesNode.prototype.name;
-
-
-/**
- * @type {string}
- */
-GmfThemesNode.prototype.type;
-
-
-/**
- * @type {string|undefined}
- */
-GmfThemesNode.prototype.url;
-
-
-/**
- * @type {string|undefined}
- */
-GmfThemesNode.prototype.wmsUrl;
+gmf.module.service('gmfAltitude', gmf.Altitude);
 </code></pre>
         </article>
     </section>

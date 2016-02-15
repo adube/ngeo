@@ -109025,7 +109025,7 @@ goog.provide('ngeo');
 
 
 /** @type {!angular.Module} */
-var ngeoModule = angular.module('ngeo', []);
+ngeo.module = angular.module('ngeo', []);
 
 
 /**
@@ -109099,7 +109099,7 @@ ngeo.btngroupDirective = function($parse) {
 };
 
 
-ngeoModule.directive('ngeoBtnGroup', ngeo.btngroupDirective);
+ngeo.module.directive('ngeoBtnGroup', ngeo.btngroupDirective);
 
 
 
@@ -109147,7 +109147,7 @@ ngeo.BtnGroupController.prototype.addButton = function(expressionFn) {
 };
 
 
-ngeoModule.controller('ngeoBtnGroupController', ngeo.BtnGroupController);
+ngeo.module.controller('ngeoBtnGroupController', ngeo.BtnGroupController);
 
 
 /**
@@ -109214,7 +109214,7 @@ ngeo.btnDirective = function($parse) {
 };
 
 
-ngeoModule.directive('ngeoBtn', ngeo.btnDirective);
+ngeo.module.directive('ngeoBtn', ngeo.btnDirective);
 
 goog.provide('ngeo.controlDirective');
 
@@ -109267,7 +109267,7 @@ ngeo.controlDirective = function() {
 };
 
 
-ngeoModule.directive('ngeoControl', ngeo.controlDirective);
+ngeo.module.directive('ngeoControl', ngeo.controlDirective);
 
 goog.provide('ngeo.DecorateGeolocation');
 
@@ -109308,7 +109308,7 @@ ngeo.decorateGeolocation = function(geolocation) {
 };
 
 
-ngeoModule.value('ngeoDecorateGeolocation', ngeo.decorateGeolocation);
+ngeo.module.value('ngeoDecorateGeolocation', ngeo.decorateGeolocation);
 
 goog.provide('ngeo.FeatureOverlay');
 goog.provide('ngeo.FeatureOverlayMgr');
@@ -109610,7 +109610,7 @@ ngeo.FeatureOverlay.prototype.handleFeatureRemove_ = function(evt) {
 };
 
 
-ngeoModule.service('ngeoFeatureOverlayMgr', ngeo.FeatureOverlayMgr);
+ngeo.module.service('ngeoFeatureOverlayMgr', ngeo.FeatureOverlayMgr);
 
 goog.provide('ngeo.DesktopGeolocationController');
 goog.provide('ngeo.desktopGeolocationDirective');
@@ -109652,7 +109652,7 @@ ngeo.desktopGeolocationDirective = function() {
 };
 
 
-ngeoModule.directive('ngeoDesktopGeolocation',
+ngeo.module.directive('ngeoDesktopGeolocation',
     ngeo.desktopGeolocationDirective);
 
 
@@ -109806,7 +109806,7 @@ ngeo.DesktopGeolocationController.prototype.setPosition_ = function(event) {
 };
 
 
-ngeoModule.controller('NgeoDesktopGeolocationController',
+ngeo.module.controller('NgeoDesktopGeolocationController',
     ngeo.DesktopGeolocationController);
 
 goog.provide('ngeo.filereaderDirective');
@@ -109836,7 +109836,7 @@ ngeo.filereaderDirective = function($window) {
     restrict: 'A',
     scope: {
       'fileContent': '=ngeoFilereader',
-      'supported': '=ngeoFilereaderSupported'
+      'supported': '=?ngeoFilereaderSupported'
     },
     link:
         /**
@@ -109869,7 +109869,7 @@ ngeo.filereaderDirective = function($window) {
 };
 
 
-ngeoModule.directive('ngeoFilereader', ngeo.filereaderDirective);
+ngeo.module.directive('ngeoFilereader', ngeo.filereaderDirective);
 
 goog.provide('ngeo.LayertreeController');
 goog.provide('ngeo.layertreeDirective');
@@ -109877,7 +109877,7 @@ goog.provide('ngeo.layertreeDirective');
 goog.require('ngeo');
 
 
-ngeoModule.value('ngeoLayertreeTemplateUrl',
+ngeo.module.value('ngeoLayertreeTemplateUrl',
     /**
      * @param {angular.JQLite} element Element.
      * @param {angular.Attributes} attrs Attributes.
@@ -109996,7 +109996,7 @@ ngeo.layertreeDirective = function(
 };
 
 
-ngeoModule.directive('ngeoLayertree', ngeo.layertreeDirective);
+ngeo.module.directive('ngeoLayertree', ngeo.layertreeDirective);
 
 
 
@@ -110134,7 +110134,7 @@ ngeo.LayertreeController.prototype.getSetActive = function(val) {
 };
 
 
-ngeoModule.controller('NgeoLayertreeController',
+ngeo.module.controller('NgeoLayertreeController',
     ngeo.LayertreeController);
 
 goog.provide('ngeo.mapDirective');
@@ -110176,7 +110176,7 @@ ngeo.mapDirective = function() {
   };
 };
 
-ngeoModule.directive('ngeoMap', ngeo.mapDirective);
+ngeo.module.directive('ngeoMap', ngeo.mapDirective);
 
 goog.provide('ngeo.MobileGeolocationController');
 goog.provide('ngeo.mobileGeolocationDirective');
@@ -110218,7 +110218,7 @@ ngeo.mobileGeolocationDirective = function() {
 };
 
 
-ngeoModule.directive('ngeoMobileGeolocation', ngeo.mobileGeolocationDirective);
+ngeo.module.directive('ngeoMobileGeolocation', ngeo.mobileGeolocationDirective);
 
 
 
@@ -110422,13 +110422,419 @@ ngeo.MobileGeolocationController.prototype.handleViewChange_ = function(event) {
 };
 
 
-ngeoModule.controller('NgeoMobileGeolocationController',
+ngeo.module.controller('NgeoMobileGeolocationController',
     ngeo.MobileGeolocationController);
+
+goog.provide('ngeo.Query');
+
+goog.require('ngeo');
+goog.require('ol.format.WMSGetFeatureInfo');
+goog.require('ol.source.ImageWMS');
+goog.require('ol.source.TileWMS');
+
+
+/**
+ * @typedef {{
+ *     resultSource: (ngeo.QueryResultSource),
+ *     source: (ngeox.QuerySource)
+ * }}
+ */
+ngeo.QueryCacheItem;
+
+
+/**
+ * @enum {string}
+ */
+ngeo.QueryInfoFormatType = {
+  GML: 'application/vnd.ogc.gml'
+};
+
+
+/**
+ * @typedef {{
+ *     sources: (Array.<ngeo.QueryResultSource>),
+ *     total: (number)
+ * }}
+ */
+ngeo.QueryResult;
+
+
+/**
+ * @typedef {{
+ *     features: (Array.<ol.Feature>),
+ *     id: (number|string),
+ *     label: (string),
+ *     pending: (boolean)
+ * }}
+ */
+ngeo.QueryResultSource;
+
+
+/**
+ * The `ngeoQueryResult` is the value service where the features of the query
+ * result are added.
+ */
+ngeo.module.value('ngeoQueryResult', {
+  'sources': [],
+  'total': 0
+});
+
+
+
+/**
+ * The Query service provides a way to send WMS GetFeatureInfo requests from
+ * visible layer objects within a map. Those do not necessarily need to have
+ * a WMS source. The Query service requires source configuration in order
+ * for layers to actually be considered queryable.
+ *
+ * To know more about the specification of a source configuration, see
+ * `ngeox.QuerySource`
+ *
+ * @constructor
+ * @param {angular.$http} $http Angular $http service.
+ * @param {ngeo.QueryResult} ngeoQueryResult The ngeo query result service.
+ * @param {ngeox.QueryOptions|undefined} ngeoQueryOptions The options to
+ *     configure the ngeo query service with.
+ * @ngdoc service
+ * @ngname ngeoQuery
+ * @ngInject
+ */
+ngeo.Query = function($http, ngeoQueryResult, ngeoQueryOptions) {
+
+  var options = ngeoQueryOptions !== undefined ? ngeoQueryOptions : {};
+
+  /**
+   * @type {number}
+   * @private
+   */
+  this.limit_ = options.limit !== undefined ? options.limit : 50;
+
+  /**
+   * @type {string}
+   * @private
+   */
+  this.sourceIdProperty_ = options.sourceIdProperty !== undefined ?
+      options.sourceIdProperty : ngeo.Query.DEFAULT_SOURCE_ID_PROPERTY_;
+
+  /**
+   * @type {angular.$http}
+   * @private
+   */
+  this.$http_ = $http;
+
+  /**
+   * @type {ngeo.QueryResult}
+   * @private
+   */
+  this.result_ = ngeoQueryResult;
+
+  /**
+   * @type {Array.<ngeox.QuerySource>}
+   * @private
+   */
+  this.sources_ = [];
+
+  /**
+   * @type {Object.<number|string, ngeo.QueryCacheItem>}
+   * @private
+   */
+  this.cache_ = {};
+};
+
+
+/**
+ * @const
+ * @private
+ */
+ngeo.Query.DEFAULT_SOURCE_ID_PROPERTY_ = 'querySourceId';
+
+
+/**
+ * Adds a new source to the query service.
+ *
+ * A source must at least have an `id` configured.  That id is then used to
+ * associate the the corresponding layer object within a map.
+ *
+ * A source will require a `ol.source.ImageWMS` or `ol.source.TileWMS` object.
+ * You can either set it directly in the config, or use the one from a given
+ * layer or let the query service create one from you using other source config
+ * such as `url` and `params`.
+ *
+ * A source can be set with either a `format` and/or `infoFormat`, which will
+ * determine how the returned features of a query will be read.
+ *
+ * This method will also create a result entry in the `ngeoQueryResult`
+ * value service.
+ *
+ * @param {ngeox.QuerySource} source The source to add to the query service.
+ * @export
+ */
+ngeo.Query.prototype.addSource = function(source) {
+  var sourceId = source.id;
+
+  goog.asserts.assert(sourceId, 'source.id should be thruthy');
+  goog.asserts.assert(!this.cache_[sourceId],
+      'no other source with the same id should be present');
+
+  // == wmsSource ==
+  // if the source doesn't have a wmsSource property set, it must at least have
+  // a layer that has one or have the required configuration options in order
+  // to create one.
+  if (!source.wmsSource) {
+    if (source.layer &&
+        (source.layer instanceof ol.layer.Image ||
+         source.layer instanceof ol.layer.Tile)) {
+      var wmsSource = source.layer.getSource();
+      if (wmsSource &&
+          (wmsSource instanceof ol.source.ImageWMS ||
+           wmsSource instanceof ol.source.TileWMS)) {
+        source.wmsSource =
+            /** @type {ol.source.ImageWMS|ol.source.TileWMS} */ (wmsSource);
+      }
+    } else {
+      var url = source.url;
+      var params = source.params;
+      goog.asserts.assert(url,
+          'url must be set when no layer or wmsSource is set in the source');
+      goog.asserts.assert(params,
+          'parmas must be set when no layer or wmsSource is set in the source');
+      source.wmsSource = new ol.source.ImageWMS({
+        url: url,
+        params: params
+      });
+    }
+  }
+  goog.asserts.assert(source.wmsSource, 'wmsSource should be thruthy');
+
+  // == format ==
+  if (!source.format) {
+    // GML is the default infoFormat if the source doesn't have one defined
+    if (!source.infoFormat) {
+      source.infoFormat = ngeo.QueryInfoFormatType.GML;
+    }
+
+    var layers = source.wmsSource.getParams()['LAYERS'].split(',');
+
+    if (source.infoFormat === ngeo.QueryInfoFormatType.GML) {
+      source.format = new ol.format.WMSGetFeatureInfo({
+        layers: layers
+      });
+    }
+  } else if (!source.infoFormat) {
+    // == infoFormat ==
+    var format = source.format;
+    if (format instanceof ol.format.WMSGetFeatureInfo) {
+      source.infoFormat = ngeo.QueryInfoFormatType.GML;
+    }
+  }
+  goog.asserts.assert(source.format, 'format should be thruthy');
+
+
+  this.sources_.push(source);
+
+  var sourceLabel = source.label !== undefined ? source.label : sourceId;
+
+  var resultSource = /** @type {ngeo.QueryResultSource} */ ({
+    'features': [],
+    'id': sourceId,
+    'label': sourceLabel,
+    'pending': false
+  });
+
+  this.result_.sources.push(resultSource);
+
+  var cacheItem = {
+    'source': source,
+    'resultSource': resultSource
+  };
+  this.cache_[sourceId] = cacheItem;
+};
+
+
+/**
+ * Add multiple sources at once in the order they are given.
+ * @param {Array.<ngeox.QuerySource>} sources The sources to add to the query
+ *     service.
+ * @export
+ */
+ngeo.Query.prototype.addSources = function(sources) {
+  sources.forEach(this.addSource, this);
+};
+
+
+/**
+ * Clear the results.
+ * @export
+ */
+ngeo.Query.prototype.clear = function() {
+  this.clearResult_();
+};
+
+
+/**
+ * Issue a new request using a given map and a given object, which can be
+ * a coordinate or extent.
+ *
+ * NOTE: only coordinates are currently supported.
+ *
+ * @param {ol.Map} map The ol3 map object to fetch the layers from.
+ * @param {ol.Coordinate|ol.Extent} object The coordinate or extent to issue
+ *     the request with.
+ * @export
+ */
+ngeo.Query.prototype.issue = function(map, object) {
+
+  this.clearResult_();
+
+  if (object.length === 2) {
+    this.issueWMSGetFeatureInfoRequests_(map, object);
+  }
+};
+
+
+/**
+ * Issue a new WMS GetFeatureInfo request using a given map and a coordinate.
+ * For each visible layer of the map, if that layer has a source configured
+ * within this query service, then a query will be sent and the results
+ * will be stocked in the `ngeoQueryResult`.
+ *
+ * If multiple sources share the same url and use GML as info format, then
+ * only one request will be sent for all these sources.
+ *
+ * NOTE: Only GML info format are currently supported.
+ *
+ * @param {ol.Map} map The ol3 map object to fetch the layers from.
+ * @param {ol.Coordinate} coordinate The coordinate to issue the request with.
+ * @private
+ */
+ngeo.Query.prototype.issueWMSGetFeatureInfoRequests_ = function(
+    map, coordinate) {
+
+  var view = map.getView();
+  var projCode = view.getProjection().getCode();
+
+  var id;
+  var infoFormat;
+  var url;
+  var item;
+  var wmsGetFeatureInfoUrl;
+
+  var itemsByUrl =
+      /** @type {Object.<string, Array.<ngeo.QueryCacheItem>>} */ ({});
+
+  var resolution = /** @type {number} */ (view.getResolution());
+
+  map.getLayers().forEach(function(layer) {
+
+    // skip layers that are not visible
+    if (!layer.getVisible()) {
+      return;
+    }
+
+    // skip layers that don't have a source configured
+    id = this.getLayerSourceId_(layer);
+    if (!id || !this.cache_[id]) {
+      return;
+    }
+
+    item = this.cache_[id];
+    item['resultSource'].pending = true;
+    infoFormat = item.source.infoFormat;
+
+    // sources that use GML as info format are combined together if they
+    // share the same server url
+    if (infoFormat === ngeo.QueryInfoFormatType.GML) {
+      url = item.source.wmsSource.getUrl();
+      goog.asserts.assertString(url);
+      if (!itemsByUrl[url]) {
+        itemsByUrl[url] = [];
+      }
+      itemsByUrl[url].push(item);
+    } else {
+      // TODO - support other kinds of infoFormats
+      item['resultSource'].pending = false;
+    }
+
+  }, this);
+
+  goog.object.forEach(itemsByUrl, function(items) {
+
+    infoFormat = items[0].source.infoFormat;
+    var layers = items[0].source.wmsSource.getParams()['LAYERS'].split(',');
+
+    wmsGetFeatureInfoUrl = items[0].source.wmsSource.getGetFeatureInfoUrl(
+        coordinate,
+        resolution,
+        projCode,
+        {
+          'INFO_FORMAT': infoFormat,
+          'FEATURE_COUNT': this.limit_
+        });
+
+    goog.asserts.assert(
+        wmsGetFeatureInfoUrl, 'WMS GetFeatureInfo url should be thruty');
+
+    for (var i = 1, len = items.length; i < len; i++) {
+      layers = layers.concat(
+          items[i].source.wmsSource.getParams()['LAYERS'].split(','));
+    }
+
+    var lyrStr = layers.join(',');
+
+    wmsGetFeatureInfoUrl =
+        goog.uri.utils.setParam(wmsGetFeatureInfoUrl, 'LAYERS', lyrStr);
+    wmsGetFeatureInfoUrl =
+        goog.uri.utils.setParam(wmsGetFeatureInfoUrl, 'QUERY_LAYERS', lyrStr);
+
+    this.$http_.get(wmsGetFeatureInfoUrl).then(goog.bind(
+        function(items, response) {
+          items.forEach(function(item) {
+            var format = item.source.format;
+            var features = format.readFeatures(response.data);
+            item['resultSource'].pending = false;
+            item['resultSource'].features = features;
+            this.result_.total += features.length;
+          }, this);
+        },
+        this,
+        items));
+  }, this);
+};
+
+
+/**
+ * Clear every features for all result sources and reset the total counter
+ * as well.
+ * @private
+ */
+ngeo.Query.prototype.clearResult_ = function() {
+  this.result_.total = 0;
+  this.result_.sources.forEach(function(source) {
+    source.features.length = 0;
+  }, this);
+};
+
+
+/**
+ * Returns the source id from an ol3 layer object.
+ * @param {ol.layer.Base} layer The ol3 layer object.
+ * @return {number|string} id The id of the source bound to that layer.
+ * @private
+ */
+ngeo.Query.prototype.getLayerSourceId_ = function(layer) {
+  var id = layer.get(this.sourceIdProperty_);
+  id = goog.isNumber(id) || goog.isString(id) ? id : '';
+  return id;
+};
+
+
+ngeo.module.service('ngeoQuery', ngeo.Query);
 
 goog.provide('ngeo.MobileQueryController');
 goog.provide('ngeo.mobileQueryDirective');
 
 goog.require('ngeo');
+goog.require('ngeo.Query');
 
 
 /**
@@ -110468,7 +110874,7 @@ ngeo.mobileQueryDirective = function() {
 };
 
 
-ngeoModule.directive('ngeoMobileQuery', ngeo.mobileQueryDirective);
+ngeo.module.directive('ngeoMobileQuery', ngeo.mobileQueryDirective);
 
 
 
@@ -110559,7 +110965,7 @@ ngeo.MobileQueryController.prototype.handleMapClick_ = function(evt) {
 };
 
 
-ngeoModule.controller('NgeoMobileQueryController', ngeo.MobileQueryController);
+ngeo.module.controller('NgeoMobileQueryController', ngeo.MobileQueryController);
 
 goog.provide('ngeo.modalDirective');
 
@@ -110639,14 +111045,14 @@ ngeo.modalDirective = function($parse) {
   };
 };
 
-ngeoModule.directive('ngeoModal', ngeo.modalDirective);
+ngeo.module.directive('ngeoModal', ngeo.modalDirective);
 
 goog.provide('ngeo.popupDirective');
 
 goog.require('ngeo');
 
 
-ngeoModule.value('ngeoPopupTemplateUrl',
+ngeo.module.value('ngeoPopupTemplateUrl',
     /**
      * @param {angular.JQLite} element Element.
      * @param {angular.Attributes} attrs Attributes.
@@ -110708,7 +111114,7 @@ ngeo.popupDirective = function(ngeoPopupTemplateUrl) {
   };
 };
 
-ngeoModule.directive('ngeoPopup', ngeo.popupDirective);
+ngeo.module.directive('ngeoPopup', ngeo.popupDirective);
 
 goog.provide('ngeo.profileDirective');
 
@@ -110827,7 +111233,7 @@ ngeo.profileDirective = function() {
   };
 };
 
-ngeoModule.directive('ngeoProfile', ngeo.profileDirective);
+ngeo.module.directive('ngeoProfile', ngeo.profileDirective);
 
 goog.provide('ngeo.recenterDirective');
 
@@ -110892,7 +111298,7 @@ ngeo.recenterDirective = function() {
     }
   };
 };
-ngeoModule.directive('ngeoRecenter', ngeo.recenterDirective);
+ngeo.module.directive('ngeoRecenter', ngeo.recenterDirective);
 
 // Copyright 2010 The Closure Library Authors. All Rights Reserved.
 //
@@ -113988,7 +114394,7 @@ ngeo.resizemapDirective = function($window, $animate) {
 };
 
 
-ngeoModule.directive('ngeoResizemap', ngeo.resizemapDirective);
+ngeo.module.directive('ngeoResizemap', ngeo.resizemapDirective);
 
 goog.provide('ngeo.ScaleselectorController');
 goog.provide('ngeo.ScaleselectorOptions');
@@ -114000,7 +114406,7 @@ goog.require('ol.Object');
 goog.require('ol.events');
 
 
-ngeoModule.value('ngeoScaleselectorTemplateUrl',
+ngeo.module.value('ngeoScaleselectorTemplateUrl',
     /**
      * @param {angular.JQLite} element Element.
      * @param {angular.Attributes} attrs Attributes.
@@ -114073,7 +114479,7 @@ ngeo.scaleselectorDirective = function(ngeoScaleselectorTemplateUrl) {
 };
 
 
-ngeoModule.directive('ngeoScaleselector', ngeo.scaleselectorDirective);
+ngeo.module.directive('ngeoScaleselector', ngeo.scaleselectorDirective);
 
 
 
@@ -114252,7 +114658,7 @@ ngeo.ScaleselectorController.prototype.registerResolutionChangeListener_ =
 };
 
 
-ngeoModule.controller('NgeoScaleselectorController',
+ngeo.module.controller('NgeoScaleselectorController',
     ngeo.ScaleselectorController);
 
 goog.provide('ngeo.searchDirective');
@@ -114397,7 +114803,7 @@ ngeo.searchDirective.adaptListeners_ = function(object) {
 };
 
 
-ngeoModule.directive('ngeoSearch', ngeo.searchDirective);
+ngeo.module.directive('ngeoSearch', ngeo.searchDirective);
 
 // Copyright 2005 The Closure Library Authors. All Rights Reserved.
 //
@@ -117712,7 +118118,7 @@ ngeo.sortableDirective = function($timeout) {
   };
 };
 
-ngeoModule.directive('ngeoSortable', ngeo.sortableDirective);
+ngeo.module.directive('ngeoSortable', ngeo.sortableDirective);
 
 goog.provide('ngeo.format.FeatureHash');
 
@@ -120553,7 +120959,7 @@ ngeo.BackgroundLayerMgr.prototype.set = function(map, layer) {
 };
 
 
-ngeoModule.service('ngeoBackgroundLayerMgr', ngeo.BackgroundLayerMgr);
+ngeo.module.service('ngeoBackgroundLayerMgr', ngeo.BackgroundLayerMgr);
 
 
 goog.provide('ngeo.CreateGeoJSONBloodhound');
@@ -120657,7 +121063,7 @@ ngeo.createGeoJSONBloodhound = function(url, opt_filter, opt_featureProjection,
 };
 
 
-ngeoModule.value('ngeoCreateGeoJSONBloodhound', ngeo.createGeoJSONBloodhound);
+ngeo.module.value('ngeoCreateGeoJSONBloodhound', ngeo.createGeoJSONBloodhound);
 
 goog.provide('ngeo.Debounce');
 
@@ -120711,7 +121117,7 @@ ngeo.debounceServiceFactory = function($timeout) {
 };
 
 
-ngeoModule.factory('ngeoDebounce', ngeo.debounceServiceFactory);
+ngeo.module.factory('ngeoDebounce', ngeo.debounceServiceFactory);
 
 goog.provide('ngeo.DecorateInteraction');
 
@@ -120751,7 +121157,7 @@ ngeo.decorateInteraction = function(interaction) {
 };
 
 
-ngeoModule.value('ngeoDecorateInteraction', ngeo.decorateInteraction);
+ngeo.module.value('ngeoDecorateInteraction', ngeo.decorateInteraction);
 
 goog.provide('ngeo.DecorateLayer');
 
@@ -120818,7 +121224,7 @@ ngeo.decorateLayer = function(layer) {
 };
 
 
-ngeoModule.value('ngeoDecorateLayer', ngeo.decorateLayer);
+ngeo.module.value('ngeoDecorateLayer', ngeo.decorateLayer);
 
 goog.provide('ngeo.GetBrowserLanguage');
 
@@ -120872,7 +121278,7 @@ ngeo.getBrowserLanguageFactory = function($window) {
 };
 
 
-ngeoModule.factory('ngeoGetBrowserLanguage', ngeo.getBrowserLanguageFactory);
+ngeo.module.factory('ngeoGetBrowserLanguage', ngeo.getBrowserLanguageFactory);
 
 goog.provide('ngeo.LayerHelper');
 
@@ -121174,7 +121580,7 @@ ngeo.LayerHelper.prototype.getFlatLayers_ = function(layer, array) {
   return array;
 };
 
-ngeoModule.service('ngeoLayerHelper', ngeo.LayerHelper);
+ngeo.module.service('ngeoLayerHelper', ngeo.LayerHelper);
 
 goog.provide('ngeo.Location');
 goog.provide('ngeo.MockLocationProvider');
@@ -121362,7 +121768,7 @@ ngeo.LocationFactory = function($rootScope, $window) {
 };
 
 
-ngeoModule.factory('ngeoLocation', ngeo.LocationFactory);
+ngeo.module.factory('ngeoLocation', ngeo.LocationFactory);
 
 
 /**
@@ -121533,7 +121939,7 @@ ngeo.createPopupServiceFactory = function($compile, $rootScope) {
         return new ngeo.Popup($compile, $rootScope);
       });
 };
-ngeoModule.factory('ngeoCreatePopup', ngeo.createPopupServiceFactory);
+ngeo.module.factory('ngeoCreatePopup', ngeo.createPopupServiceFactory);
 
 goog.provide('ngeo.CreatePrint');
 goog.provide('ngeo.Print');
@@ -122319,7 +122725,7 @@ ngeo.createPrintServiceFactory = function($http) {
 };
 
 
-ngeoModule.factory('ngeoCreatePrint', ngeo.createPrintServiceFactory);
+ngeo.module.factory('ngeoCreatePrint', ngeo.createPrintServiceFactory);
 
 goog.provide('ngeo.PrintUtils');
 
@@ -122480,412 +122886,7 @@ ngeo.PrintUtils.prototype.getOptimalResolution = function(
 };
 
 
-ngeoModule.service('ngeoPrintUtils', ngeo.PrintUtils);
-
-goog.provide('ngeo.Query');
-
-goog.require('ngeo');
-goog.require('ol.format.WMSGetFeatureInfo');
-goog.require('ol.source.ImageWMS');
-goog.require('ol.source.TileWMS');
-
-
-/**
- * @typedef {{
- *     resultSource: (ngeo.QueryResultSource),
- *     source: (ngeox.QuerySource)
- * }}
- */
-ngeo.QueryCacheItem;
-
-
-/**
- * @enum {string}
- */
-ngeo.QueryInfoFormatType = {
-  GML: 'application/vnd.ogc.gml'
-};
-
-
-/**
- * @typedef {{
- *     sources: (Array.<ngeo.QueryResultSource>),
- *     total: (number)
- * }}
- */
-ngeo.QueryResult;
-
-
-/**
- * @typedef {{
- *     features: (Array.<ol.Feature>),
- *     id: (number|string),
- *     label: (string),
- *     pending: (boolean)
- * }}
- */
-ngeo.QueryResultSource;
-
-
-/**
- * The `ngeoQueryResult` is the value service where the features of the query
- * result are added.
- */
-ngeoModule.value('ngeoQueryResult', {
-  'sources': [],
-  'total': 0
-});
-
-
-
-/**
- * The Query service provides a way to send WMS GetFeatureInfo requests from
- * visible layer objects within a map. Those do not necessarily need to have
- * a WMS source. The Query service requires source configuration in order
- * for layers to actually be considered queryable.
- *
- * To know more about the specification of a source configuration, see
- * `ngeox.QuerySource`
- *
- * @constructor
- * @param {angular.$http} $http Angular $http service.
- * @param {ngeo.QueryResult} ngeoQueryResult The ngeo query result service.
- * @param {ngeox.QueryOptions|undefined} ngeoQueryOptions The options to
- *     configure the ngeo query service with.
- * @ngdoc service
- * @ngname ngeoQuery
- * @ngInject
- */
-ngeo.Query = function($http, ngeoQueryResult, ngeoQueryOptions) {
-
-  var options = ngeoQueryOptions !== undefined ? ngeoQueryOptions : {};
-
-  /**
-   * @type {number}
-   * @private
-   */
-  this.limit_ = options.limit !== undefined ? options.limit : 50;
-
-  /**
-   * @type {string}
-   * @private
-   */
-  this.sourceIdProperty_ = options.sourceIdProperty !== undefined ?
-      options.sourceIdProperty : ngeo.Query.DEFAULT_SOURCE_ID_PROPERTY_;
-
-  /**
-   * @type {angular.$http}
-   * @private
-   */
-  this.$http_ = $http;
-
-  /**
-   * @type {ngeo.QueryResult}
-   * @private
-   */
-  this.result_ = ngeoQueryResult;
-
-  /**
-   * @type {Array.<ngeox.QuerySource>}
-   * @private
-   */
-  this.sources_ = [];
-
-  /**
-   * @type {Object.<number|string, ngeo.QueryCacheItem>}
-   * @private
-   */
-  this.cache_ = {};
-};
-
-
-/**
- * @const
- * @private
- */
-ngeo.Query.DEFAULT_SOURCE_ID_PROPERTY_ = 'querySourceId';
-
-
-/**
- * Adds a new source to the query service.
- *
- * A source must at least have an `id` configured.  That id is then used to
- * associate the the corresponding layer object within a map.
- *
- * A source will require a `ol.source.ImageWMS` or `ol.source.TileWMS` object.
- * You can either set it directly in the config, or use the one from a given
- * layer or let the query service create one from you using other source config
- * such as `url` and `params`.
- *
- * A source can be set with either a `format` and/or `infoFormat`, which will
- * determine how the returned features of a query will be read.
- *
- * This method will also create a result entry in the `ngeoQueryResult`
- * value service.
- *
- * @param {ngeox.QuerySource} source The source to add to the query service.
- * @export
- */
-ngeo.Query.prototype.addSource = function(source) {
-  var sourceId = source.id;
-
-  goog.asserts.assert(sourceId, 'source.id should be thruthy');
-  goog.asserts.assert(!this.cache_[sourceId],
-      'no other source with the same id should be present');
-
-  // == wmsSource ==
-  // if the source doesn't have a wmsSource property set, it must at least have
-  // a layer that has one or have the required configuration options in order
-  // to create one.
-  if (!source.wmsSource) {
-    if (source.layer &&
-        (source.layer instanceof ol.layer.Image ||
-         source.layer instanceof ol.layer.Tile)) {
-      var wmsSource = source.layer.getSource();
-      if (wmsSource &&
-          (wmsSource instanceof ol.source.ImageWMS ||
-           wmsSource instanceof ol.source.TileWMS)) {
-        source.wmsSource =
-            /** @type {ol.source.ImageWMS|ol.source.TileWMS} */ (wmsSource);
-      }
-    } else {
-      var url = source.url;
-      var params = source.params;
-      goog.asserts.assert(url,
-          'url must be set when no layer or wmsSource is set in the source');
-      goog.asserts.assert(params,
-          'parmas must be set when no layer or wmsSource is set in the source');
-      source.wmsSource = new ol.source.ImageWMS({
-        url: url,
-        params: params
-      });
-    }
-  }
-  goog.asserts.assert(source.wmsSource, 'wmsSource should be thruthy');
-
-  // == format ==
-  if (!source.format) {
-    // GML is the default infoFormat if the source doesn't have one defined
-    if (!source.infoFormat) {
-      source.infoFormat = ngeo.QueryInfoFormatType.GML;
-    }
-
-    var layers = source.wmsSource.getParams()['LAYERS'].split(',');
-
-    if (source.infoFormat === ngeo.QueryInfoFormatType.GML) {
-      source.format = new ol.format.WMSGetFeatureInfo({
-        layers: layers
-      });
-    }
-  } else if (!source.infoFormat) {
-    // == infoFormat ==
-    var format = source.format;
-    if (format instanceof ol.format.WMSGetFeatureInfo) {
-      source.infoFormat = ngeo.QueryInfoFormatType.GML;
-    }
-  }
-  goog.asserts.assert(source.format, 'format should be thruthy');
-
-
-  this.sources_.push(source);
-
-  var sourceLabel = source.label !== undefined ? source.label : sourceId;
-
-  var resultSource = /** @type {ngeo.QueryResultSource} */ ({
-    'features': [],
-    'id': sourceId,
-    'label': sourceLabel,
-    'pending': false
-  });
-
-  this.result_.sources.push(resultSource);
-
-  var cacheItem = {
-    'source': source,
-    'resultSource': resultSource
-  };
-  this.cache_[sourceId] = cacheItem;
-};
-
-
-/**
- * Add multiple sources at once in the order they are given.
- * @param {Array.<ngeox.QuerySource>} sources The sources to add to the query
- *     service.
- * @export
- */
-ngeo.Query.prototype.addSources = function(sources) {
-  sources.forEach(this.addSource, this);
-};
-
-
-/**
- * Clear the results.
- * @export
- */
-ngeo.Query.prototype.clear = function() {
-  this.clearResult_();
-};
-
-
-/**
- * Issue a new request using a given map and a given object, which can be
- * a coordinate or extent.
- *
- * NOTE: only coordinates are currently supported.
- *
- * @param {ol.Map} map The ol3 map object to fetch the layers from.
- * @param {ol.Coordinate|ol.Extent} object The coordinate or extent to issue
- *     the request with.
- * @export
- */
-ngeo.Query.prototype.issue = function(map, object) {
-
-  this.clearResult_();
-
-  if (object.length === 2) {
-    this.issueWMSGetFeatureInfoRequests_(map, object);
-  }
-};
-
-
-/**
- * Issue a new WMS GetFeatureInfo request using a given map and a coordinate.
- * For each visible layer of the map, if that layer has a source configured
- * within this query service, then a query will be sent and the results
- * will be stocked in the `ngeoQueryResult`.
- *
- * If multiple sources share the same url and use GML as info format, then
- * only one request will be sent for all these sources.
- *
- * NOTE: Only GML info format are currently supported.
- *
- * @param {ol.Map} map The ol3 map object to fetch the layers from.
- * @param {ol.Coordinate} coordinate The coordinate to issue the request with.
- * @private
- */
-ngeo.Query.prototype.issueWMSGetFeatureInfoRequests_ = function(
-    map, coordinate) {
-
-  var view = map.getView();
-  var projCode = view.getProjection().getCode();
-
-  var id;
-  var infoFormat;
-  var url;
-  var item;
-  var wmsGetFeatureInfoUrl;
-
-  var itemsByUrl =
-      /** @type {Object.<string, Array.<ngeo.QueryCacheItem>>} */ ({});
-
-  var resolution = /** @type {number} */ (view.getResolution());
-
-  map.getLayers().forEach(function(layer) {
-
-    // skip layers that are not visible
-    if (!layer.getVisible()) {
-      return;
-    }
-
-    // skip layers that don't have a source configured
-    id = this.getLayerSourceId_(layer);
-    if (!id || !this.cache_[id]) {
-      return;
-    }
-
-    item = this.cache_[id];
-    item['resultSource'].pending = true;
-    infoFormat = item.source.infoFormat;
-
-    // sources that use GML as info format are combined together if they
-    // share the same server url
-    if (infoFormat === ngeo.QueryInfoFormatType.GML) {
-      url = item.source.wmsSource.getUrl();
-      goog.asserts.assertString(url);
-      if (!itemsByUrl[url]) {
-        itemsByUrl[url] = [];
-      }
-      itemsByUrl[url].push(item);
-    } else {
-      // TODO - support other kinds of infoFormats
-      item['resultSource'].pending = false;
-    }
-
-  }, this);
-
-  goog.object.forEach(itemsByUrl, function(items) {
-
-    infoFormat = items[0].source.infoFormat;
-    var layers = items[0].source.wmsSource.getParams()['LAYERS'].split(',');
-
-    wmsGetFeatureInfoUrl = items[0].source.wmsSource.getGetFeatureInfoUrl(
-        coordinate,
-        resolution,
-        projCode,
-        {
-          'INFO_FORMAT': infoFormat,
-          'FEATURE_COUNT': this.limit_
-        });
-
-    goog.asserts.assert(
-        wmsGetFeatureInfoUrl, 'WMS GetFeatureInfo url should be thruty');
-
-    for (var i = 1, len = items.length; i < len; i++) {
-      layers = layers.concat(
-          items[i].source.wmsSource.getParams()['LAYERS'].split(','));
-    }
-
-    var lyrStr = layers.join(',');
-
-    wmsGetFeatureInfoUrl =
-        goog.uri.utils.setParam(wmsGetFeatureInfoUrl, 'LAYERS', lyrStr);
-    wmsGetFeatureInfoUrl =
-        goog.uri.utils.setParam(wmsGetFeatureInfoUrl, 'QUERY_LAYERS', lyrStr);
-
-    this.$http_.get(wmsGetFeatureInfoUrl).then(goog.bind(
-        function(items, response) {
-          items.forEach(function(item) {
-            var format = item.source.format;
-            var features = format.readFeatures(response.data);
-            item['resultSource'].pending = false;
-            item['resultSource'].features = features;
-            this.result_.total += features.length;
-          }, this);
-        },
-        this,
-        items));
-  }, this);
-};
-
-
-/**
- * Clear every features for all result sources and reset the total counter
- * as well.
- * @private
- */
-ngeo.Query.prototype.clearResult_ = function() {
-  this.result_.total = 0;
-  this.result_.sources.forEach(function(source) {
-    source.features.length = 0;
-  }, this);
-};
-
-
-/**
- * Returns the source id from an ol3 layer object.
- * @param {ol.layer.Base} layer The ol3 layer object.
- * @return {number|string} id The id of the source bound to that layer.
- * @private
- */
-ngeo.Query.prototype.getLayerSourceId_ = function(layer) {
-  var id = layer.get(this.sourceIdProperty_);
-  id = goog.isNumber(id) || goog.isString(id) ? id : '';
-  return id;
-};
-
-
-ngeoModule.service('ngeoQuery', ngeo.Query);
+ngeo.module.service('ngeoPrintUtils', ngeo.PrintUtils);
 
 // Copyright 2011 The Closure Library Authors. All Rights Reserved.
 //
@@ -123383,7 +123384,7 @@ ngeo.StateManager.prototype.deleteParam = function(key) {
   }
 };
 
-ngeoModule.service('ngeoStateManager', ngeo.StateManager);
+ngeo.module.service('ngeoStateManager', ngeo.StateManager);
 
 goog.provide('ngeo.SyncArrays');
 
@@ -123485,7 +123486,7 @@ ngeo.syncArrays = function(arr1, arr2, reverse, scope, filter) {
 };
 
 
-ngeoModule.value('ngeoSyncArrays', ngeo.syncArrays);
+ngeo.module.value('ngeoSyncArrays', ngeo.syncArrays);
 
 goog.provide('ngeo.ToolActivate');
 goog.provide('ngeo.ToolActivateMgr');
@@ -123526,7 +123527,7 @@ ngeo.ToolActivate = function(toolContext, activePropertyName) {
 };
 
 
-ngeoModule.value('ngeoToolActivate', ngeo.ToolActivate);
+ngeo.module.value('ngeoToolActivate', ngeo.ToolActivate);
 
 
 /**
@@ -123725,7 +123726,7 @@ ngeo.ToolActivateMgr.prototype.activateDefault_ = function(groupName) {
 };
 
 
-ngeoModule.service('ngeoToolActivateMgr', ngeo.ToolActivateMgr);
+ngeo.module.service('ngeoToolActivateMgr', ngeo.ToolActivateMgr);
 
 
 /**
@@ -123734,10 +123735,6 @@ ngeoModule.service('ngeoToolActivateMgr', ngeo.ToolActivateMgr);
  * GENERATED FILE. DO NOT EDIT.
  */
 
-/**
- * This goog.require is needed because it provides ngeoModule.
- * @suppress {extraRequire}
- */
 goog.require('ngeo');
 
 (function() {
@@ -123751,7 +123748,7 @@ goog.require('ngeo');
     $templateCache.put('ngeo/layertree.html', '<span ng-if=::!layertreeCtrl.isRoot>{{::layertreeCtrl.node.name}}</span> <input type=checkbox ng-if="::layertreeCtrl.node && !layertreeCtrl.node.children" ng-model=layertreeCtrl.getSetActive ng-model-options="{getterSetter: true}"> <ul ng-if=::layertreeCtrl.node.children> <li ng-repeat="node in ::layertreeCtrl.node.children" ngeo-layertree=::node ngeo-layertree-notroot ngeo-layertree-map=layertreeCtrl.map ngeo-layertree-nodelayerexpr=layertreeCtrl.nodelayerExpr ngeo-layertree-listenersexpr=layertreeCtrl.listenersExpr> </li> </ul> ');
   };
 
-  ngeoModule.run(runner);
+  ngeo.module.run(runner);
 })();
 
 
