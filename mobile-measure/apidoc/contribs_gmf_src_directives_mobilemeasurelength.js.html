@@ -30,6 +30,7 @@
 goog.provide('gmf.mobileMeasureLengthDirective');
 
 goog.require('gmf');
+goog.require('ngeo.DecorateInteraction');
 goog.require('ngeo.interaction.MeasureLengthMobile');
 goog.require('ngeo.interaction.MobileDraw');
 goog.require('ol.style.Fill');
@@ -42,6 +43,7 @@ gmf.module.value('gmfMobileMeasureLengthTemplateUrl',
     /**
      * @param {angular.JQLite} element Element.
      * @param {angular.Attributes} attrs Attributes.
+     * @return {string} The template url.
      */
     function(element, attrs) {
       var templateUrl = attrs['gmfMobileMeasureLengthTemplateurl'];
@@ -68,26 +70,24 @@ gmf.module.value('gmfMobileMeasureLengthTemplateUrl',
  */
 gmf.mobileMeasureLengthDirective =
     function(gmfMobileMeasureLengthTemplateUrl) {
-  return {
-    restrict: 'A',
-    scope: {
-      'active': '=gmfMobileMeasureLengthActive',
-      'decimals': '=?gmfMobileMeasureLengthDecimals',
-      'map': '=gmfMobileMeasureLengthMap',
-      'sketchStyle': '=?gmfMobileMeasureLengthSketchStyle'
-    },
-    controller: 'GmfMobileMeasureLengthController',
-    controllerAs: 'ctrl',
-    bindToController: true,
-    templateUrl: gmfMobileMeasureLengthTemplateUrl
-  };
-
-};
+      return {
+        restrict: 'A',
+        scope: {
+          'active': '=gmfMobileMeasureLengthActive',
+          'decimals': '=?gmfMobileMeasureLengthDecimals',
+          'map': '=gmfMobileMeasureLengthMap',
+          'sketchStyle': '=?gmfMobileMeasureLengthSketchStyle'
+        },
+        controller: 'GmfMobileMeasureLengthController',
+        controllerAs: 'ctrl',
+        bindToController: true,
+        templateUrl: gmfMobileMeasureLengthTemplateUrl
+      };
+    };
 
 
 gmf.module.directive('gmfMobileMeasureLength',
                      gmf.mobileMeasureLengthDirective);
-
 
 
 /**
@@ -286,7 +286,7 @@ gmf.MobileMeasureLengthController.prototype.deactivate = function() {
 
 /**
  * @param {string} str String to translate.
- * @return {string}
+ * @return {string} The translated text.
  * @export
  */
 gmf.MobileMeasureLengthController.prototype.translate = function(str) {

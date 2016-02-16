@@ -70,7 +70,6 @@ ngeo.MeasureEventType = {
 };
 
 
-
 /**
  * @classdesc
  * Events emitted by {@link ngeo.interaction.Interaction} instances are
@@ -95,7 +94,6 @@ ngeo.MeasureEvent = function(type, feature) {
 
 };
 goog.inherits(ngeo.MeasureEvent, ol.events.Event);
-
 
 
 /**
@@ -290,8 +288,8 @@ ngeo.interaction.Measure.getFormattedArea = function(
  * @param {?number} decimals Decimals.
  * @return {string} Formatted string of length.
  */
-ngeo.interaction.Measure.getFormattedLength =
-    function(lineString, projection, decimals) {
+ngeo.interaction.Measure.getFormattedLength = function(lineString, projection,
+    decimals) {
   var length = 0;
   var coordinates = lineString.getCoordinates();
   for (var i = 0, ii = coordinates.length - 1; i &lt; ii; ++i) {
@@ -366,7 +364,7 @@ ngeo.interaction.Measure.handleEvent_ = function(evt) {
 
 
 /**
- * @return {ol.interaction.Draw|ngeo.interaction.DrawAzimut|ngeo.interaction.MobileDraw}
+ * @return {ol.interaction.Draw|ngeo.interaction.DrawAzimut|ngeo.interaction.MobileDraw} The draw interaction.
  * @export
  */
 ngeo.interaction.Measure.prototype.getDrawInteraction = function() {
@@ -406,7 +404,7 @@ ngeo.interaction.Measure.prototype.setMap = function(map) {
 
 /**
  * Handle draw interaction `drawstart` event.
- * @param {ol.interaction.DrawEvent} evt
+ * @param {ol.interaction.DrawEvent} evt Event.
  * @private
  */
 ngeo.interaction.Measure.prototype.onDrawStart_ = function(evt) {
@@ -432,7 +430,7 @@ ngeo.interaction.Measure.prototype.onDrawStart_ = function(evt) {
 
 /**
  * Handle draw interaction `drawend` event.
- * @param {ol.interaction.DrawEvent} evt
+ * @param {ol.interaction.DrawEvent} evt Event.
  * @private
  */
 ngeo.interaction.Measure.prototype.onDrawEnd_ = function(evt) {
@@ -552,7 +550,7 @@ ngeo.interaction.Measure.prototype.handleMeasure = goog.abstractMethod;
 
 /**
  * Get a reference to the tooltip element.
- * @return {Element}
+ * @return {Element} Tooltip Element.
  */
 ngeo.interaction.Measure.prototype.getTooltipElement = function() {
   return this.measureTooltipElement_;
@@ -568,10 +566,10 @@ ngeo.interaction.Measure.prototype.getTooltipElement = function() {
  */
 ngeo.interaction.Measure.prototype.handleDrawInteractionActiveChange_ =
     function() {
-  if (this.shouldHandleDrawInteractionActiveChange_) {
-    this.setActive(this.drawInteraction_.getActive());
-  }
-};
+      if (this.shouldHandleDrawInteractionActiveChange_) {
+        this.setActive(this.drawInteraction_.getActive());
+      }
+    };
 </code></pre>
         </article>
     </section>

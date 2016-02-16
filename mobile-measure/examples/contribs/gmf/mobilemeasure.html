@@ -54,7 +54,7 @@
     </style>
   </head>
   <body ng-controller="MainController as ctrl">
-    <div id="map" ngeo-map="::ctrl.map"></div>
+    <gmf-map id="map" gmf-map-map="::ctrl.map"></gmf-map>
 
     <div ngeo-btn-group class="btn-group">
       <a ngeo-btn
@@ -86,6 +86,7 @@
       service to also obtain the height of the location as well.
     </p>
     <script src="../../lib/angular.min.js"></script>
+    <script src="../../lib/proj4.js"></script>
     <script src="../../lib/gmf.js"></script>
     <script src="mobilemeasure.js"></script>
     <script src="../../lib/watchwatchers.js"></script>

@@ -48,7 +48,6 @@ ngeo.interaction.MobileDrawProperty = {
 };
 
 
-
 /**
  * @classdesc
  * Interaction for drawing feature geometries from a mobile device using the
@@ -418,7 +417,7 @@ ngeo.interaction.MobileDraw.prototype.updateState_ = function() {
 
 
 /**
- * @param {ol.ObjectEvent} evt
+ * @param {ol.ObjectEvent} evt Event.
  * @private
  */
 ngeo.interaction.MobileDraw.prototype.handleViewCenterChange_ = function(evt) {
@@ -478,7 +477,7 @@ ngeo.interaction.MobileDraw.prototype.updateSketchFeatures_ = function() {
 
 /**
  * Returns the geometry of the sketch point feature.
- * @return {ol.geom.Point}
+ * @return {ol.geom.Point} Point.
  * @private
  */
 ngeo.interaction.MobileDraw.prototype.getSketchPointGeometry_ = function() {
@@ -491,7 +490,7 @@ ngeo.interaction.MobileDraw.prototype.getSketchPointGeometry_ = function() {
 
 /**
  * Returns the center of the map view
- * @return {ol.Coordinate}
+ * @return {ol.Coordinate} Coordinate.
  * @private
  */
 ngeo.interaction.MobileDraw.prototype.getCenter_ = function() {

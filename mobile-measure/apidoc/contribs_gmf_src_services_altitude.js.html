@@ -45,7 +45,6 @@ gmf.AltitudeParam = {
 };
 
 
-
 /**
  * @constructor
  * @param {angular.$http} $http Angular http service.
@@ -90,7 +89,7 @@ gmf.Altitude.prototype.getAltitude = function(coordinate) {
 
 /**
  * @param {angular.$http.Response} resp Ajax response.
- * @return {Object.&lt;string, number>}
+ * @return {Object.&lt;string, number>} The altitude object.
  * @private
  */
 gmf.Altitude.prototype.handleGetAltitude_ = function(resp) {

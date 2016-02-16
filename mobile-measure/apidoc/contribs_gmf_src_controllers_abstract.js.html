@@ -45,11 +45,10 @@ goog.require('ngeo.ToolActivate');
 goog.require('ngeo.ToolActivateMgr');
 
 
-
 /**
- * Application abstract cntroller.
+ * Application abstract controller.
  *
- * This file includes `goog.require`'for base components/directives used
+ * This file includes `goog.require` for base components/directives used
  * by the HTML page and the controller to provide the configuration.
  *
  * @param {gmfx.Config} config A part of the application config.
@@ -60,6 +59,9 @@ goog.require('ngeo.ToolActivateMgr');
  * @export
  */
 gmf.AbstractController = function(config, $scope, $injector) {
+
+
+  goog.asserts.assertInstanceof(this.map, ol.Map);
 
   /**
    * A reference to the current theme

@@ -33,7 +33,6 @@ goog.require('ngeo.interaction.MobileDraw');
 goog.require('ol.geom.Point');
 
 
-
 /**
  * @classdesc
  * Interaction dedicated to measure by coordinate (point) on mobile devices.
@@ -58,8 +57,8 @@ goog.inherits(ngeo.interaction.MeasurePointMobile, ngeo.interaction.Measure);
 /**
  * @inheritDoc
  */
-ngeo.interaction.MeasurePointMobile.prototype.createDrawInteraction =
-    function(style, source) {
+ngeo.interaction.MeasurePointMobile.prototype.createDrawInteraction = function(
+    style, source) {
   return new ngeo.interaction.MobileDraw({
     'type': /** @type {ol.geom.GeometryType&lt;string>} */ ('Point'),
     'style': style,
@@ -71,8 +70,8 @@ ngeo.interaction.MeasurePointMobile.prototype.createDrawInteraction =
 /**
  * @inheritDoc
  */
-ngeo.interaction.MeasurePointMobile.prototype.handleMeasure =
-    function(callback) {
+ngeo.interaction.MeasurePointMobile.prototype.handleMeasure = function(
+    callback) {
   var geom = /** @type {ol.geom.Point} */
       (this.sketchFeature.getGeometry());
   var proj = this.getMap().getView().getProjection();
