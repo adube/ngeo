@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: LayerHelper <small>service:ngeoLayerHelper</small></title>
+    <title>JSDoc: Class: mobiledisplayqueriesDirective <small>directive:gmfMobiledisplayqueries</small></title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: LayerHelper <small>service:ngeoLayerHelper</small></h1>
+    <h1 class="page-title">Class: mobiledisplayqueriesDirective <small>directive:gmfMobiledisplayqueries</small></h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2 id="LayerHelper">
-            <span class="ancestors">ngeo.</span>LayerHelper
+        <h2 id="mobiledisplayqueriesDirective">
+            <span class="ancestors">gmf.</span>mobiledisplayqueriesDirective
         </h2>
         
     
@@ -42,14 +42,20 @@
 
     
 
-    <h4 class="name" id="LayerHelper"><span class="type-signature"></span>new LayerHelper<span class="signature">($q, $http)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="mobiledisplayqueriesDirective"><span class="type-signature"></span>new mobiledisplayqueriesDirective<span class="signature">(gmfMobiledisplayqueriesTemplateUrl)</span><span class="type-signature"> &rarr; {<a href="https://docs.angularjs.org/guide/directive">angular.Directive</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Provides help functions that helps you to create and manage layers.</p>
+    <p>Provide a &quot;gmf mobile display queries&quot; directive.</p>
+<p>This directive displays results of the ngeoQueryResult and shows related
+features on the map using the ngeoFeatureOverlayMgr.</p>
+<p>You can override the default directive's template by setting the value
+'gmfMobiledisplayqueriesTemplateUrl'.</p>
+<p>Features displayed on the map use a default style but you can override these
+styles by passing ol.style.Style objects as attributes of this directive.</p>
 </div>
 
 
@@ -60,7 +66,9 @@
 
 
 
-    <h5>Parameters:</h5>
+
+
+    <h5>HTML attributes:</h5>
     
 
 <table class="params">
@@ -85,13 +93,13 @@
 
         <tr>
             
-                <td class="name"><code>$q</code></td>
+                <td class="name"><code>gmf-mobiledisplayqueries-featuresstyle</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="https://docs.angularjs.org/api/ng/service/$q">angular.$q</a></span>
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.style.Style.html">ol.style.Style</a></span>
 
 
             
@@ -101,20 +109,21 @@
 
             
 
-            <td class="description last"><p>Angular promises/deferred service.</p></td>
+            <td class="description last">A style
+    object for all features from the result of the query.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$http</code></td>
+                <td class="name"><code>selectedfeaturestyle</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="https://docs.angularjs.org/api/ng/service/$http">angular.$http</a></span>
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.style.Style.html">ol.style.Style</a></span>
 
 
             
@@ -124,14 +133,13 @@
 
             
 
-            <td class="description last"><p>Angular http service.</p></td>
+            <td class="description last">A style
+    object for the current displayed feature.</td>
         </tr>
 
     
     </tbody>
 </table>
-
-
 
 
 
@@ -167,7 +175,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line22">line 22</a>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -190,6 +198,36 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Directive Definition Object.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="https://docs.angularjs.org/guide/directive">angular.Directive</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>&lt;gmf-mobiledisplayqueries
+    gmf-mobiledisplayqueries-featuresstyle="ctrl.styleForAllFeatures"
+    gmf-mobiledisplayqueries-selectedfeaturestyle="ctrl.styleForTheCurrentFeature">
+&lt;/gmf-mobiledisplayqueries></code></pre>
 
 
 
@@ -208,698 +246,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="createBasicGroup"><span class="type-signature"></span>createBasicGroup<span class="signature">(opt_layers<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="http://openlayers.org/en/master/apidoc/ol.layer.Group.html">ol.layer.Group</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Create and return an ol.layer.Group. You can pass a collection of layers to
-directly add them in the returned group.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>opt_layers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Collection.html">ol.Collection</a>.&lt;<a href="http://openlayers.org/en/master/apidoc/ol.layer.Base.html">ol.layer.Base</a>></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The layer to add to the
-returned Group.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line110">line 110</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Layer group.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Group.html">ol.layer.Group</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="createBasicWMSLayer"><span class="type-signature"></span>createBasicWMSLayer<span class="signature">(sourceURL, sourceLayersName)</span><span class="type-signature"> &rarr; {<a href="http://openlayers.org/en/master/apidoc/ol.layer.Image.html">ol.layer.Image</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Create and return a basic WMS layer with only a source URL and a dot
-separated layers names (see <a href="http://openlayers.org/en/master/apidoc/ol.source.ImageWMS.html"><code>ol.source.ImageWMS</code></a>).</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>sourceURL</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The source URL.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>sourceLayersName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>A dot separated names string.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line46">line 46</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>WMS Layer.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Image.html">ol.layer.Image</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="createWMTSLayerFromCapabilitites"><span class="type-signature"></span>createWMTSLayerFromCapabilitites<span class="signature">(capabilitiesURL, layerName)</span><span class="type-signature"> &rarr; {<a href="https://docs.angularjs.org/api/ng/service/$q#the-promise-api">angular.$q.Promise</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Create and return a promise that provides a WMTS layer with source on
-success, no layer else.
-The WMTS layer source will be configured by the capabilities that are
-loaded from the given capabilitiesUrl.
-The style object described in the capabilities for this layer will be added
-as key 'capabilitiesStyles' as param of the new layer.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>capabilitiesURL</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The getCapabilities url.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>layerName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The name of the layer.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line71">line 71</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>A Promise with a layer (with source) on success,
-    no layer else.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="https://docs.angularjs.org/api/ng/service/$q#the-promise-api">angular.$q.Promise</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getFlatLayers"><span class="type-signature"></span>getFlatLayers<span class="signature">(layer)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.&lt;<a href="http://openlayers.org/en/master/apidoc/ol.layer.Layer.html">ol.layer.Layer</a>>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Get an array of all layers in a group. The group can contain multiple levels
-of others groups.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>layer</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Base.html">ol.layer.Base</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The base layer, mostly a group of layers.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line126">line 126</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Layers.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.&lt;<a href="http://openlayers.org/en/master/apidoc/ol.layer.Layer.html">ol.layer.Layer</a>></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
     
 
     

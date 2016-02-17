@@ -9429,8 +9429,7 @@ main {
   color: black;
 }
 .search span.twitter-typeahead .tt-menu .search-datum .search-group {
-  color: #808080;
-  font-size: 0.8em;
+  display: none;
 }
 .ol-zoom {
   left: 13px;

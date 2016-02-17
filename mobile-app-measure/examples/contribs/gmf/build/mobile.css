@@ -9747,8 +9747,7 @@ span.twitter-typeahead input {
   display: block;
   margin-bottom: 5px;
 }
-div[gmf-mobile-measure-length],
-div[gmf-mobile-measure-point] {
+.measure-tools-control {
   bottom: 1em;
   right: 1em;
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: LayerHelper <small>service:ngeoLayerHelper</small></title>
+    <title>JSDoc: Class: MobiledisplayqueriesController <small>Controller:GmfMobiledisplayqueriesController</small></title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: LayerHelper <small>service:ngeoLayerHelper</small></h1>
+    <h1 class="page-title">Class: MobiledisplayqueriesController <small>Controller:GmfMobiledisplayqueriesController</small></h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2 id="LayerHelper">
-            <span class="ancestors">ngeo.</span>LayerHelper
+        <h2 id="MobiledisplayqueriesController">
+            <span class="ancestors">gmf.</span>MobiledisplayqueriesController
         </h2>
         
     
@@ -42,15 +42,11 @@
 
     
 
-    <h4 class="name" id="LayerHelper"><span class="type-signature"></span>new LayerHelper<span class="signature">($q, $http)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="MobiledisplayqueriesController"><span class="type-signature"></span>new MobiledisplayqueriesController<span class="signature">($scope, ngeoQueryResult, ngeoFeatureOverlayMgr)</span><span class="type-signature"></span></h4>
 
     
 
 
-
-<div class="description">
-    <p>Provides help functions that helps you to create and manage layers.</p>
-</div>
 
 
 
@@ -85,13 +81,13 @@
 
         <tr>
             
-                <td class="name"><code>$q</code></td>
+                <td class="name"><code>$scope</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="https://docs.angularjs.org/api/ng/service/$q">angular.$q</a></span>
+<span class="param-type"><a href="https://docs.angularjs.org/guide/scope">angular.Scope</a></span>
 
 
             
@@ -101,20 +97,20 @@
 
             
 
-            <td class="description last"><p>Angular promises/deferred service.</p></td>
+            <td class="description last"><p>Angular scope.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$http</code></td>
+                <td class="name"><code>ngeoQueryResult</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="https://docs.angularjs.org/api/ng/service/$http">angular.$http</a></span>
+<span class="param-type"><a href="ngeo.html#QueryResult">ngeo.QueryResult</a></span>
 
 
             
@@ -124,7 +120,31 @@
 
             
 
-            <td class="description last"><p>Angular http service.</p></td>
+            <td class="description last"><p>ngeo query result.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ngeoFeatureOverlayMgr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="ngeo.FeatureOverlayMgr.html">ngeo.FeatureOverlayMgr</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The ngeo feature
+    overlay manager service.</p></td>
         </tr>
 
     
@@ -167,7 +187,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line22">line 22</a>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line87">line 87</a>
     </li></ul></dd>
     
 
@@ -207,6 +227,418 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="animate"><span class="type-signature"></span>animate<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line164">line 164</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="currentResult"><span class="type-signature"></span>currentResult<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line152">line 152</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="feature"><span class="type-signature"></span>feature<span class="type-signature"> :<a href="http://openlayers.org/en/master/apidoc/ol.Feature.html">ol.Feature</a></span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Feature.html">ol.Feature</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line146">line 146</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="isNext"><span class="type-signature"></span>isNext<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line158">line 158</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="open"><span class="type-signature"></span>open<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line170">line 170</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="source"><span class="type-signature">(nullable) </span>source<span class="type-signature"> :<a href="ngeo.html#QueryResultSource">ngeo.QueryResultSource</a></span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="ngeo.html#QueryResultSource">ngeo.QueryResultSource</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line140">line 140</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -216,15 +648,15 @@
 
     
 
-    <h4 class="name" id="createBasicGroup"><span class="type-signature"></span>createBasicGroup<span class="signature">(opt_layers<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="http://openlayers.org/en/master/apidoc/ol.layer.Group.html">ol.layer.Group</a>}</span></h4>
+    <h4 class="name" id="clear"><span class="type-signature"></span>clear<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Create and return an ol.layer.Group. You can pass a collection of layers to
-directly add them in the returned group.</p>
+    <p>Remove the current selected feature and source and remove all features
+from the map.</p>
 </div>
 
 
@@ -233,68 +665,6 @@ directly add them in the returned group.</p>
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>opt_layers</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Collection.html">ol.Collection</a>.&lt;<a href="http://openlayers.org/en/master/apidoc/ol.layer.Base.html">ol.layer.Base</a>></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The layer to add to the
-returned Group.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -332,7 +702,7 @@ returned Group.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line110">line 110</a>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line351">line 351</a>
     </li></ul></dd>
     
 
@@ -355,28 +725,6 @@ returned Group.</p></td>
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Layer group.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Group.html">ol.layer.Group</a></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -385,15 +733,15 @@ returned Group.</p></td>
 
     
 
-    <h4 class="name" id="createBasicWMSLayer"><span class="type-signature"></span>createBasicWMSLayer<span class="signature">(sourceURL, sourceLayersName)</span><span class="type-signature"> &rarr; {<a href="http://openlayers.org/en/master/apidoc/ol.layer.Image.html">ol.layer.Image</a>}</span></h4>
+    <h4 class="name" id="close"><span class="type-signature"></span>close<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Create and return a basic WMS layer with only a source URL and a dot
-separated layers names (see <a href="http://openlayers.org/en/master/apidoc/ol.source.ImageWMS.html"><code>ol.source.ImageWMS</code></a>).</p>
+    <p>Remove the current selected feature and source and remove all features
+from the map.</p>
 </div>
 
 
@@ -402,78 +750,6 @@ separated layers names (see <a href="http://openlayers.org/en/master/apidoc/ol.s
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>sourceURL</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The source URL.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>sourceLayersName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>A dot separated names string.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -511,7 +787,7 @@ separated layers names (see <a href="http://openlayers.org/en/master/apidoc/ol.s
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line46">line 46</a>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line340">line 340</a>
     </li></ul></dd>
     
 
@@ -534,28 +810,6 @@ separated layers names (see <a href="http://openlayers.org/en/master/apidoc/ol.s
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>WMS Layer.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Image.html">ol.layer.Image</a></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -564,19 +818,14 @@ separated layers names (see <a href="http://openlayers.org/en/master/apidoc/ol.s
 
     
 
-    <h4 class="name" id="createWMTSLayerFromCapabilitites"><span class="type-signature"></span>createWMTSLayerFromCapabilitites<span class="signature">(capabilitiesURL, layerName)</span><span class="type-signature"> &rarr; {<a href="https://docs.angularjs.org/api/ng/service/$q#the-promise-api">angular.$q.Promise</a>}</span></h4>
+    <h4 class="name" id="getResultLength"><span class="type-signature"></span>getResultLength<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Create and return a promise that provides a WMTS layer with source on
-success, no layer else.
-The WMTS layer source will be configured by the capabilities that are
-loaded from the given capabilitiesUrl.
-The style object described in the capabilities for this layer will be added
-as key 'capabilitiesStyles' as param of the new layer.</p>
+    <p>Get the total count of features in the result of the query.</p>
 </div>
 
 
@@ -585,78 +834,6 @@ as key 'capabilitiesStyles' as param of the new layer.</p>
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>capabilitiesURL</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The getCapabilities url.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>layerName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The name of the layer.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -694,7 +871,7 @@ as key 'capabilitiesStyles' as param of the new layer.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line71">line 71</a>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line279">line 279</a>
     </li></ul></dd>
     
 
@@ -721,8 +898,7 @@ as key 'capabilitiesStyles' as param of the new layer.</p>
 
         
 <div class="param-desc">
-    <p>A Promise with a layer (with source) on success,
-    no layer else.</p>
+    <p>Total number of features.</p>
 </div>
 
 
@@ -733,7 +909,7 @@ as key 'capabilitiesStyles' as param of the new layer.</p>
     </dt>
     <dd>
         
-<span class="param-type"><a href="https://docs.angularjs.org/api/ng/service/$q#the-promise-api">angular.$q.Promise</a></span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
 
 
     </dd>
@@ -748,15 +924,15 @@ as key 'capabilitiesStyles' as param of the new layer.</p>
 
     
 
-    <h4 class="name" id="getFlatLayers"><span class="type-signature"></span>getFlatLayers<span class="signature">(layer)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.&lt;<a href="http://openlayers.org/en/master/apidoc/ol.layer.Layer.html">ol.layer.Layer</a>>}</span></h4>
+    <h4 class="name" id="next"><span class="type-signature"></span>next<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Get an array of all layers in a group. The group can contain multiple levels
-of others groups.</p>
+    <p>Select the logical next source and feature then highlight this feature on
+the map.</p>
 </div>
 
 
@@ -765,55 +941,6 @@ of others groups.</p>
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>layer</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Base.html">ol.layer.Base</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The base layer, mostly a group of layers.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -851,7 +978,7 @@ of others groups.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_services_layerHelper.js.html">src/services/layerHelper.js</a>, <a href="src_services_layerHelper.js.html#line126">line 126</a>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line261">line 261</a>
     </li></ul></dd>
     
 
@@ -874,28 +1001,177 @@ of others groups.</p>
 
 
 
-<h5>Returns:</h5>
+
+
 
         
-<div class="param-desc">
-    <p>Layers.</p>
+            
+
+    
+
+    <h4 class="name" id="previous"><span class="type-signature"></span>previous<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Select the logical previous source and feature then highlight this feature on
+the map.</p>
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.&lt;<a href="http://openlayers.org/en/master/apidoc/ol.layer.Layer.html">ol.layer.Layer</a>></span>
 
 
-    </dd>
-</dl>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line244">line 244</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="show"><span class="type-signature"></span>show<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Remove current displayed results then get new results from the
+ngeoQueryResult sevice. Display all results on the map and display,
+highlight the first feature.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html">contribs/gmf/src/directives/mobiledisplayqueries.js</a>, <a href="contribs_gmf_src_directives_mobiledisplayqueries.js.html#line192">line 192</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
