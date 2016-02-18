@@ -9586,7 +9586,7 @@ nav.nav-right .slide.slide-out {
 }
 .nav-right-trigger {
   right: calc( 1em  + 2px);
-  box-shadow: -2px 0 5px -2px #bbb;
+  box-shadow: -3px 0 5px -2px #bbb;
 }
 @media (min-width: 768px) {
   main button:hover {
@@ -9814,6 +9814,12 @@ gmf-map .tooltip-static:before {
   span.twitter-typeahead input {
     padding: 0 5px !important;
   }
+  .tt-menu {
+    border-top: 1px solid black;
+    border-right: inherit;
+    border-bottom: inherit;
+    border-left: inherit;
+  }
 }
 .ol-control button,
 .ol-touch .ol-control button {
@@ -9845,5 +9851,11 @@ button[ngeo-mobile-geolocation] {
   }
   button[ngeo-mobile-geolocation] button:after {
     content: 'b';
+  }
+  .tt-menu {
+    border-top: inherit;
+    border-right: 1px solid black;
+    border-bottom: inherit;
+    border-left: 1px solid black;
   }
 }
