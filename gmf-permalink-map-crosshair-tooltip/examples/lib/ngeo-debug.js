@@ -120854,7 +120854,8 @@ ngeo.Popover = function(opt_options) {
    * @private
    */
   this.closeEl_ = $('<button>', {
-    'class': 'btn btn-xs btn-primary'
+    'class': 'close',
+    'text': 'x'
   })[0];
 
   /**
