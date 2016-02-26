@@ -120850,21 +120850,21 @@ ngeo.Popover = function(opt_options) {
   }
 
   /**
-   * @type {Element}
+   * @type {jQuery}
    * @private
    */
   this.closeEl_ = $('<button>', {
     'class': 'close',
-    'text': 'x'
-  })[0];
+    'html': '&times;'
+  });
 
   /**
-   * @type {Element}
+   * @type {jQuery}
    * @private
    */
   this.contentEl_ = $('<div/>')
     .append(this.closeEl_)
-    .append(originalEl)[0];
+    .append(originalEl);
 
   options.element = $('<div />')[0];
 
@@ -120913,7 +120913,7 @@ ngeo.Popover.prototype.setMap = function(map) {
         .popover('show');
     }, 0);
 
-    this.clickKey_ = goog.events.listen(this.closeEl_,
+    this.clickKey_ = goog.events.listen(this.closeEl_[0],
         goog.events.EventType.CLICK, this.handleCloseElClick_, false, this);
   }
 };
