@@ -109214,6 +109214,7 @@ ngeo.FeatureOverlayMgr.prototype.clear = function(groupIndex) {
 
 /**
  * @return {ol.layer.Vector} The vector layer used internally.
+ * @export
  */
 ngeo.FeatureOverlayMgr.prototype.getLayer = function() {
   return this.layer_;
@@ -109222,6 +109223,7 @@ ngeo.FeatureOverlayMgr.prototype.getLayer = function() {
 
 /**
  * @return {ngeo.FeatureOverlay} Feature overlay.
+ * @export
  */
 ngeo.FeatureOverlayMgr.prototype.getFeatureOverlay = function() {
   var groupIndex = this.groups_.length;
@@ -109235,6 +109237,7 @@ ngeo.FeatureOverlayMgr.prototype.getFeatureOverlay = function() {
 
 /**
  * @param {ol.Map} map Map.
+ * @export
  */
 ngeo.FeatureOverlayMgr.prototype.init = function(map) {
   this.layer_.setMap(map);
@@ -109300,6 +109303,7 @@ ngeo.FeatureOverlay = function(manager, index) {
 /**
  * Add a feature to the feature overlay.
  * @param {ol.Feature} feature The feature to add.
+ * @export
  */
 ngeo.FeatureOverlay.prototype.addFeature = function(feature) {
   this.manager_.addFeature(feature, this.index_);
@@ -109308,7 +109312,8 @@ ngeo.FeatureOverlay.prototype.addFeature = function(feature) {
 
 /**
  * Remove a feature from the feature overlay.
- * @param {ol.Feature} feature The feature to add.
+ * @param {ol.Feature} feature The feature to remove.
+ * @export
  */
 ngeo.FeatureOverlay.prototype.removeFeature = function(feature) {
   this.manager_.removeFeature(feature, this.index_);
@@ -109317,6 +109322,7 @@ ngeo.FeatureOverlay.prototype.removeFeature = function(feature) {
 
 /**
  * Remove all the features from the feature overlay.
+ * @export
  */
 ngeo.FeatureOverlay.prototype.clear = function() {
   this.manager_.clear(this.index_);
@@ -109330,6 +109336,7 @@ ngeo.FeatureOverlay.prototype.clear = function() {
  * collection to add and remove features instead of using the overlay's
  * `addFeature`, `removeFeature` and `clear` functions.
  * @param {ol.Collection.<ol.Feature>} features Feature collection.
+ * @export
  */
 ngeo.FeatureOverlay.prototype.setFeatures = function(features) {
   if (this.features_ !== null) {
@@ -109356,6 +109363,7 @@ ngeo.FeatureOverlay.prototype.setFeatures = function(features) {
  * Set a style for the feature overlay.
  * @param {ol.style.Style|Array.<ol.style.Style>|ol.style.StyleFunction} style
  * Style.
+ * @export
  */
 ngeo.FeatureOverlay.prototype.setStyle = function(style) {
   this.manager_.setStyle(style, this.index_);
@@ -118007,6 +118015,7 @@ ngeo.format.FeatureHashStyleTypes_[ol.geom.GeometryType.MULTI_POLYGON] =
  * @constructor
  * @extends {ol.format.TextFeature}
  * @param {ngeox.format.FeatureHashOptions=} opt_options Options.
+ * @export
  */
 ngeo.format.FeatureHash = function(opt_options) {
   goog.base(this);
@@ -118048,6 +118057,48 @@ ngeo.format.FeatureHash = function(opt_options) {
 
 };
 goog.inherits(ngeo.format.FeatureHash, ol.format.TextFeature);
+
+
+/**
+ * @inheritDoc
+ * @export
+ */
+ngeo.format.FeatureHash.prototype.readFeature;
+
+
+/**
+ * @inheritDoc
+ * @export
+ */
+ngeo.format.FeatureHash.prototype.readFeatures;
+
+
+/**
+ * @inheritDoc
+ * @export
+ */
+ngeo.format.FeatureHash.prototype.readGeometry;
+
+
+/**
+ * @inheritDoc
+ * @export
+ */
+ngeo.format.FeatureHash.prototype.writeFeature;
+
+
+/**
+ * @inheritDoc
+ * @export
+ */
+ngeo.format.FeatureHash.prototype.writeFeatures;
+
+
+/**
+ * @inheritDoc
+ * @export
+ */
+ngeo.format.FeatureHash.prototype.writeGeometry;
 
 
 /**
@@ -119193,6 +119244,7 @@ goog.inherits(ngeo.interaction.Measure, ol.interaction.Interaction);
  * @param {ol.proj.Projection} projection Projection of the polygon coords.
  * @param {?number} decimals Decimals.
  * @return {string} Formatted string of the area.
+ * @export
  */
 ngeo.interaction.Measure.getFormattedArea = function(
     polygon, projection, decimals) {
@@ -119227,6 +119279,7 @@ ngeo.interaction.Measure.getFormattedArea = function(
  * @param {ol.proj.Projection} projection Projection of the line string coords.
  * @param {?number} decimals Decimals.
  * @return {string} Formatted string of length.
+ * @export
  */
 ngeo.interaction.Measure.getFormattedLength = function(lineString, projection,
     decimals) {
@@ -119491,6 +119544,7 @@ ngeo.interaction.Measure.prototype.handleMeasure = goog.abstractMethod;
 /**
  * Get a reference to the tooltip element.
  * @return {Element} Tooltip Element.
+ * @export
  */
 ngeo.interaction.Measure.prototype.getTooltipElement = function() {
   return this.measureTooltipElement_;
@@ -119525,6 +119579,7 @@ goog.require('ol.interaction.Draw');
  * @constructor
  * @extends {ngeo.interaction.Measure}
  * @param {ngeox.interaction.MeasureOptions=} opt_options Options
+ * @export
  */
 ngeo.interaction.MeasureArea = function(opt_options) {
 
@@ -119609,6 +119664,7 @@ goog.require('ol.source.Vector');
  * @fires ol.interaction.DrawEvent
  * @extends {ngeo.interaction.Measure}
  * @param {ngeox.interaction.MeasureOptions=} opt_options Options
+ * @export
  */
 ngeo.interaction.MeasureAzimut = function(opt_options) {
 
@@ -119993,6 +120049,7 @@ goog.require('ol.interaction.Draw');
  * @constructor
  * @extends {ngeo.interaction.Measure}
  * @param {ngeox.interaction.MeasureOptions=} opt_options Options
+ * @export
  */
 ngeo.interaction.MeasureLength = function(opt_options) {
 
@@ -120733,11 +120790,24 @@ goog.provide('ngeo.proj.EPSG2056');
 goog.require('ol.proj');
 
 if (typeof proj4 == 'function') {
-  proj4.defs('EPSG:2056',
-      '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 ' +
-      '+k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel ' +
-      '+towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs');
-  ol.proj.get('EPSG:2056').setExtent([2420000, 1030000, 2900000, 1350000]);
+  var epsg2056def = [
+    '+proj=somerc',
+    '+lat_0=46.95240555555556',
+    '+lon_0=7.439583333333333',
+    '+k_0=1',
+    '+x_0=2600000',
+    '+y_0=1200000',
+    '+ellps=bessel',
+    '+towgs84=674.374,15.056,405.346,0,0,0,0',
+    '+units=m',
+    '+no_defs'
+  ].join(' ');
+  var epsg2056extent = [2420000, 1030000, 2900000, 1350000];
+
+  proj4.defs('epsg:2056', epsg2056def);
+  proj4.defs('EPSG:2056', epsg2056def);
+  ol.proj.get('epsg:2056').setExtent(epsg2056extent);
+  ol.proj.get('EPSG:2056').setExtent(epsg2056extent);
 }
 
 goog.provide('ngeo.proj.EPSG21781');
@@ -120753,16 +120823,16 @@ if (typeof proj4 == 'function') {
     '+x_0=600000',
     '+y_0=200000',
     '+ellps=bessel',
-    '+towgs84=674.4,15.1,405.3,0,0,0,0',
+    '+towgs84=674.374,15.056,405.346,0,0,0,0',
     '+units=m',
     '+no_defs'
   ].join(' ');
+  var epsg21781extent = [420000, 30000, 900000, 350000];
 
-  var extent = [420000, 30000, 900000, 350000];
   proj4.defs('epsg:21781', epsg21781def);
   proj4.defs('EPSG:21781', epsg21781def);
-  ol.proj.get('epsg:21781').setExtent(extent);
-  ol.proj.get('EPSG:21781').setExtent(extent);
+  ol.proj.get('epsg:21781').setExtent(epsg21781extent);
+  ol.proj.get('EPSG:21781').setExtent(epsg21781extent);
 }
 
 goog.provide('ngeo.BackgroundEvent');
@@ -120865,6 +120935,7 @@ goog.inherits(ngeo.BackgroundLayerMgr, ol.Observable);
  * the map does not have a background layer.
  * @param {ol.Map} map Map.
  * @return {ol.layer.Base} layer The background layer.
+ * @export
  */
 ngeo.BackgroundLayerMgr.prototype.get = function(map) {
   var mapUid = goog.getUid(map).toString();
@@ -120878,6 +120949,7 @@ ngeo.BackgroundLayerMgr.prototype.get = function(map) {
  * @param {ol.Map} map The map.
  * @param {ol.layer.Base} layer The new background layer.
  * @return {ol.layer.Base} The previous background layer.
+ * @export
  */
 ngeo.BackgroundLayerMgr.prototype.set = function(map, layer) {
   var mapUid = goog.getUid(map).toString();
@@ -121503,6 +121575,7 @@ ngeo.Location = function(location, history) {
 /**
  * Get the location's URI object.
  * @return {!goog.Uri} URI.
+ * @export
  */
 ngeo.Location.prototype.getUri = function() {
   return this.uri_;
@@ -121512,6 +121585,7 @@ ngeo.Location.prototype.getUri = function() {
 /**
  * Get the location's current path.
  * @return {string} The path.
+ * @export
  */
 ngeo.Location.prototype.getPath = function() {
   return this.uri_.getPath();
@@ -121522,6 +121596,7 @@ ngeo.Location.prototype.getPath = function() {
  * Get the location's URI as a string
  * @param {Object.<string, string>=} opt_params Params.
  * @return {string} The URI.
+ * @export
  */
 ngeo.Location.prototype.getUriString = function(opt_params) {
   var extendedUri;
@@ -121539,6 +121614,7 @@ ngeo.Location.prototype.getUriString = function(opt_params) {
  * Check if a param exists in the location's URI.
  * @param {string} key Param key.
  * @return {boolean} True if the param exists.
+ * @export
  */
 ngeo.Location.prototype.hasParam = function(key) {
   return this.uri_.getQueryData().containsKey(key);
@@ -121549,6 +121625,7 @@ ngeo.Location.prototype.hasParam = function(key) {
  * Get a param in the location's URI.
  * @param {string} key Param key.
  * @return {string} Param value.
+ * @export
  */
 ngeo.Location.prototype.getParam = function(key) {
   return /** @type {string} */ (this.uri_.getQueryData().get(key));
@@ -121558,6 +121635,7 @@ ngeo.Location.prototype.getParam = function(key) {
 /**
  * Get an array with all existing param's keys in the location's URI.
  * @return {Array.<string>} Param keys.
+ * @export
  */
 ngeo.Location.prototype.getParamKeys = function() {
   return this.uri_.getQueryData().getKeys();
@@ -121567,6 +121645,7 @@ ngeo.Location.prototype.getParamKeys = function() {
 /**
  * Set or create a param in the location's URI.
  * @param {Object.<string, string>} params Parameters.
+ * @export
  */
 ngeo.Location.prototype.updateParams = function(params) {
   var qd = this.uri_.getQueryData();
@@ -121579,6 +121658,7 @@ ngeo.Location.prototype.updateParams = function(params) {
 /**
  * Delete a param in the location's URI.
  * @param {string} key Param key.
+ * @export
  */
 ngeo.Location.prototype.deleteParam = function(key) {
   this.uri_.getQueryData().remove(key);
@@ -121587,6 +121667,7 @@ ngeo.Location.prototype.deleteParam = function(key) {
 
 /**
  * Refresh the the location's URI.
+ * @export
  */
 ngeo.Location.prototype.refresh = function() {
   this.history_.replaceState(null, '', this.getUriString());
@@ -121596,6 +121677,7 @@ ngeo.Location.prototype.refresh = function() {
 /**
  * Set a new path for this location.
  * @param {string} path Path.
+ * @export
  */
 ngeo.Location.prototype.setPath = function(path) {
   this.uri_.setPath(path);
@@ -121774,6 +121856,7 @@ ngeo.Popup = function($compile, $rootScope) {
 /**
  * Get the current popup state.
  * @return {boolean} `true` if the popup is currently, otherwise `false`.
+ * @export
  */
 ngeo.Popup.prototype.getOpen = function() {
   return this.scope_['open'];
@@ -121783,6 +121866,7 @@ ngeo.Popup.prototype.getOpen = function() {
 /**
  * Show/hide the popup.
  * @param {boolean} open `true` to show the popup, `false` to hide it.
+ * @export
  */
 ngeo.Popup.prototype.setOpen = function(open) {
   this.scope_['open'] = open;
@@ -121791,6 +121875,7 @@ ngeo.Popup.prototype.setOpen = function(open) {
 
 /**
  * Destroy the popup.
+ * @export
  */
 ngeo.Popup.prototype.destroy = function() {
   this.scope_.$destroy();
@@ -121801,6 +121886,7 @@ ngeo.Popup.prototype.destroy = function() {
 /**
  * Set the popup's title.
  * @param {string} title The title.
+ * @export
  */
 ngeo.Popup.prototype.setTitle = function(title) {
   this.scope_['title'] = title;
@@ -121812,6 +121898,7 @@ ngeo.Popup.prototype.setTitle = function(title) {
  * Note: the type of the `content` param is `*` instead of `string`, this
  * is because the content may be trusted using `$sce.trustAsHtml`.
  * @param {*} content The content.
+ * @export
  */
 ngeo.Popup.prototype.setContent = function(content) {
   this.scope_['content'] = content;
@@ -121962,6 +122049,7 @@ ngeo.Print.FEAT_STYLE_PROP_PREFIX_ = '_ngeo_style_';
  * @param {string} ref Print report reference.
  * @param {angular.$http.Config=} opt_httpConfig $http config object.
  * @return {angular.$http.HttpPromise} HTTP promise.
+ * @export
  */
 ngeo.Print.prototype.cancel = function(ref, opt_httpConfig) {
   var httpConfig = opt_httpConfig !== undefined ? opt_httpConfig :
@@ -121980,6 +122068,7 @@ ngeo.Print.prototype.cancel = function(ref, opt_httpConfig) {
  * @param {string} layout Layout.
  * @param {Object.<string, *>} customAttributes Custom attributes.
  * @return {MapFishPrintSpec} The print spec.
+ * @export
  */
 ngeo.Print.prototype.createSpec = function(
     map, scale, dpi, layout, customAttributes) {
@@ -122241,28 +122330,19 @@ ngeo.Print.prototype.encodeVectorLayer_ = function(arr, layer, resolution) {
   });
 
   for (var i = 0, ii = features.length; i < ii; ++i) {
-    var feature = features[i];
-    var geometry = feature.getGeometry();
-
-    // no need to encode features with no geometry
-    if (!goog.isDefAndNotNull(geometry)) {
-      continue;
-    }
-
-    var geometryType = geometry.getType();
-    var geojsonFeature = geojsonFormat.writeFeatureObject(feature);
+    var originalFeature = features[i];
 
     var styleData = null;
-    var styleFunction = feature.getStyleFunction();
+    var styleFunction = originalFeature.getStyleFunction();
     if (styleFunction !== undefined) {
-      styleData = styleFunction.call(feature, resolution);
+      styleData = styleFunction.call(originalFeature, resolution);
     } else {
       styleFunction = layer.getStyleFunction();
       if (styleFunction !== undefined) {
-        styleData = styleFunction.call(layer, feature, resolution);
+        styleData = styleFunction.call(layer, originalFeature, resolution);
       }
     }
-
+    var origGeojsonFeature = geojsonFormat.writeFeatureObject(originalFeature);
     /**
      * @type {Array<ol.style.Style>}
      */
@@ -122271,13 +122351,37 @@ ngeo.Print.prototype.encodeVectorLayer_ = function(arr, layer, resolution) {
     goog.asserts.assert(goog.isArray(styles));
 
     if (styles !== null && styles.length > 0) {
-      geojsonFeatures.push(geojsonFeature);
-      if (geojsonFeature.properties === null) {
-        geojsonFeature.properties = {};
-      }
+      var isOriginalFeatureAdded = false;
       for (var j = 0, jj = styles.length; j < jj; ++j) {
         var style = styles[j];
         var styleId = goog.getUid(style).toString();
+        var geometry = style.getGeometry();
+        var geojsonFeature;
+        if (!geometry) {
+          geojsonFeature = origGeojsonFeature;
+          geometry = originalFeature.getGeometry();
+          // no need to encode features with no geometry
+          if (!goog.isDefAndNotNull(geometry)) {
+            continue;
+          }
+          if (!isOriginalFeatureAdded) {
+            geojsonFeatures.push(geojsonFeature);
+            isOriginalFeatureAdded = true;
+          }
+        } else {
+          var styledFeature = originalFeature.clone()
+          styledFeature.setGeometry(geometry);
+          geojsonFeature = geojsonFormat.writeFeatureObject(styledFeature);
+          geometry = styledFeature.getGeometry();
+          styledFeature = null;
+          geojsonFeatures.push(geojsonFeature);
+        }
+
+        var geometryType = geometry.getType();
+        if (geojsonFeature.properties === null) {
+          geojsonFeature.properties = {};
+        }
+
         var featureStyleProp = ngeo.Print.FEAT_STYLE_PROP_PREFIX_ + j;
         this.encodeVectorStyle_(
             mapfishStyleObject, geometryType, style, styleId, featureStyleProp);
@@ -122411,11 +122515,66 @@ ngeo.Print.prototype.encodeVectorStylePoint_ = function(symbolizers, imageStyle)
     if (src !== undefined) {
       symbolizer = /** @type {MapFishPrintSymbolizerPoint} */ ({
         type: 'point',
-        externalGraphic: src
+        externalGraphic: src,
+        /**
+         * TODO: Need a way to find the mime type of the image.
+         * Providing a fake mimetype works but it's not the right way to do.
+         */
+        graphicFormat : 'image/png'
       });
+      var opacity = imageStyle.getOpacity();
+      if (opacity !== null) {
+        symbolizer.graphicOpacity = opacity;
+      }
+      var size = imageStyle.getSize();
+      if (size !== null) {
+        symbolizer.graphicWidth = size[0];
+        symbolizer.graphicHeight = size[1];
+      }
       var rotation = imageStyle.getRotation();
       if (rotation !== 0) {
         symbolizer.rotation = goog.math.toDegrees(rotation);
+      }
+    }
+  } else if (imageStyle instanceof ol.style.RegularShape) {
+    /**
+     * Mapfish Print does not support image defined with ol.style.RegularShape.
+     * As a workaround, I try to map the image on a well-known image name.
+     */
+    var points = imageStyle.getPoints();
+    if (points !== null) {
+      symbolizer = /** @type {MapFishPrintSymbolizerPoint} */ ({
+        type: 'point'
+      });
+      if (points === 4) {
+        symbolizer.graphicName = 'square';
+      } else if (points === 3) {
+        symbolizer.graphicName = 'triangle';
+      } else if (points === 5) {
+        symbolizer.graphicName = 'star';
+      } else if (points === 8) {
+        symbolizer.graphicName = 'cross';
+      }
+      var sizeShape = imageStyle.getSize();
+      if (sizeShape !== null) {
+        symbolizer.graphicWidth = sizeShape[0];
+        symbolizer.graphicHeight = sizeShape[1];
+      }
+      var rotationShape = imageStyle.getRotation();
+      if (!isNaN(rotationShape) && rotationShape !== 0) {
+        symbolizer.rotation = goog.math.toDegrees(rotationShape);
+      }
+      var opacityShape = imageStyle.getOpacity();
+      if (opacityShape !== null) {
+        symbolizer.graphicOpacity = opacityShape;
+      }
+      var strokeShape = imageStyle.getStroke();
+      if (strokeShape !== null) {
+        this.encodeVectorStyleStroke_(symbolizer, strokeShape);
+      }
+      var fillShape = imageStyle.getFill();
+      if (fillShape !== null) {
+        this.encodeVectorStyleFill_(symbolizer, fillShape);
       }
     }
   }
@@ -122560,6 +122719,7 @@ ngeo.Print.prototype.getWmtsUrl_ = function(source) {
  * @param {MapFishPrintSpec} printSpec Print specification.
  * @param {angular.$http.Config=} opt_httpConfig $http config object.
  * @return {angular.$http.HttpPromise} HTTP promise.
+ * @export
  */
 ngeo.Print.prototype.createReport = function(printSpec, opt_httpConfig) {
   var url = this.url_ + '/report.pdf';
@@ -122579,6 +122739,7 @@ ngeo.Print.prototype.createReport = function(printSpec, opt_httpConfig) {
  * @param {string} ref Print report reference.
  * @param {angular.$http.Config=} opt_httpConfig $http config object.
  * @return {angular.$http.HttpPromise} HTTP promise.
+ * @export
  */
 ngeo.Print.prototype.getStatus = function(ref, opt_httpConfig) {
   var httpConfig = opt_httpConfig !== undefined ? opt_httpConfig :
@@ -122592,6 +122753,7 @@ ngeo.Print.prototype.getStatus = function(ref, opt_httpConfig) {
  * Get the URL of a report.
  * @param {string} ref Print report reference.
  * @return {string} The report URL for this ref.
+ * @export
  */
 ngeo.Print.prototype.getReportUrl = function(ref) {
   return this.url_ + '/report/' + ref;
@@ -122670,6 +122832,7 @@ ngeo.PrintUtils.DOTS_PER_INCH_ = 72;
  * returning the scale of the map to print.
  * @return {function(ol.render.Event)} Function to use as a map postcompose
  * listener.
+ * @export
  */
 ngeo.PrintUtils.prototype.createPrintMaskPostcompose = function(getSize, getScale) {
   var self = this;
@@ -122744,6 +122907,7 @@ ngeo.PrintUtils.prototype.createPrintMaskPostcompose = function(getSize, getScal
  * @return {number} The best scale. `-1` is returned if there is no optimal
  * scale, that is the optimal scale is lower than or equal to the first value
  * in `printMapScales`.
+ * @export
  */
 ngeo.PrintUtils.prototype.getOptimalScale = function(
     mapSize, mapResolution, printMapSize, printMapScales) {
@@ -122775,6 +122939,7 @@ ngeo.PrintUtils.prototype.getOptimalScale = function(
  * @param {ol.Size} printMapSize Size of the map on the paper (dots).
  * @param {number} printMapScale Map scale on the paper.
  * @return {number} The optimal map resolution.
+ * @export
  */
 ngeo.PrintUtils.prototype.getOptimalResolution = function(
     mapSize, printMapSize, printMapScale) {
@@ -123454,6 +123619,7 @@ goog.require('ngeo');
  * @constructor
  * @ngdoc value
  * @ngname ngeoToolActivate
+ * @export
  */
 ngeo.ToolActivate = function(toolContext, activePropertyName) {
 
@@ -123536,6 +123702,7 @@ ngeo.ToolActivateMgr = function($rootScope) {
  * @param {ngeo.ToolActivate} tool Tool to register.
  * @param {boolean=} opt_defaultActivate If true, this tool will be activated
  *     when all other tools in the group are deactivated.
+ * @export
  */
 ngeo.ToolActivateMgr.prototype.registerTool = function(groupName, tool,
     opt_defaultActivate) {

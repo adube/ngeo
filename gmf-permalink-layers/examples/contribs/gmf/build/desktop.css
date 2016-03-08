@@ -9362,6 +9362,9 @@ gmf-layertree ul .treenode .legend img {
 .search .form-control.ng-pristine.ng-untouched.ng-valid.tt-hint {
   display: none;
 }
+.search-is-active .search {
+  z-index: 5;
+}
 span.twitter-typeahead input {
   padding-left: 1rem;
 }

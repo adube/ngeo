@@ -9226,6 +9226,9 @@ button[ngeo-mobile-geolocation] .fa {
 .search .form-control.ng-pristine.ng-untouched.ng-valid.tt-hint {
   display: none;
 }
+.search-is-active .search {
+  z-index: 5;
+}
 span.twitter-typeahead input {
   padding-left: 1rem;
 }
@@ -9487,9 +9490,9 @@ main {
 main .overlay {
   /* shadow layer visible when navigation is active */
   position: absolute;
-  z-index: 3;
-  height: 100%;
-  width: 100%;
+  z-index: 6;
+  height: 100vh;
+  width: 100vw;
   top: 0;
   left: 0;
   cursor: pointer;
@@ -9504,6 +9507,29 @@ main .overlay {
 .nav-is-visible main .overlay {
   visibility: visible;
   opacity: 1;
+}
+.search-overlay {
+  /* shadow layer visible when search is active */
+  position: absolute;
+  z-index: 4;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  background-color: white;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s, visibility 0.3s;
+  transition: opacity 0.3s, visibility 0.3s;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+@media (max-width: 767px) {
+  .search-is-active .search-overlay {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 .nav-left-is-visible nav.nav-right,
 .nav-right-is-visible nav.nav-left {
@@ -9529,8 +9555,8 @@ nav.nav-right {
 nav.nav-left header,
 nav.nav-right header {
   display: block;
-  height: 5rem;
-  line-height: 5rem;
+  height: 50px;
+  line-height: 50px;
   background-color: #808080;
 }
 nav.nav-left header .go-back,
@@ -9543,7 +9569,7 @@ nav.nav-right header .go-back {
   will-change: opacity, visibility;
   opacity: 0;
   visibility: hidden;
-  height: 5rem;
+  height: 50px;
   width: 4rem;
 }
 nav.nav-left header .go-back.active,
@@ -9652,8 +9678,8 @@ nav.nav-right a[data-toggle=slide-in]::after {
 nav.nav-left ul a[data-toggle=slide-in],
 nav.nav-right ul a[data-toggle=slide-in] {
   display: block;
-  height: 5rem;
-  line-height: 5rem;
+  height: 50px;
+  line-height: 50px;
   color: #5c996a;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -9662,7 +9688,7 @@ nav.nav-right ul a[data-toggle=slide-in] {
 nav.nav-left .slide,
 nav.nav-right .slide {
   position: fixed;
-  height: calc(100% - 5rem);
+  height: calc(100% - 50px);
   width: 26rem;
   -webkit-transform: translateX(100%);
           transform: translateX(100%);
@@ -9700,7 +9726,7 @@ nav.nav-right .slide.slide-out {
 .nav-trigger {
   top: 1rem;
   background: white;
-  z-index: 3;
+  z-index: 6;
   height: 4rem;
   border: 1px solid black;
 }
