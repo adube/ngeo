@@ -8,8 +8,6 @@ var app = {};
 /** @type {!angular.Module} **/
 app.module = angular.module('app', ['gmf']);
 
-app.module.constant('gmfTreeUrl', 'data/themes.json');
-
 
 /**
  * @constructor

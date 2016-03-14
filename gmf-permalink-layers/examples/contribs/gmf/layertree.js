@@ -19,8 +19,11 @@ app.module.value('gmfWmsUrl',
 /**
  * @constructor
  * @param {angular.$http} $http Angular's $http service.
+ * @param {gmf.Themes} gmfThemes The gme themes service.
  */
-app.MainController = function($http) {
+app.MainController = function($http, gmfThemes) {
+
+  gmfThemes.loadThemes();
 
   var projection = ol.proj.get('EPSG:21781');
   projection.setExtent([485869.5728, 76443.1884, 837076.5648, 299941.7864]);
@@ -55,13 +58,13 @@ app.MainController = function($http) {
    */
   this.treeSource = undefined;
 
-  $http.get('data/themes.json').success(function(data) {
-    var themes = data['themes'];
+  gmfThemes.getThemesObject().then(function(themes) {
     if (themes) {
       this.themes = themes;
       this.treeSource = themes[3];
     }
   }.bind(this));
+
 };
 
 app.module.controller('MainController', app.MainController);
