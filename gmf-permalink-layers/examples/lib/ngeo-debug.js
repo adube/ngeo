@@ -108998,8 +108998,8 @@ goog.require('ol.control.Control');
 
 
 /**
- * Provides a directive can be used to add a control to a DOM
- * element of the HTML page.
+ * Provides a directive that can be used to add a control to the map
+ * using a DOM element.
  *
  * Example:
  *
@@ -109721,7 +109721,7 @@ ngeo.module.value('ngeoLayertreeTemplateUrl',
  *      <div ngeo-layertree="ctrl.tree"
  *        ngeo-layertree-map="ctrl.map"
  *        ngeo-layertree-nodelayer="ctrl.getLayer(node)"
- *        ngeo-layertree-listeners="ctrl.listeners(treeScope, treeCtrl)"
+ *        ngeo-layertree-listeners="ctrl.listeners(treeScope, treeCtrl)">
  *      </div>
  *
  * The "ngeo-layertree", "ngeo-layertree-map" and
@@ -117779,9 +117779,8 @@ ngeo.SortableOptions;
 
 
 /**
- * Provides the "ngeoSortable" directive. This directive allows
- * drag-and-dropping DOM items between them. The directive also changes the
- * order of elements in the array it is given.
+ * Provides a directive that allows drag-and-dropping DOM items between them.
+ * It also changes the order of elements in the given array.
  *
  * It is typically used together with `ng-repeat`, for example for re-ordering
  * layers in a map.

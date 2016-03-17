@@ -18,10 +18,10 @@ app.module.value('gmfWmsUrl',
 
 /**
  * @constructor
- * @param {angular.$http} $http Angular's $http service.
  * @param {gmf.Themes} gmfThemes The gme themes service.
+ * @param {gmf.TreeManager} gmfTreeManager gmf Tree Manager service.
  */
-app.MainController = function($http, gmfThemes) {
+app.MainController = function(gmfThemes, gmfTreeManager) {
 
   gmfThemes.loadThemes();
 
@@ -47,10 +47,28 @@ app.MainController = function($http, gmfThemes) {
   });
 
   /**
-   * @type {Array.<Object>|undefined}
-   * export
+   * @type {gmf.TreeManager}
+   * @export
    */
-  this.themes = undefined;
+  this.gmfTreeManager = gmfTreeManager;
+
+  /**
+   * @type {Array.<GmfThemesNode>}
+   * @export
+   */
+  this.themes = [];
+
+  /**
+   * @type {Array.<GmfThemesNode>}
+   * @export
+   */
+  this.groups = [];
+
+  /**
+   * @type {Array.<GmfThemesNode>}
+   * @export
+   */
+  this.layers = [];
 
   /**
    * @type {Object|undefined}
@@ -58,13 +76,119 @@ app.MainController = function($http, gmfThemes) {
    */
   this.treeSource = undefined;
 
+  /**
+   * @type {string}
+   * @export
+   */
+  this.modeFlush = 'flush';
+
+  /**
+   * @type {function()}
+   * @export
+   */
+  this.setModeFlush = function() {
+    var isModeFlush = this.modeFlush == 'flush' ? true : false;
+    this.gmfTreeManager.setModeFlush(isModeFlush);
+  }
+
+  /**
+   * @param {GmfThemesNode|undefined} value A theme or undefined to get Themes.
+   * @return {Array.<GmfThemesNode>} All themes.
+   * @export
+   */
+  this.getSetTheme = function(value) {
+    if (value !== undefined) {
+      this.gmfTreeManager.addTheme(value);
+    }
+    return this.themes;
+  }
+
+  /**
+   * @param {GmfThemesNode|undefined} value A group or undefined to get groups.
+   * @return {Array.<GmfThemesNode>} All groups in all themes.
+   * @export
+   */
+  this.getSetGroup = function(value) {
+    if (value !== undefined) {
+      this.gmfTreeManager.addGroups([value]);
+    }
+    return this.groups;
+  }
+
+  /**
+   * @param {GmfThemesNode|undefined} value A group or undefined to get groups.
+   * @return {Array.<GmfThemesNode>} All groups in all themes.
+   * @export
+   */
+  this.getSetLayers = function(value) {
+    if (value !== undefined) {
+      this.gmfTreeManager.addGroupByLayerName(value.name);
+    }
+    return this.layers;
+  }
+
+  /**
+   * @param {GmfThemesNode|undefined} value A Theme or group node, or undefined
+   *     to get the groups of the tree manager.
+   * @return {Array.<GmfThemesNode>} All groups in the tree manager.
+   * @export
+   */
+  this.getSetRemoveTree = function(value) {
+    if (value !== undefined) {
+      this.gmfTreeManager.removeGroup(value);
+    }
+    return this.gmfTreeManager.tree.children;
+  }
+
   gmfThemes.getThemesObject().then(function(themes) {
     if (themes) {
       this.themes = themes;
-      this.treeSource = themes[3];
+
+      // Get an array with all nodes entities existing in "themes".
+      var flatNodes = [];
+      this.themes.forEach(function(theme) {
+        theme.children.forEach(function(group) {
+          this.groups.push(group); // get a list of all groups
+          this.getDistinctFlatNodes_(group, flatNodes);
+        }.bind(this));
+      }.bind(this));
+      flatNodes.forEach(function(node) {
+        // Get an array of all layers
+        if (node.children === undefined) {
+          this.layers.push(node);
+        }
+      }.bind(this));
+
+      //set arbitrarily a default theme
+      this.gmfTreeManager.addTheme(themes[0]);
+      this.treeSource = this.gmfTreeManager.tree;
     }
   }.bind(this));
 
+  /**
+   * Just for this example
+   * @param {GmfThemesNode} node A theme, group or layer node.
+   * @param {Array.<GmfThemesNode>} nodes An Array of nodes.
+   * @export
+   */
+  this.getDistinctFlatNodes_ = function(node, nodes) {
+    var i;
+    var children = node.children;
+    if (children !== undefined) {
+      for (i = 0; i < children.length; i++) {
+        this.getDistinctFlatNodes_(children[i], nodes);
+      }
+    }
+    var alreadyAdded = false;
+    nodes.some(function(n) {
+      if (n.id === node.id) {
+        return alreadyAdded = true;
+      }
+    });
+    if (!alreadyAdded) {
+      nodes.push(node);
+    }
+  }
 };
 
 app.module.controller('MainController', app.MainController);
