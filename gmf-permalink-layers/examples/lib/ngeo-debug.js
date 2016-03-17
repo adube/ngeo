@@ -121622,12 +121622,7 @@ ngeo.LayerHelper.prototype.getLayerByName = function(layerName, layers) {
     } else if (layer.get('layerName') === layerName) {
       found = layer;
     }
-
-    if (found) {
-      return true;
-    } else {
-      return false;
-    }
+    return !!found;
   }, this);
 
   return found;
