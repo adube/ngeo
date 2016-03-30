@@ -119833,6 +119833,37 @@ ngeo.interaction.Measure.getFormattedArea = function(
 
 
 /**
+ * Calculate the area of the passed circle and return a formatted string
+ * of the area.
+ * @param {ol.geom.Circle} circle Circle
+ * @param {?number} decimals Decimals.
+ * @return {string} Formatted string of the area.
+ * @export
+ */
+ngeo.interaction.Measure.getFormattedCircleArea = function(
+    circle, decimals) {
+  var area = Math.PI * Math.pow(circle.getRadius(), 2);
+  var output;
+  if (area > 1000000) {
+    if (decimals !== null) {
+      output = goog.string.padNumber(area / 1000000, 0, decimals);
+    } else {
+      output = parseFloat((area / 1000000).toPrecision(3));
+    }
+    output += ' ' + 'km²';
+  } else {
+    if (decimals !== null) {
+      output = goog.string.padNumber(area, 0, decimals);
+    } else {
+      output = parseFloat(area.toPrecision(3));
+    }
+    output += ' ' + 'm²';
+  }
+  return output;
+};
+
+
+/**
  * Calculate the length of the passed line string and return a formatted
  * string of the length.
  * @param {ol.geom.LineString} lineString Line string.
@@ -121980,6 +122011,7 @@ goog.provide('ngeo.LayerHelper');
 
 goog.require('ngeo');
 goog.require('ol.Collection');
+goog.require('ol.array');
 goog.require('ol.format.WMTSCapabilities');
 goog.require('ol.layer.Group');
 goog.require('ol.layer.Image');
@@ -122070,7 +122102,7 @@ ngeo.LayerHelper.prototype.createWMTSLayerFromCapabilitites = function(
 
       // Add styles from capabilities as param of the layer
       var layers = result['Contents']['Layer'];
-      var l = goog.array.find(layers, function(elt, index, array) {
+      var l = ol.array.find(layers, function(elt, index, array) {
         return elt['Identifier'] == layerName;
       });
       layer.set('capabilitiesStyles', l['Style']);
