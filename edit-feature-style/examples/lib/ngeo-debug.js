@@ -109289,6 +109289,8 @@ goog.require('ngeo');
  *
  *     <div ngeo-btn-group ngeo-btn-group-active="ctrl.drawToolActive">
  *
+ * See our live example: {@link ../examples/interactionbtngroup.html}
+ *
  * @htmlAttribute {*} ngeo-btn-group-active Any property of the scope.
  * Tells whether at least one button of the group is active.
  * @param {angular.$parse} $parse Angular parse service.
@@ -109563,6 +109565,8 @@ goog.require('ol.control.Control');
  * instance, and the expression passed to "ngeo-control-map" should
  * evaluate to a map instance.
  *
+ * See our live example: {@link ../examples/control.html}
+ *
  * @htmlAttribute {ol.Map} ngeo-control-map The map.
  * @return {angular.Directive} The directive specs.
  * @ngInject
@@ -109611,6 +109615,8 @@ goog.require('ngeo');
  * Example:
  *
  *      <input type="checkbox" ngModel="geolocation.tracking" />
+ *
+ * See our live example: {@link ../examples/geolocation.html}
  *
  * @typedef {function(ol.Geolocation)}
  * @ngdoc service
@@ -109981,6 +109987,8 @@ ngeo.DesktopGeolocationEventType = {
  *        ngeo-desktop-geolocation-options="ctrl.desktopGeolocationOptions">
  *      </button>
  *
+ * See our live example: {@link ../examples/desktopgeolocation.html}
+ *
  * @htmlAttribute {ol.Map} gmf-geolocation-map The map.
  * @htmlAttribute {ngeox.DesktopGeolocationDirectiveOptions} gmf-geolocation-options The options.
  * @return {angular.Directive} The Directive Definition Object.
@@ -110196,6 +110204,8 @@ goog.require('ngeo');
  *      <input type="file" ngeo-filereader="ctrl.fileContent"
  *        ngeo-filereader-supported="ctrl.supported"/>
  *
+ * See our live example: {@link ../examples/importfeatures.html}
+ *
  * @htmlAttribute {string} ngeo-filereader The content of the file read.
  * @htmlAttribute {boolean=} ngeo-filereader-supported Whether the FileReader API is supported.
  * @param {angular.$window} $window The Angular $window service.
@@ -110320,6 +110330,8 @@ ngeo.module.value('ngeoLayertreeTemplateUrl',
  * has a "layertreeCtrl" property which is a reference to the directive's
  * controller: "layertreeCtrl". You can refer to that property in a custom
  * template for example.
+ *
+ * See our live example: {@link ../examples/layertree.html}
  *
  * @htmlAttribute {Object} ngeo-layertree One theme (JSON).
  * @htmlAttribute {string} ngeo-layertree-templateurl The template URL.
@@ -110514,6 +110526,10 @@ goog.require('ol.Map');
  *
  *      <div ngeo-map="ctrl.map"></div>
  *
+ * See our live examples:
+ * {@link ../examples/permalink.html}
+ * {@link ../examples/simple.html}
+ *
  * @htmlAttribute {ol.Map} ngeo-map The map.
  * @return {angular.Directive} Directive Definition Object.
  * @ngInject
@@ -110576,6 +110592,8 @@ ngeo.MobileGeolocationEventType = {
  *        ngeo-mobile-geolocation-map="ctrl.map"
  *        ngeo-mobile-geolocation-options="ctrl.mobileGeolocationOptions">
  *      </button>
+ *
+ * See our live example: {@link ../examples/mobilegeolocation.html}
  *
  * @htmlAttribute {ol.Map} ngeo-mobile-geolocation-map The map.
  * @htmlAttribute {ngeox.MobileGeolocationDirectiveOptions} ngeo-mobile-geolocation-options The options.
@@ -111323,6 +111341,8 @@ goog.require('ngeo.Query');
  *        ngeo-mobile-query-active="ctrl.queryActive">
  *      </span>
  *
+ * See our live example: {@link ../examples/mobilequery.html}
+ *
  * @param {ngeo.Query} ngeoQuery The ngeo Query service.
  * @return {angular.Directive} The Directive Definition Object.
  * @ngInject
@@ -111412,6 +111432,8 @@ goog.require('ngeo');
  *
  * Note: for z-indexing purpose, the modal DOM element is automatically moved
  * to document body element.
+ *
+ * See our live example: {@link ../examples/modal.html}
  *
  * @param {angular.$parse} $parse Angular parse service.
  * @return {angular.Directive} The directive specs.
@@ -111559,6 +111581,8 @@ goog.require('ngeo.profile');
  * processed by {@link ngeox.profile.ElevationExtractor} and
  * {@link ngeox.profile.PoiExtractor}.
  *
+ * See our live example: {@link ../examples/profile.html}
+ *
  * @htmlAttribute {?Object} ngeo-profile The profile data.
  * @htmlAttribute {ngeox.profile.ProfileOptions} ngeo-profile-options The options.
  * @htmlAttribute {?Array} ngeo-profile-pois The data for POIs.
@@ -111684,6 +111708,8 @@ goog.require('ngeo');
  *        <option ngeo-extent="[-1898084, 4676723, 3972279, 8590299]">A</option>
  *        <option ngeo-extent="[727681, 5784754, 1094579, 6029353]">B</option>
  *      </select>
+ *
+ * See our live example: {@link ../examples/locationchooser.html}
  *
  * @htmlAttribute {ol.Map} ngeo-recenter-map The map.
  * @return {angular.Directive} Directive Definition Object.
@@ -114693,6 +114719,8 @@ goog.require('ol.Map');
  *      <div>
  *      <input type="checkbox" ng-model="ctrl.open" />
  *
+ * See our live example: {@link ../examples/animation.html}
+ *
  * @param {angular.$window} $window Angular window service.
  * @param {angular.$animate} $animate Angular animate service.
  * @return {angular.Directive} The directive specs.
@@ -114813,6 +114841,8 @@ ngeo.ScaleselectorOptions;
  *
  * The directive doesn't create any watcher. In particular the object including
  * the scales information is now watched.
+ *
+ * See our live example: {@link ../examples/scaleselector.html}
  *
  * @htmlAttribute {Object.<string, string>} ngeo-scaleselector-scales The available scales (key: scale, value: display text).
  * @htmlAttribute {ol.Map} ngeo-scaleselector-map The map.
@@ -115031,6 +115061,8 @@ goog.require('ngeo');
  *        ngeo-search="ctrl.typeaheadOptions"
  *        ngeo-search-datasets="ctrl.typeaheadDatasets"
  *        ngeo-search-listeners="crtl.typeaheadListeners">
+ *
+ * See our live example: {@link ../examples/search.html}
  *
  * @htmlAttribute {TypeaheadOptions} ngeo-search The options.
  * @htmlAttribute {Array.<TypeaheadDataset>} ngeo-search-datasets The sources datasets.
@@ -118366,6 +118398,8 @@ ngeo.SortableOptions;
  * if some outside code adds/removes elements to/from the "sortable" array,
  * the "ngeoSortable" directive will pick it up.
  *
+ * See our live example: {@link ../examples/layerorder.html}
+ *
  * @htmlAttribute {Array.<ol.layer.Base>} ngeo-sortable The layers to sort.
  * @htmlAttribute {!ngeo.SortableOptions} ngeo-sortable The options.
  * @param {angular.$timeout} $timeout Angular timeout service.
@@ -120167,6 +120201,8 @@ goog.require('ol.interaction.Draw');
  * @classdesc
  * Interaction dedicated to measure length.
  *
+ * See our live example: {@link ../examples/measure.html}
+ *
  * @constructor
  * @extends {ngeo.interaction.Measure}
  * @param {ngeox.interaction.MeasureOptions=} opt_options Options
@@ -120250,6 +120286,8 @@ goog.require('ol.source.Vector');
 /**
  * @classdesc
  * Interaction dedicated to measure length.
+ *
+ * See our live example: {@link ../examples/measure.html}
  *
  * @constructor
  * @fires ol.interaction.DrawEvent
@@ -120636,6 +120674,8 @@ goog.require('ol.interaction.Draw');
 /**
  * @classdesc
  * Interaction dedicated to measure length.
+ *
+ * See our live example: {@link ../examples/measure.html}
  *
  * @constructor
  * @extends {ngeo.interaction.Measure}
@@ -121619,6 +121659,10 @@ goog.inherits(ngeo.BackgroundEvent, ol.events.Event);
  *       var previous = e.previous
  *     });
  *
+ * See our live examples:
+ * {@link ../examples/backgroundlayer.html}
+ * {@link ../examples/backgroundlayerdropdown.html}
+ *
  * @extends {ol.Observable}
  * @constructor
  * @ngdoc service
@@ -121799,6 +121843,8 @@ goog.require('ngeo');
  * Provides a debounce service. That service is a function
  * used to debounce calls to a user-provided function.
  *
+ * See our live example: {@link ../examples/permalink.html}
+ *
  * @typedef {function(function(?), number, boolean):function()}
  * @ngdoc service
  * @ngname ngeoDebounce
@@ -121859,6 +121905,8 @@ goog.require('ngeo');
  *
  *      <input type="checkbox" ngModel="interaction.active" />
  *
+ * See our live example: {@link ../examples/interactiontoggle.html}
+ *
  * @typedef {function(ol.interaction.Interaction)}
  * @ngdoc service
  * @ngname ngeoDecorateInteraction
@@ -121899,6 +121947,10 @@ goog.require('ngeo');
  * Example:
  *
  *      <input type="checkbox" ngModel="layer.visible" />
+ *
+ * See our live examples:
+ * {@link ../examples/layeropacity.html}
+ * {@link ../examples/layervisibility.html}
  *
  * @typedef {function(ol.layer.Base)}
  * @ngdoc service
@@ -122255,6 +122307,8 @@ ngeo.MockLocationProvider;
  *     app.module.config(ngeo.mockLocationProvider);
  *
  * The ngeo Location type.
+ *
+ * See our live example: {@link ../examples/permalink.html}
  *
  * @param {Location} location Location.
  * @param {History} history History.
@@ -122712,6 +122766,8 @@ ngeo.PrintStyleTypes_[ol.geom.GeometryType.MULTI_POLYGON] =
  *     var reportSpec = print.createSpec(map, scale, dpi, layout, {
  *       'title': 'A title for my report'
  *     });
+ *
+ * See our live example: {@link ../examples/mapfishprint.html}
  *
  * TODO and limitations:
  *
@@ -124317,6 +124373,10 @@ goog.require('ngeo');
 /**
  * A simple object that can be managed by `ngeo.ToolActivateMgr`.
  *
+ * See our live examples:
+ * {@link ../examples/mobilequery.html}
+ * {@link ../examples/toolActivate.html}
+ *
  * @param {Object} toolContext An object which acts as the context for the tool.
  * @param {string} activePropertyName The name of a boolean property on
  *      `toolContext` which represents the active state of the tool.
@@ -124376,6 +124436,10 @@ ngeo.ToolMgrEntry;
  *
  *     ngeoToolActivateMgr.activateTool(tool);
  *     ngeoToolActivateMgr.deactivateTool(tool);
+ *
+ * See our live examples:
+ * {@link ../examples/mobilequery.html}
+ * {@link ../examples/toolActivate.html}
  *
  * @param {angular.Scope} $rootScope The rootScope provider.
  * @constructor
