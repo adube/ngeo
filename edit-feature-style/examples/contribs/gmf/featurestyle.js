@@ -8,13 +8,15 @@ var app = {};
 /** @type {!angular.Module} **/
 app.module = angular.module('app', ['gmf']);
 
+app.module.constant('gmfMeasureDecimals', 2);
+
 
 /**
  * @constructor
  * @param {!angular.Scope} $scope Angular scope.
- * @param {angular.$timeout} $timeout Angular timeout service.
+ * @param {gmf.FeatureHelper} gmfFeatureHelper Gmf feature helper service.
  */
-app.MainController = function($scope, $timeout) {
+app.MainController = function($scope, gmfFeatureHelper) {
 
   /**
    * @type {!angular.Scope}
@@ -22,6 +24,7 @@ app.MainController = function($scope, $timeout) {
    */
   this.scope_ = $scope;
 
+  // create features
   var features = new ol.format.GeoJSON().readFeatures({
     'type': 'FeatureCollection',
     'features': [{
@@ -32,7 +35,7 @@ app.MainController = function($scope, $timeout) {
       },
       'properties': {
         'color': '#009D57',
-        'label': 'Point 1',
+        'name': 'Point 1',
         'size': '6'
       }
     }, {
@@ -45,7 +48,7 @@ app.MainController = function($scope, $timeout) {
         'angle': '0',
         'color': '#000000',
         'isText': true,
-        'label': 'Text 1',
+        'name': 'Text 1',
         'size': '16'
       }
     }, {
@@ -61,7 +64,7 @@ app.MainController = function($scope, $timeout) {
       },
       'properties': {
         'color': '#0BA9CC',
-        'label': 'LineString 1',
+        'name': 'LineString 1',
         'stroke': '4'
       }
     }, {
@@ -80,8 +83,9 @@ app.MainController = function($scope, $timeout) {
       },
       'properties': {
         'color': '#4186F0',
-        'label': 'Polygon 1',
+        'name': 'Polygon 1',
         'opacity': '0.5',
+        'showMeasure': true,
         'stroke': '1'
       }
     }, {
@@ -100,7 +104,7 @@ app.MainController = function($scope, $timeout) {
       },
       'properties': {
         'color': '#CCCCCC',
-        'label': 'Polygon 2',
+        'name': 'Polygon 2',
         'opacity': '1',
         'stroke': '3'
       }
@@ -121,7 +125,7 @@ app.MainController = function($scope, $timeout) {
       'properties': {
         'color': '#000000',
         'isRectangle': true,
-        'label': 'Rectangle 1',
+        'name': 'Rectangle 1',
         'opacity': '0.5',
         'stroke': '2'
       }
@@ -131,28 +135,22 @@ app.MainController = function($scope, $timeout) {
   features.push(new ol.Feature({
     geometry: new ol.geom.Circle([-7691093, 6166327], 35000),
     color: '#000000',
-    label: 'Circle 1',
+    name: 'Circle 1',
     opacity: '0.5',
     stroke: '2'
   }));
 
-  var source = new ol.source.Vector({
-    wrapX: false,
-    features: features
-  });
-
-  var vector = new ol.layer.Vector({
-    source: source
-  });
-
-  /**
-   * @type {ol.View}
-   * @export
-   */
-  this.view = new ol.View({
+  var view = new ol.View({
     center: [-8174482, 6288627],
     zoom: 6
   });
+
+  gmfFeatureHelper.setProjection(view.getProjection());
+
+  // set style
+  features.forEach(function(feature) {
+    gmfFeatureHelper.setStyle(feature);
+  }, this);
 
   /**
    * @type {ol.Map}
@@ -162,32 +160,24 @@ app.MainController = function($scope, $timeout) {
     layers: [
       new ol.layer.Tile({
         source: new ol.source.OSM()
+      }),
+      new ol.layer.Vector({
+        source: new ol.source.Vector({
+          wrapX: false,
+          features: features
+        })
       })
     ],
-    view: this.view
+    view: view
   });
 
   /**
-   * @type {ol.Feature}
+   * @type {?ol.Feature}
    * @export
    */
   this.selectedFeature = null;
 
   this.map.on('singleclick', this.handleMapSingleClick_, this);
-
-  // force selection for each feature to apply the style upon initialization
-  // (for the purpose of having a more appealing example)
-  $('gmf-featurestyle').hide();
-  features.forEach(function(feature) {
-    $timeout(function() {
-      this.selectedFeature = feature;
-    }.bind(this));
-  }, this);
-  $timeout(function() {
-    this.selectedFeature = null;
-    $('gmf-featurestyle').show();
-    this.map.addLayer(vector);
-  }.bind(this));
 };
 
 
