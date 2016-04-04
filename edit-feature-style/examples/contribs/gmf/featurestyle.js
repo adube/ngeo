@@ -133,8 +133,10 @@ app.MainController = function($scope, gmfFeatureHelper) {
   });
 
   features.push(new ol.Feature({
-    geometry: new ol.geom.Circle([-7691093, 6166327], 35000),
+    geometry: ol.geom.Polygon.fromCircle(
+        new ol.geom.Circle([-7691093, 6166327], 35000), 64),
     color: '#000000',
+    isCircle: true,
     name: 'Circle 1',
     opacity: '0.5',
     stroke: '2'
