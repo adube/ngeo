@@ -22,39 +22,18 @@
       gmf-featurestyle .form-horizontal .control-label {
         text-align: left;
       }
-      .gmf-featurestyle-label {
+      .gmf-featurestyle-name {
         font-weight: bold;
         font-size: 16pt;
       }
-      .gmf-featurestyle-label:not(:focus) {
+      .gmf-featurestyle-name:not(:focus) {
         border: none;
         box-shadow: none;
         -webkit-box-shadow: none;
         padding: 0;
       }
-      .gmf-featurestyle-measure {
-        margin: 0 0 0 6px;
-      }
-      .gmf-featurestyle-icon {
-        border: 1px solid;
-      }
-      .gmf-featurestyle-icon-circle:before {
-        content: "Circle";
-      }
-      .gmf-featurestyle-icon-linestring:before {
-        content: "LineString";
-      }
-      .gmf-featurestyle-icon-point:before {
-        content: "Point";
-      }
-      .gmf-featurestyle-icon-polygon:before {
-        content: "Polygon";
-      }
-      .gmf-featurestyle-icon-rectangle:before {
-        content: "Rectangle";
-      }
-      .gmf-featurestyle-icon-text:before {
-        content: "Text";
+      gmf-featurestyle input[type=range] {
+        padding: 6px 12px;
       }
       .palette {
         border-collapse: separate;
@@ -111,9 +90,7 @@
   <body ng-controller="MainController as ctrl">
     <gmf-map gmf-map-map="ctrl.map"></gmf-map>
     <gmf-featurestyle
-      gmf-featurestyle-decimals="2"
-      gmf-featurestyle-feature="ctrl.selectedFeature"
-      gmf-featurestyle-projection="::ctrl.view.getProjection()">
+      gmf-featurestyle-feature="ctrl.selectedFeature">
     </gmf-featurestyle>
 
     <p id="desc">
