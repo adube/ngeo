@@ -8,15 +8,15 @@ var app = {};
 /** @type {!angular.Module} **/
 app.module = angular.module('app', ['gmf']);
 
-app.module.constant('gmfMeasureDecimals', 2);
+app.module.constant('ngeoMeasureDecimals', 2);
 
 
 /**
  * @constructor
  * @param {!angular.Scope} $scope Angular scope.
- * @param {gmf.FeatureHelper} gmfFeatureHelper Gmf feature helper service.
+ * @param {ngeo.FeatureHelper} ngeoFeatureHelper Gmf feature helper service.
  */
-app.MainController = function($scope, gmfFeatureHelper) {
+app.MainController = function($scope, ngeoFeatureHelper) {
 
   /**
    * @type {!angular.Scope}
@@ -147,11 +147,11 @@ app.MainController = function($scope, gmfFeatureHelper) {
     zoom: 6
   });
 
-  gmfFeatureHelper.setProjection(view.getProjection());
+  ngeoFeatureHelper.setProjection(view.getProjection());
 
   // set style
   features.forEach(function(feature) {
-    gmfFeatureHelper.setStyle(feature);
+    ngeoFeatureHelper.setStyle(feature);
   }, this);
 
   /**
