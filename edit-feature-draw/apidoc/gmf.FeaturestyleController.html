@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Measure</title>
+    <title>JSDoc: Class: FeaturestyleController <small>controller:GmfFeaturestyleController</small></title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Measure</h1>
+    <h1 class="page-title">Class: FeaturestyleController <small>controller:GmfFeaturestyleController</small></h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2 id="Measure">
-            <span class="ancestors">ngeo.interaction.</span>Measure
+        <h2 id="FeaturestyleController">
+            <span class="ancestors">gmf.</span>FeaturestyleController
         </h2>
         
     
@@ -42,15 +42,11 @@
 
     
 
-    <h4 class="name" id="Measure"><span class="type-signature"></span>new Measure<span class="signature">(opt_options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="FeaturestyleController"><span class="type-signature"></span>new FeaturestyleController<span class="signature">($scope<span class="signature-attributes">non-null</span>, ngeoFeatureHelper)</span><span class="type-signature"></span></h4>
 
     
 
 
-
-<div class="description">
-    <p>Interaction that allows measuring (length, area, ...).</p>
-</div>
 
 
 
@@ -73,8 +69,6 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -87,33 +81,46 @@
 
         <tr>
             
-                <td class="name"><code>opt_options</code></td>
+                <td class="name"><code>$scope</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="ngeo.interaction.html#MeasureBaseOptions">ngeo.interaction.MeasureBaseOptions</a></span>
+<span class="param-type"><a href="https://docs.angularjs.org/guide/scope">angular.Scope</a></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
-                
+            
 
+            <td class="description last"><p>Angular scope.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ngeoFeatureHelper</code></td>
+            
+
+            <td class="type">
+            
                 
-                </td>
+<span class="param-type"><a href="ngeo.FeatureHelper.html">ngeo.FeatureHelper</a></span>
+
+
+            
+            </td>
+
             
 
             
 
-            <td class="description last"><p>Options</p></td>
+            <td class="description last"><p>Gmf feature helper service.</p></td>
         </tr>
 
     
@@ -157,8 +164,8 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L81">line 81</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L48">line 48</a>
     </li></ul></dd>
     
 
@@ -188,17 +195,6 @@
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="http://openlayers.org/en/master/apidoc/ol.interaction.Interaction.html">ol.interaction.Interaction</a></li>
-    </ul>
-
-
-    
 
     
 
@@ -213,14 +209,10 @@
 
         
             
-<h4 class="name" id="continueMsg"><span class="type-signature">(nullable) </span>continueMsg<span class="type-signature"> :Element</span></h4>
+<h4 class="name" id="color"><span class="type-signature">(nullable) </span>color<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></h4>
 
 
 
-
-<div class="description">
-    <p>Message to show after the first point is clicked.</p>
-</div>
 
 
 
@@ -228,7 +220,7 @@
     <ul>
         <li>
             
-<span class="param-type">Element</span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
 
 
         </li>
@@ -268,8 +260,8 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L132">line 132</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L66">line 66</a>
     </li></ul></dd>
     
 
@@ -287,218 +279,10 @@
 
         
             
-<h4 class="name" id="createDrawInteraction"><span class="type-signature">(protected) </span>createDrawInteraction<span class="type-signature"></span></h4>
+<h4 class="name" id="feature"><span class="type-signature">(nullable) </span>feature<span class="type-signature"> :<a href="http://openlayers.org/en/master/apidoc/ol.Feature.html">ol.Feature</a></span></h4>
 
 
 
-
-<div class="description">
-    <p>Creates the draw interaction.</p>
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L390">line 390</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="decimals"><span class="type-signature">(protected, nullable) </span>decimals<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>Defines the number of decimals to keep in the measurement. If not defined,
-then the default behaviour occurs depending on the measure type.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L140">line 140</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="handleMeasure"><span class="type-signature">(protected) </span>handleMeasure<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Function implemented in inherited classes to compute measurement, determine
-where to place the tooltip and determine which help message to display.</p>
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L555">line 555</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="sketchFeature"><span class="type-signature">(protected) </span>sketchFeature<span class="type-signature"> :<a href="http://openlayers.org/en/master/apidoc/ol.Feature.html">ol.Feature</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>The sketch feature.</p>
-</div>
 
 
 
@@ -546,8 +330,8 @@ where to place the tooltip and determine which help message to display.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L126">line 126</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L54">line 54</a>
     </li></ul></dd>
     
 
@@ -565,14 +349,10 @@ where to place the tooltip and determine which help message to display.</p>
 
         
             
-<h4 class="name" id="startMsg"><span class="type-signature"></span>startMsg<span class="type-signature"> :Element</span></h4>
+<h4 class="name" id="measure"><span class="type-signature">(nullable) </span>measure<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></h4>
 
 
 
-
-<div class="description">
-    <p>The message to show when user is about to start drawing.</p>
-</div>
 
 
 
@@ -580,7 +360,7 @@ where to place the tooltip and determine which help message to display.</p>
     <ul>
         <li>
             
-<span class="param-type">Element</span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
 
 
         </li>
@@ -620,8 +400,78 @@ where to place the tooltip and determine which help message to display.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L154">line 154</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L72">line 72</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="type"><span class="type-signature">(nullable) </span>type<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L91">line 91</a>
     </li></ul></dd>
     
 
@@ -648,16 +498,11 @@ where to place the tooltip and determine which help message to display.</p>
 
     
 
-    <h4 class="name" id=".getFormattedArea"><span class="type-signature">(static) </span>getFormattedArea<span class="signature">(polygon, projection, decimals<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
+    <h4 class="name" id="getSetAngle"><span class="type-signature"></span>getSetAngle<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>}</span></h4>
 
     
 
 
-
-<div class="description">
-    <p>Calculate the area of the passed polygon and return a formatted string
-of the area.</p>
-</div>
 
 
 
@@ -680,8 +525,6 @@ of the area.</p>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -694,982 +537,31 @@ of the area.</p>
 
         <tr>
             
-                <td class="name"><code>polygon</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.geom.Polygon.html">ol.geom.Polygon</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Polygon.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>projection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.proj.Projection.html">ol.proj.Projection</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Projection of the polygon coords.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>decimals</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Decimals.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L232">line 232</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Formatted string of the area.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".getFormattedCircleArea"><span class="type-signature">(static) </span>getFormattedCircleArea<span class="signature">(circle, decimals<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Calculate the area of the passed circle and return a formatted string
-of the area.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>circle</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.geom.Circle.html">ol.geom.Circle</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Circle</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>decimals</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Decimals.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L266">line 266</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Formatted string of the area.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".getFormattedLength"><span class="type-signature">(static) </span>getFormattedLength<span class="signature">(lineString, projection, decimals<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Calculate the length of the passed line string and return a formatted
-string of the length.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>lineString</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.geom.LineString.html">ol.geom.LineString</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Line string.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>projection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.proj.Projection.html">ol.proj.Projection</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Projection of the line string coords.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>decimals</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Decimals.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L298">line 298</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Formatted string of length.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".getFormattedPoint"><span class="type-signature">(static) </span>getFormattedPoint<span class="signature">(point, projection, decimals<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Return a formatted string of the point.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>point</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.geom.Point.html">ol.geom.Point</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Point.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>projection</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.proj.Projection.html">ol.proj.Projection</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Projection of the line string coords.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>decimals</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Decimals.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L334">line 334</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Formatted string of coordinate.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="getDrawInteraction"><span class="type-signature"></span>getDrawInteraction<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="http://openlayers.org/en/master/apidoc/ol.interaction.Draw.html">ol.interaction.Draw</a>|<a href="ngeo.interaction.DrawAzimut.html">ngeo.interaction.DrawAzimut</a>|<a href="ngeo.interaction.MobileDraw.html">ngeo.interaction.MobileDraw</a>}</span></h4>
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L377">line 377</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The draw interaction.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.interaction.Draw.html">ol.interaction.Draw</a></span>
 |
 
-<span class="param-type"><a href="ngeo.interaction.DrawAzimut.html">ngeo.interaction.DrawAzimut</a></span>
-|
-
-<span class="param-type"><a href="ngeo.interaction.MobileDraw.html">ngeo.interaction.MobileDraw</a></span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
 
 
-    </dd>
-</dl>
+            
+            </td>
 
-    
-
-
-
-        
             
 
+            
+
+            <td class="description last"><p>A name value to set or undefined to get.</p></td>
+        </tr>
+
     
-
-    <h4 class="name" id="getTooltipElement"><span class="type-signature"></span>getTooltipElement<span class="signature">()</span><span class="type-signature"> &rarr; {Element}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Get a reference to the tooltip element.</p>
-</div>
-
-
-
-
-
-
-
+    </tbody>
+</table>
 
 
 
@@ -1708,8 +600,8 @@ string of the length.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L563">line 563</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L179">line 179</a>
     </li></ul></dd>
     
 
@@ -1736,7 +628,7 @@ string of the length.</p>
 
         
 <div class="param-desc">
-    <p>Tooltip Element.</p>
+    <p>The angle of the feature.</p>
 </div>
 
 
@@ -1747,7 +639,7 @@ string of the length.</p>
     </dt>
     <dd>
         
-<span class="param-type">Element</span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
 
 
     </dd>
@@ -1762,7 +654,7 @@ string of the length.</p>
 
     
 
-    <h4 class="name" id="setMap"><span class="type-signature"></span>setMap<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getSetName"><span class="type-signature"></span>getSetName<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
 
     
 
@@ -1774,6 +666,58 @@ string of the length.</p>
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A name value to set or undefined to get.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1812,8 +756,8 @@ string of the length.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js">src/ol-ext/interaction/measure.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/measure.js#L396">line 396</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L190">line 190</a>
     </li></ul></dd>
     
 
@@ -1836,6 +780,653 @@ string of the length.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The name of the feature.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getSetOpacity"><span class="type-signature"></span>getSetOpacity<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A stroke value to set or undefined to get.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L201">line 201</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The stroke of the feature.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getSetShowMeasure"><span class="type-signature"></span>getSetShowMeasure<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>}</span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A value to set or undefined to get for the
+    purpose of showing the geometry measurements or not.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L213">line 213</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Whether to show the measurements or not.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getSetSize"><span class="type-signature"></span>getSetSize<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A size value to set or undefined to get.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L224">line 224</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The size of the feature.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getSetStroke"><span class="type-signature"></span>getSetStroke<span class="signature">(value)</span><span class="type-signature"> &rarr; {<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>}</span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A stroke value to set or undefined to get.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js">contribs/gmf/src/directives/featurestyle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/featurestyle.js#L235">line 235</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The stroke of the feature.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
