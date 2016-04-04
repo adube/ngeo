@@ -10,12 +10,19 @@ app.module = angular.module('app', ['gmf']);
 
 
 /**
+ * @param {!angular.Scope} $scope Angular scope.
  * @param {ngeo.ToolActivateMgr} ngeoToolActivateMgr Ngeo ToolActivate manager
  *     service.
  * @param {ol.Collection.<ol.Feature>} gmfFeatures Collection of features.
  * @constructor
  */
-app.MainController = function(ngeoToolActivateMgr, gmfFeatures) {
+app.MainController = function($scope, ngeoToolActivateMgr, gmfFeatures) {
+
+  /**
+   * @type {!angular.Scope}
+   * @private
+   */
+  this.scope_ = $scope;
 
   var vector = new ol.layer.Vector({
     source: new ol.source.Vector({
