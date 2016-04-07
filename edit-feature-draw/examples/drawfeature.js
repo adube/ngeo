@@ -6,17 +6,17 @@ var app = {};
 
 
 /** @type {!angular.Module} **/
-app.module = angular.module('app', ['gmf']);
+app.module = angular.module('app', ['ngeo']);
 
 
 /**
  * @param {!angular.Scope} $scope Angular scope.
+ * @param {ol.Collection.<ol.Feature>} ngeoFeatures Collection of features.
  * @param {ngeo.ToolActivateMgr} ngeoToolActivateMgr Ngeo ToolActivate manager
  *     service.
- * @param {ol.Collection.<ol.Feature>} gmfFeatures Collection of features.
  * @constructor
  */
-app.MainController = function($scope, ngeoToolActivateMgr, gmfFeatures) {
+app.MainController = function($scope, ngeoFeatures, ngeoToolActivateMgr) {
 
   /**
    * @type {!angular.Scope}
@@ -27,7 +27,7 @@ app.MainController = function($scope, ngeoToolActivateMgr, gmfFeatures) {
   var vector = new ol.layer.Vector({
     source: new ol.source.Vector({
       wrapX: false,
-      features: gmfFeatures
+      features: ngeoFeatures
     })
   });
 
