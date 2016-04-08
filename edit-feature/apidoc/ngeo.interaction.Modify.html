@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: mobileBackgroundlayerselectorDirective <small>directive:gmfMobileBackgroundlayerselector</small></title>
+    <title>JSDoc: Class: Modify</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: mobileBackgroundlayerselectorDirective <small>directive:gmfMobileBackgroundlayerselector</small></h1>
+    <h1 class="page-title">Class: Modify</h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2 id="mobileBackgroundlayerselectorDirective">
-            <span class="ancestors">gmf.</span>mobileBackgroundlayerselectorDirective
+        <h2 id="Modify">
+            <span class="ancestors">ngeo.interaction.</span>Modify
         </h2>
         
     
@@ -42,21 +42,15 @@
 
     
 
-    <h4 class="name" id="mobileBackgroundlayerselectorDirective"><span class="type-signature"></span>new mobileBackgroundlayerselectorDirective<span class="signature">(gmfMobileBackgroundlayerselectorTemplateUrl)</span><span class="type-signature"> &rarr; {<a href="https://docs.angularjs.org/guide/directive">angular.Directive</a>}</span></h4>
+    <h4 class="name" id="Modify"><span class="type-signature"></span>new Modify<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Provide a &quot;mobile background layer selector&quot; directive.</p>
-<p>Example:</p>
-<pre class="prettyprint source"><code> &lt;gmf-mobile-backgroundlayerselector
-   gmf-mobile-backgroundlayerselector-map=&quot;::ctrl.map&quot;>
- &lt;/gmf-mobile-backgroundlayerselector></code></pre><p>Used UI metadata:</p>
-<ul>
-<li>thumbnail: The URL used for the icon.</li>
-</ul>
+    <p>Interactions that combines multiple kind of feature modification interactions
+into one.</p>
 </div>
 
 
@@ -67,9 +61,7 @@
 
 
 
-
-
-    <h5>HTML attributes:</h5>
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -81,8 +73,6 @@
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
         
 
         
@@ -96,38 +86,30 @@
 
         <tr>
             
-                <td class="name"><code>gmf-mobile-backgroundlayerselector-map</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span>
+<span class="param-type"><a href="ngeo.interaction.html#MeasureBaseOptions">ngeo.interaction.MeasureBaseOptions</a></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">The map.</td>
+            <td class="description last"><p>Options.</p></td>
         </tr>
 
     
     </tbody>
 </table>
+
+
 
 
 
@@ -164,8 +146,8 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/mobilebackgroundlayerselector.js">contribs/gmf/src/directives/mobilebackgroundlayerselector.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/mobilebackgroundlayerselector.js#L44">line 44</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modify.js">src/ol-ext/interaction/modify.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modify.js#L17">line 17</a>
     </li></ul></dd>
     
 
@@ -188,33 +170,22 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The Directive Definition Object.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="https://docs.angularjs.org/guide/directive">angular.Directive</a></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
     
     </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="http://openlayers.org/en/master/apidoc/ol.interaction.Interaction.html">ol.interaction.Interaction</a></li>
+    </ul>
+
 
     
 
@@ -228,6 +199,282 @@
 
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="setActive"><span class="type-signature"></span>setActive<span class="signature">(active)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Activate or deactivate the interaction.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>active</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Active.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modify.js">src/ol-ext/interaction/modify.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modify.js#L60">line 60</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="setMap"><span class="type-signature"></span>setMap<span class="signature">(map)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Remove the interaction from its current map and attach it to the new map.
+Subclasses may set up event handlers to get notified about changes to
+the map here.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>map</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Map.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modify.js">src/ol-ext/interaction/modify.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modify.js#L72">line 72</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
