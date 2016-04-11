@@ -104555,30 +104555,96 @@ ngeo.baseTemplateUrl = 'ngeo';
 
 /**
  * @enum {string}
+ * @export
  */
 ngeo.FeatureProperties = {
+  /**
+   * @type {string}
+   * @export
+   */
   ANGLE: 'angle',
+  /**
+   * @type {string}
+   * @export
+   */
   COLOR: 'color',
+  /**
+   * @type {string}
+   * @export
+   */
   IS_CIRCLE: 'isCircle',
+  /**
+   * @type {string}
+   * @export
+   */
   IS_RECTANGLE: 'isRectangle',
+  /**
+   * @type {string}
+   * @export
+   */
   IS_TEXT: 'isText',
+  /**
+   * @type {string}
+   * @export
+   */
   NAME: 'name',
+  /**
+   * @type {string}
+   * @export
+   */
   OPACITY: 'opacity',
+  /**
+   * @type {string}
+   * @export
+   */
   SHOW_MEASURE: 'showMeasure',
+  /**
+   * @type {string}
+   * @export
+   */
   SIZE: 'size',
+  /**
+   * @type {string}
+   * @export
+   */
   STROKE: 'stroke'
 };
 
 
 /**
  * @enum {string}
+ * @export
  */
 ngeo.GeometryType = {
+  /**
+   * @type {string}
+   * @export
+   */
   CIRCLE: 'Circle',
+  /**
+   * @type {string}
+   * @export
+   */
   LINE_STRING: 'LineString',
+  /**
+   * @type {string}
+   * @export
+   */
   POINT: 'Point',
+  /**
+   * @type {string}
+   * @export
+   */
   POLYGON: 'Polygon',
+  /**
+   * @type {string}
+   * @export
+   */
   RECTANGLE: 'Rectangle',
+  /**
+   * @type {string}
+   * @export
+   */
   TEXT: 'Text'
 };
 
@@ -118389,8 +118455,20 @@ goog.require('ol.interaction.Modify');
 
 
 /**
- * Interactions that combines multiple kind of feature modification interactions
- * into one.
+ * This interaction combines multiple kind of feature modification interactions
+ * in order to be able to modify vector features depending on their geometry
+ * type. The different kind of interactions supported are:
+ *
+ * - `ol.interaction.Modify`
+ * - `ngeo.interaction.ModifyCircle`
+ * - `ngeo.interaction.ModifyCircle`
+ *
+ * This interaction receives a collection of features. Its job is to listen
+ * to added/removed features to and from it and add them in the proper
+ * collection that is uniquely used for each inner interaction. Those inner
+ * interactions follow the `active` property of this interaction, i.e. when
+ * this interaction is activated, so do the inner interactions. Since they will
+ * never share the same feature, they don't collide with one an other.
  *
  * @constructor
  * @extends {ol.interaction.Interaction}

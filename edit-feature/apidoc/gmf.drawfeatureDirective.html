@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ColorpickerController <small>controller:NgeoScaleselectorController</small></title>
+    <title>JSDoc: Class: drawfeatureDirective <small>directive:gmfDrawfeature</small></title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ColorpickerController <small>controller:NgeoScaleselectorController</small></h1>
+    <h1 class="page-title">Class: drawfeatureDirective <small>directive:gmfDrawfeature</small></h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2 id="ColorpickerController">
-            <span class="ancestors">ngeo.</span>ColorpickerController
+        <h2 id="drawfeatureDirective">
+            <span class="ancestors">gmf.</span>drawfeatureDirective
         </h2>
         
     
@@ -42,12 +42,21 @@
 
     
 
-    <h4 class="name" id="ColorpickerController"><span class="type-signature"></span>new ColorpickerController<span class="signature">($scope, $element, $attrs)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="drawfeatureDirective"><span class="type-signature"></span>new drawfeatureDirective<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
+<div class="description">
+    <p>Directive used to create, modify and delete vector features on a map with
+the addition of changing their style.
+Example:</p>
+<pre class="prettyprint source"><code>&lt;gmf-drawfeature
+    gmf-drawfeature-active=&quot;ctrl.drawFeatureActive&quot;>
+    gmf-drawfeature-map=&quot;::ctrl.map&quot;>
+&lt;/gmf-drawfeature></code></pre>
+</div>
 
 
 
@@ -56,7 +65,10 @@
 
 
 
-    <h5>Parameters:</h5>
+
+
+
+    <h5>HTML attributes:</h5>
     
 
 <table class="params">
@@ -81,10 +93,15 @@
 
         <tr>
             
-                <td class="name"><code>$scope</code></td>
+                <td class="name"><code>gmf-drawfeature-active</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>
+
+
             
             </td>
 
@@ -92,17 +109,23 @@
 
             
 
-            <td class="description last"><p>Directive scope.</p></td>
+            <td class="description last">Whether the directive is
+    active or not.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>$element</code></td>
+                <td class="name"><code>gmf-drawfeature-map</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span>
+
+
             
             </td>
 
@@ -110,32 +133,12 @@
 
             
 
-            <td class="description last"><p>Element.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>$attrs</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Attributes.</p></td>
+            <td class="description last">The map.</td>
         </tr>
 
     
     </tbody>
 </table>
-
-
 
 
 
@@ -172,8 +175,8 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/colorpicker.js">src/directives/colorpicker.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/colorpicker.js#L73">line 73</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/drawfeature.js">contribs/gmf/src/directives/drawfeature.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/drawfeature.js#L35">line 35</a>
     </li></ul></dd>
     
 
@@ -213,292 +216,7 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
 
-        
-            
-<h4 class="name" id="color"><span class="type-signature"></span>color<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a>|<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>The selected color</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
-|
-
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/colorpicker.js">src/directives/colorpicker.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/colorpicker.js#L86">line 86</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="colors"><span class="type-signature"></span>colors<span class="type-signature"> :<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>></span></h4>
-
-
-
-
-<div class="description">
-    <p>The set of color</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>.&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/colorpicker.js">src/directives/colorpicker.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/colorpicker.js#L80">line 80</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="setColor"><span class="type-signature"></span>setColor<span class="signature">(color)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>color</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The color to select.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-    
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/colorpicker.js">src/directives/colorpicker.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/colorpicker.js#L93">line 93</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
     
 
     
