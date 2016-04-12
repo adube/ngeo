@@ -118749,20 +118749,19 @@ ngeo.Menu = function(menuOptions, opt_overlayOptions) {
   this.actions_ = [];
 
   menuOptions.actions.forEach(function(action) {
-    var cls = [''];
-    cls.push(action.cls !== undefined ? action.cls : '');
-
     this.actions_.push(
       $('<button>', {
-        'class': cls.join(' '),
         'data-name': action.name,
         'text': [
           ' ',
           (action.label) !== undefined ? action.label : action.name
         ].join('')
-      }).appendTo(actionsEl)
+      })
+        .appendTo(actionsEl)
+        .prepend($('<span>', {
+          'class': action.cls !== undefined ? action.cls : ''
+        }))
     );
-    $('<br>').appendTo(actionsEl);
   }, this);
 
   options.element = contentEl[0];
