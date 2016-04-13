@@ -106540,14 +106540,17 @@ ngeo.FeatureHelper.prototype.setProjection = function(projection) {
  * Set the style of a feature using its inner properties and depending on
  * its geometry type.
  * @param {ol.Feature} feature Feature.
- * @param {boolean=} opt_incVertex Whether to include vertex or not in the
- *     style.
+ * @param {boolean=} opt_select Whether the feature should be rendered as
+ *     selected, which includes additionnal vertex and halo styles.
  * @export
  */
-ngeo.FeatureHelper.prototype.setStyle = function(feature, opt_incVertex) {
+ngeo.FeatureHelper.prototype.setStyle = function(feature, opt_select) {
   var styles = [this.getStyle(feature)];
-  if (opt_incVertex && this.supportsVertex_(feature)) {
-    styles.push(this.getVertexStyle_());
+  if (opt_select) {
+    if (this.supportsVertex_(feature)) {
+      styles.push(this.getVertexStyle_());
+    }
+    styles.unshift(this.getHaloStyle_(feature));
   }
   feature.setStyle(styles);
 };
@@ -106757,6 +106760,60 @@ ngeo.FeatureHelper.prototype.supportsVertex_ = function(feature) {
 };
 
 
+/**
+ * @param {ol.Feature} feature Feature.
+ * @return {ol.style.Style} Style.
+ * @private
+ */
+ngeo.FeatureHelper.prototype.getHaloStyle_ = function(feature) {
+  var type = this.getType(feature);
+  var style;
+  var haloSize = 3;
+  var size;
+
+  switch (type) {
+    case ngeo.GeometryType.POINT:
+      size = this.getSizeProperty(feature);
+      style = new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: size + haloSize,
+          fill: new ol.style.Fill({
+            color: 'white'
+          })
+        })
+      });
+      break;
+    case ngeo.GeometryType.LINE_STRING:
+    case ngeo.GeometryType.CIRCLE:
+    case ngeo.GeometryType.POLYGON:
+    case ngeo.GeometryType.RECTANGLE:
+      var strokeWidth = this.getStrokeProperty(feature);
+      style = new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'white',
+          width: strokeWidth + haloSize * 2
+        })
+      });
+      break;
+    case ngeo.GeometryType.TEXT:
+      var label = this.getNameProperty(feature);
+      size = this.getSizeProperty(feature);
+      var angle = this.getAngleProperty(feature);
+      var color = 'white';
+      style = new ol.style.Style({
+        text: this.createTextStyle_(label, size, angle, color, haloSize * 2)
+      })
+      break;
+    default:
+      break;
+  }
+
+  goog.asserts.assert(style, 'Style should be thruthy');
+
+  return style;
+};
+
+
 // === PROPERTY GETTERS ===
 
 
@@ -106861,23 +106918,25 @@ ngeo.FeatureHelper.prototype.getStrokeProperty = function(feature) {
  * @param {string} text The text to display.
  * @param {number} size The size in `pt` of the text font.
  * @param {number=} opt_angle The angle in degrees of the text.
- * @param {string=} opt_color The color of the text
+ * @param {string=} opt_color The color of the text.
+ * @param {number=} opt_width The width of the outline color.
  * @return {ol.style.Text} Style.
  * @private
  */
 ngeo.FeatureHelper.prototype.createTextStyle_ = function(text, size,
-                                                        opt_angle, opt_color) {
+    opt_angle, opt_color, opt_width) {
 
   var angle = opt_angle !== undefined ? opt_angle : 0;
   var rotation = angle * Math.PI / 180;
   var font = ['normal', size + 'pt', 'Arial'].join(' ');
   var color = opt_color !== undefined ? opt_color : '#000000';
+  var width = opt_width !== undefined ? opt_width : 3;
 
   return new ol.style.Text({
     font: font,
     text: text,
     fill: new ol.style.Fill({color: color}),
-    stroke: new ol.style.Stroke({color: '#ffffff', width: 3}),
+    stroke: new ol.style.Stroke({color: '#ffffff', width: width}),
     rotation: rotation
   });
 };
