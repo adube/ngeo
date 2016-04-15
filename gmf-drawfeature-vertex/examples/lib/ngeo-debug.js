@@ -106541,14 +106541,14 @@ ngeo.FeatureHelper.prototype.setProjection = function(projection) {
  * its geometry type.
  * @param {ol.Feature} feature Feature.
  * @param {boolean=} opt_select Whether the feature should be rendered as
- *     selected, which includes additionnal vertex and halo styles.
+ *     selected, which includes additional vertex and halo styles.
  * @export
  */
 ngeo.FeatureHelper.prototype.setStyle = function(feature, opt_select) {
   var styles = [this.getStyle(feature)];
   if (opt_select) {
     if (this.supportsVertex_(feature)) {
-      styles.push(this.getVertexStyle_());
+      styles.push(this.getVertexStyle());
     }
     styles.unshift(this.getHaloStyle_(feature));
   }
@@ -106706,11 +106706,20 @@ ngeo.FeatureHelper.prototype.getTextStyle_ = function(feature) {
 
 
 /**
+ * Create and return a style object to be used for vertex.
+ * @param {boolean=} opt_incGeomFunc Whether to include the geometry function
+ *     or not. One wants to use the geometry function when you want to draw
+ *     the vertex of features that don't have point geometries. One doesn't
+ *     want to include the geometry function if you just want to have the
+ *     style object itself to be used to draw features that have point
+ *     geometries. Defaults to `true`.
  * @return {ol.style.Style} Style.
- * @private
+ * @export
  */
-ngeo.FeatureHelper.prototype.getVertexStyle_ = function() {
-  return new ol.style.Style({
+ngeo.FeatureHelper.prototype.getVertexStyle = function(opt_incGeomFunc) {
+  var incGeomFunc = opt_incGeomFunc !== undefined ? opt_incGeomFunc : true;
+
+  var options = {
     image: new ol.style.RegularShape({
       radius: 6,
       points: 4,
@@ -106721,8 +106730,11 @@ ngeo.FeatureHelper.prototype.getVertexStyle_ = function() {
       stroke: new ol.style.Stroke({
         color: [0, 0, 0, 1]
       })
-    }),
-    geometry: function(feature) {
+    })
+  };
+
+  if (incGeomFunc) {
+    options.geometry = function(feature) {
       var geom = feature.getGeometry();
 
       if (geom.getType() == ol.geom.GeometryType.POINT) {
@@ -106740,7 +106752,9 @@ ngeo.FeatureHelper.prototype.getVertexStyle_ = function() {
         return feature.getGeometry();
       }
     }
-  });
+  }
+
+  return new ol.style.Style(options);
 };
 
 
