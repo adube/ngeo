@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: drawfeatureDirective <small>directive:ngeoDrawfeature</small></title>
+    <title>JSDoc: Class: ModifyCircle</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: drawfeatureDirective <small>directive:ngeoDrawfeature</small></h1>
+    <h1 class="page-title">Class: ModifyCircle</h1>
 
     
 
@@ -28,9 +28,11 @@
 
 <header>
     
-        <h2 id="drawfeatureDirective">
-            <span class="ancestors">ngeo.</span>drawfeatureDirective
+        <h2 id="ModifyCircle">
+            <span class="ancestors">ngeo.interaction.</span>ModifyCircle
         </h2>
+        
+            <div class="class-description"><p>Interaction for modifying feature geometries.</p></div>
         
     
 </header>
@@ -41,71 +43,15 @@
         
 
     
+    <h2>Constructor</h2>
+    
 
-    <h4 class="name" id="drawfeatureDirective"><span class="type-signature"></span>new drawfeatureDirective<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ModifyCircle"><span class="type-signature"></span>new ModifyCircle<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
     
 
 
 
-<div class="description">
-    <p>Directive used to draw vector features on a map.
-Example:</p>
-<pre class="prettyprint source"><code>&lt;ngeo-drawfeature
-    ngeo-btn-group
-    class=&quot;btn-group&quot;
-    ngeo-drawfeature-active=&quot;ctrl.drawActive&quot;
-    ngeo-drawfeature-map=&quot;::ctrl.map&quot;>
-  &lt;a
-    href
-    translate
-    ngeo-btn
-    ngeo-drawpoint
-    class=&quot;btn btn-default ngeo-drawfeature-point&quot;
-    ng-class=&quot;{active: dfCtrl.drawPoint.active}&quot;
-    ng-model=&quot;dfCtrl.drawPoint.active&quot;>&lt;/a>
-  &lt;a
-    href
-    translate
-    ngeo-btn
-    ngeo-measurelength
-    class=&quot;btn btn-default ngeo-drawfeature-linestring&quot;
-    ng-class=&quot;{active: dfCtrl.measureLength.active}&quot;
-    ng-model=&quot;dfCtrl.measureLength.active&quot;>&lt;/a>
-  &lt;a
-    href
-    translate
-    ngeo-btn
-    ngeo-measurearea
-    class=&quot;btn btn-default ngeo-drawfeature-polygon&quot;
-    ng-class=&quot;{active: dfCtrl.measureArea.active}&quot;
-    ng-model=&quot;dfCtrl.measureArea.active&quot;>&lt;/a>
-  &lt;a
-    href
-    translate
-    ngeo-btn
-    ngeo-measureazimut
-    class=&quot;btn btn-default ngeo-drawfeature-circle&quot;
-    ng-class=&quot;{active: dfCtrl.measureAzimut.active}&quot;
-    ng-model=&quot;dfCtrl.measureAzimut.active&quot;>&lt;/a>
-  &lt;a
-    href
-    translate
-    ngeo-btn
-    ngeo-drawrectangle
-    class=&quot;btn btn-default ngeo-drawfeature-rectangle&quot;
-    ng-class=&quot;{active: dfCtrl.drawRectangle.active}&quot;
-    ng-model=&quot;dfCtrl.drawRectangle.active&quot;>&lt;/a>
-  &lt;a
-    href
-    translate
-    ngeo-btn
-    ngeo-drawtext
-    class=&quot;btn btn-default ngeo-drawfeature-text&quot;
-    ng-class=&quot;{active: dfCtrl.drawText.active}&quot;
-    ng-model=&quot;dfCtrl.drawText.active&quot;>&lt;/a>
-&lt;/ngeo-drawfeature></code></pre>
-</div>
 
 
 
@@ -114,10 +60,7 @@ Example:</p>
 
 
 
-
-
-
-    <h5>HTML attributes:</h5>
+    <h5>Parameters:</h5>
     
 
 <table class="params">
@@ -142,15 +85,10 @@ Example:</p>
 
         <tr>
             
-                <td class="name"><code>ngeo-drawfeature-active</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>
-
-
             
             </td>
 
@@ -158,36 +96,14 @@ Example:</p>
 
             
 
-            <td class="description last">Whether the directive is
-    active or not.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ngeo-drawfeature-map</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The map.</td>
+            <td class="description last"><p>Options.</p></td>
         </tr>
 
     
     </tbody>
 </table>
+
+
 
 
 
@@ -224,8 +140,124 @@ Example:</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/drawfeature.js">src/directives/drawfeature.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/drawfeature.js#L91">line 91</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modifycircle.js">src/ol-ext/interaction/modifycircle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modifycircle.js#L47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<h5>Fires:</h5>
+<ul>
+    <li>ngeo.interaction.event:ModifyCircleEvent</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="http://openlayers.org/en/master/apidoc/ol.interaction.Pointer.html">ol.interaction.Pointer</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".getDefaultStyleFunction"><span class="type-signature">(static) </span>getDefaultStyleFunction<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modifycircle.js">src/ol-ext/interaction/modifycircle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modifycircle.js#L516">line 516</a>
     </li></ul></dd>
     
 
@@ -251,21 +283,223 @@ Example:</p>
 
 
 
-    
-    </div>
+        
+            
 
     
 
+    <h4 class="name" id=".handleEvent"><span class="type-signature">(static) </span>handleEvent<span class="signature">(mapBrowserEvent)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Handles the <a href="http://openlayers.org/en/master/apidoc/ol.MapBrowserEvent.html"><code>map browser event</code></a> and may modify the
+geometry.</p>
+</div>
+
+
+
+
+
+
+
+    <h5>This:</h5>
+    <ul><li>{<a href="ngeo.interaction.ModifyCircle.html">ngeo.interaction.ModifyCircle</a>}</li></ul>
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>mapBrowserEvent</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Map browser event.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+<dl class="details">
+
     
 
     
 
-     
+    
+
+    
 
     
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modifycircle.js">src/ol-ext/interaction/modifycircle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modifycircle.js#L410">line 410</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="setMap"><span class="type-signature"></span>setMap<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+    
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modifycircle.js">src/ol-ext/interaction/modifycircle.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/ol-ext/interaction/modifycircle.js#L216">line 216</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     

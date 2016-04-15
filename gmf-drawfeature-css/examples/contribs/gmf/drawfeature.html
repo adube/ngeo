@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="../../lib/ngeo.css" type="text/css">
     <link rel="stylesheet" href="../../lib/bootstrap.min.css" type="text/css">
-<link rel="stylesheet" href="../../lib/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="../../lib/font-awesome.min.css" type="text/css">
 
     <style>
       gmf-map > div {
@@ -21,7 +21,7 @@
       gmf-drawfeature {
         display: block;
         margin: 20px;
-        width: 300px;
+        width: 400px;
       }
 
       .ngeo-drawfeature-actionbuttons {
@@ -53,6 +53,26 @@
       ngeo-drawfeature {
         margin: 10px 0;
       }
+
+      .gmf-icon-circle:before {
+        content: "Circle";
+      }
+      .gmf-icon-line:after {
+        content: 'Line';
+      }
+      .gmf-icon-point:after {
+        content: 'Point';
+      }
+      .gmf-icon-polygon:after {
+        content: 'Polygon';
+      }
+      .gmf-icon-rectangle:after {
+        content: 'Rectangle';
+      }
+      .gmf-icon-text:after {
+        content: 'Text';
+      }
+
       .tooltip {
         position: relative;
         background: rgba(0, 0, 0, 0.5);
