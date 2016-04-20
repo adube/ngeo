@@ -107039,6 +107039,9 @@ ngeo.FeatureHelper.prototype.exportKML = function(features) {
 
 
 /**
+ * Export features using a given format to a specific filename and download
+ * the result to the browser. The projection of the exported features is:
+ * `EPSG:4326`.
  * @param {Array.<ol.Feature>} features Array of vector features.
  * @param {ol.format.Feature} format Format
  * @param {string} fileName Name of the file.
@@ -107050,23 +107053,22 @@ ngeo.FeatureHelper.prototype.export_ = function(features, format, fileName,
   var mimeType = opt_mimeType !== undefined ? opt_mimeType : 'text/plain';
 
   // clone the features to:
-  //  - transform the exported features to EPSG:4326
   //  - apply the original style to the clone (the original may have select
   //    style active)
   var clones = [];
   var clone;
   features.forEach(function(feature) {
-    clone = new ol.Feature();
-    clone.setProperties(feature.getProperties());
-    clone.setGeometry(clone.getGeometry().clone());
-    if (this.projection_) {
-      clone.getGeometry().transform(this.projection_, ol.proj.get('EPSG:4326'));
-    }
+    clone = new ol.Feature(feature.getProperties());
     this.setStyle(clone, false);
     clones.push(clone);
   }, this);
 
-  var data = format.writeFeatures(clones);
+  var writeOptions = this.projection_ ? {
+    dataProjection: 'EPSG:4326',
+    featureProjection: this.projection_
+  } : {};
+
+  var data = format.writeFeatures(clones, writeOptions);
 
   $('<a />', {
     'download': fileName,
@@ -108518,7 +108520,7 @@ ngeo.ExportfeaturesController = function($element, $injector, $scope,
    */
   this.items_ = [];
 
-  // build the drop-down menu and items of there's more than one format
+  // build the drop-down menu and items if there's more than one format
   if (formats.length > 1) {
     $element.attr('id', id);
     var $menu = $('<ul />', {
@@ -108565,7 +108567,7 @@ ngeo.ExportfeaturesController = function($element, $injector, $scope,
  * Finally, if there's only one feature in the collection to export and there's
  * more than one format set, some formats may not support the type of geometry.
  * If that's the case, then disable each format item in the drop-down menu
- * that don't support.
+ * that doesn't support the type of geometry.
  * @private
  */
 ngeo.ExportfeaturesController.prototype.handleElementClick_ = function() {
@@ -108594,6 +108596,8 @@ ngeo.ExportfeaturesController.prototype.handleElementClick_ = function() {
 
 
 /**
+ * Called when a menu item is clicked. Export the features to the selected
+ * format.
  * @param {string} format Format.
  * @private
  */
@@ -108904,7 +108908,7 @@ ngeo.LayertreeController = function($scope, $element, $attrs) {
    * @export
    */
   this.layer = isRoot ? null : /** @type {ol.layer.Layer} */
-      ($scope.$eval(nodelayerExpr, {'node': this.node, 'depth': this.depth}));
+      ($scope.$eval(nodelayerExpr, {'node': this.node, 'depth': this.depth, 'parentCtrl' : this.parent}));
 
 
   var listenersExpr = $attrs['ngeoLayertreeListeners'];
