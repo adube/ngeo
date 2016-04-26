@@ -104619,52 +104619,52 @@ ngeo.FeatureProperties = {
    * @type {string}
    * @export
    */
-  ANGLE: 'angle',
+  ANGLE: 'a',
   /**
    * @type {string}
    * @export
    */
-  COLOR: 'color',
+  COLOR: 'c',
   /**
    * @type {string}
    * @export
    */
-  IS_CIRCLE: 'isCircle',
+  IS_CIRCLE: 'l',
   /**
    * @type {string}
    * @export
    */
-  IS_RECTANGLE: 'isRectangle',
+  IS_RECTANGLE: 'r',
   /**
    * @type {string}
    * @export
    */
-  IS_TEXT: 'isText',
+  IS_TEXT: 't',
   /**
    * @type {string}
    * @export
    */
-  NAME: 'name',
+  NAME: 'n',
   /**
    * @type {string}
    * @export
    */
-  OPACITY: 'opacity',
+  OPACITY: 'o',
   /**
    * @type {string}
    * @export
    */
-  SHOW_MEASURE: 'showMeasure',
+  SHOW_MEASURE: 'm',
   /**
    * @type {string}
    * @export
    */
-  SIZE: 'size',
+  SIZE: 's',
   /**
    * @type {string}
    * @export
    */
-  STROKE: 'stroke'
+  STROKE: 'k'
 };
 
 
@@ -118362,6 +118362,7 @@ ngeo.format.FeatureHash.setStyleProperties_ = function(text, feature) {
   var geometry = feature.getGeometry();
   var clone = {};
 
+  // Deal with legacy properties
   if (geometry instanceof ol.geom.Point) {
     if (properties['isLabel'] ||
         properties[ngeo.FeatureProperties.IS_TEXT]) {
@@ -118379,7 +118380,7 @@ ngeo.format.FeatureHash.setStyleProperties_ = function(text, feature) {
     }
   }
 
-  // convert legacy properties
+  // Convert legacy properties
   for (var key in properties) {
     var value = properties[key];
     if (ngeo.format.FeatureHashLegacyProperties_[key]) {
@@ -118390,7 +118391,6 @@ ngeo.format.FeatureHash.setStyleProperties_ = function(text, feature) {
   }
 
   feature.setProperties(clone);
-
 };
 
 
@@ -120019,16 +120019,6 @@ goog.require('ol.source.Vector');
 
 
 /**
- * @typedef {{depth: (Array.<number>|undefined),
- *            feature: ol.Feature,
- *            geometry: ol.geom.SimpleGeometry,
- *            index: (number|undefined),
- *            segment: Array.<ol.Extent>}}
- */
-ol.interaction.SegmentDataType;
-
-
-/**
  * @classdesc
  * Interaction for modifying feature geometries.
  *
@@ -120117,6 +120107,12 @@ ngeo.interaction.ModifyRectangle = function(options) {
    */
   this.coordinate_ = null;
 
+  /**
+   * @type {Object.<number, ngeo.interaction.ModifyRectangle.CacheItem>}
+   * @private
+   */
+  this.cache_ = {}
+
   ol.events.listen(this.features_, ol.CollectionEventType.ADD,
       this.handleFeatureAdd_, this);
   ol.events.listen(this.features_, ol.CollectionEventType.REMOVE,
@@ -120174,7 +120170,11 @@ ngeo.interaction.ModifyRectangle.prototype.addFeature_ = function(feature) {
 
       pointFeatures.push(cornerFeature);
     }, this);
-    feature.set('corners', pointFeatures);
+    var uid = goog.getUid(feature);
+    var item = /** @type {ngeo.interaction.ModifyRectangle.CacheItem} */ ({
+      corners: pointFeatures
+    });
+    this.cache_[uid] = item;
 
     var previousFeature;
     var nextFeature;
@@ -120290,7 +120290,9 @@ ngeo.interaction.ModifyRectangle.prototype.willModifyFeatures_ = function(evt) {
  * @private
  */
 ngeo.interaction.ModifyRectangle.prototype.removeFeature_ = function(feature) {
-  var corners = feature.get('corners');
+  var uid = goog.getUid(feature);
+  var item = this.cache_[uid];
+  var corners = item.corners;
   for (var i = 0; i < corners.length; i++) {
     ol.events.unlisten(corners[i], ol.events.EventType.CHANGE,
         this.handleCornerGeometryChange_);
@@ -120299,6 +120301,8 @@ ngeo.interaction.ModifyRectangle.prototype.removeFeature_ = function(feature) {
   }
   this.vectorBoxes_.getSource().removeFeature(feature);
   this.feature_ = null;
+  corners.length = 0;
+  delete this.cache_[uid];
 };
 
 
@@ -120424,6 +120428,14 @@ ngeo.interaction.ModifyRectangle.prototype.handleUp_ = function(evt) {
   }
   return false;
 };
+
+
+/**
+ * @typedef {{
+ *     corners: Array.<ol.Feature>
+ * }}
+ */
+ngeo.interaction.ModifyRectangle.CacheItem;
 
 goog.provide('ngeo.interaction.Modify');
 
