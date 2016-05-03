@@ -108707,11 +108707,83 @@ ngeo.filereaderDirective = function($window) {
 
 ngeo.module.directive('ngeoFilereader', ngeo.filereaderDirective);
 
+goog.provide('ngeo.DecorateLayer');
+
+goog.require('goog.asserts');
+goog.require('ngeo');
+
+
+/**
+ * Provides a function that adds properties (using
+ * `Object.defineProperty`) to the layer, making it possible to control layer
+ * properties with ngModel.
+ *
+ * Example:
+ *
+ *      <input type="checkbox" ngModel="layer.visible" />
+ *
+ * See our live examples:
+ * {@link ../examples/layeropacity.html}
+ * {@link ../examples/layervisibility.html}
+ *
+ * @typedef {function(ol.layer.Base)}
+ * @ngdoc service
+ * @ngname ngeoDecorateLayer
+ */
+ngeo.DecorateLayer;
+
+
+/**
+ * @param {ol.layer.Base} layer Layer to decorate.
+ */
+ngeo.decorateLayer = function(layer) {
+  goog.asserts.assertInstanceof(layer, ol.layer.Base);
+
+  Object.defineProperty(layer, 'visible', {
+    configurable: true,
+    get:
+        /**
+         * @return {boolean} Visible.
+         */
+        function() {
+          return layer.getVisible();
+        },
+    set:
+        /**
+         * @param {boolean} val Visible.
+         */
+        function(val) {
+          layer.setVisible(val);
+        }
+  });
+
+  Object.defineProperty(layer, 'opacity', {
+    configurable: true,
+    get:
+        /**
+         * @return {string} Opacity.
+         */
+        function() {
+          return (Math.round(layer.getOpacity() * 100) / 100) + '';
+        },
+    set:
+        /**
+         * @param {string} val Opacity.
+         */
+        function(val) {
+          layer.setOpacity(+val);
+        }
+  });
+};
+
+
+ngeo.module.value('ngeoDecorateLayer', ngeo.decorateLayer);
+
 goog.provide('ngeo.LayertreeController');
 goog.provide('ngeo.layertreeDirective');
 
 goog.require('ngeo');
-
+goog.require('ngeo.DecorateLayer');
 
 ngeo.module.value('ngeoLayertreeTemplateUrl',
     /**
@@ -108832,13 +108904,14 @@ ngeo.module.directive('ngeoLayertree', ngeo.layertreeDirective);
  * @param {angular.Scope} $scope Scope.
  * @param {angular.JQLite} $element Element.
  * @param {angular.Attributes} $attrs Attributes.
+ * @param {ngeo.DecorateLayer} ngeoDecorateLayer layer decorator service.
  * @constructor
  * @ngInject
  * @export
  * @ngdoc controller
  * @ngname NgeoLayertreeController
  */
-ngeo.LayertreeController = function($scope, $element, $attrs) {
+ngeo.LayertreeController = function($scope, $element, $attrs, ngeoDecorateLayer) {
 
   var isRoot = $attrs['ngeoLayertreeNotroot'] === undefined;
 
@@ -108918,6 +108991,10 @@ ngeo.LayertreeController = function($scope, $element, $attrs) {
    */
   this.layer = isRoot ? null : /** @type {ol.layer.Layer} */
       ($scope.$eval(nodelayerExpr, {'node': this.node, 'depth': this.depth, 'parentCtrl' : this.parent}));
+
+  if (this.layer) {
+    ngeoDecorateLayer(this.layer);
+  }
 
 
   var listenersExpr = $attrs['ngeoLayertreeListeners'];
@@ -109343,15 +109420,21 @@ ngeo.LayerHelper.GROUP_KEY = 'groupName';
  * separated layers names (see {@link ol.source.ImageWMS}).
  * @param {string} sourceURL The source URL.
  * @param {string} sourceLayersName A dot separated names string.
+ * @param {string=} opt_serverType Type of the server ("mapserver",
+ *     "geoserver", qgisserver, …).
  * @return {ol.layer.Image} WMS Layer.
  * @export
  */
 ngeo.LayerHelper.prototype.createBasicWMSLayer = function(sourceURL,
-    sourceLayersName) {
+    sourceLayersName, opt_serverType) {
+  var params = {'LAYERS': sourceLayersName};
+  if (opt_serverType) {
+    params['SERVERTYPE'] = opt_serverType;
+  }
   var layer = new ol.layer.Image({
     source: new ol.source.ImageWMS({
       url: sourceURL,
-      params: {'LAYERS': sourceLayersName}
+      params: params
     })
   });
   return layer;
@@ -109506,6 +109589,55 @@ ngeo.LayerHelper.prototype.getLayerByName = function(layerName, layers) {
   }, this);
 
   return found;
+};
+
+
+/**
+ * Get the WMTS legend URL for the given layer.
+ * @param {ol.layer.Tile} layer Tile layer as returned by the
+ * ngeo layerHelper service.
+ * @return {?string} The legend URL or null.
+ * @export
+ */
+ngeo.LayerHelper.prototype.getWMTSLegendURL = function(layer) {
+  // FIXME case of multiple styles ?  case of multiple legendUrl ?
+  var url;
+  var styles = layer.get('capabilitiesStyles');
+  if (styles !== undefined) {
+    var legendURL = styles[0]['legendURL'];
+    if (legendURL !== undefined) {
+      url = legendURL[0]['href'];
+    }
+  }
+  return url || null;
+};
+
+
+/**
+ * Get the WMS legend URL for the given node.
+ * @param {string} url The base url of the wms service.
+ * @param {string} layerName The name of a wms layer.
+ * @param {number} scale A scale.
+ * @param {string=} opt_legendRule rule parameters to add to the returned URL.
+ * @return {?string} The legend URL or null.
+ * @export
+ */
+ngeo.LayerHelper.prototype.getWMSLegendURL = function(url,
+    layerName, scale, opt_legendRule) {
+  if (!url) {
+    return null;
+  }
+  url = goog.uri.utils.setParam(url, 'FORMAT', 'image/png');
+  url = goog.uri.utils.setParam(url, 'TRANSPARENT', true);
+  url = goog.uri.utils.setParam(url, 'SERVICE', 'wms');
+  url = goog.uri.utils.setParam(url, 'VERSION', '1.1.1');
+  url = goog.uri.utils.setParam(url, 'REQUEST', 'GetLegendGraphic');
+  url = goog.uri.utils.setParam(url, 'LAYER', layerName);
+  url = goog.uri.utils.setParam(url, 'SCALE', scale);
+  if (opt_legendRule !== undefined) {
+    url = goog.uri.utils.setParam(url, 'RULE', opt_legendRule);
+  }
+  return url;
 };
 
 
@@ -110167,7 +110299,7 @@ goog.require('ngeo');
  *
  *<div ngeo-popover>
  *  <a ngeo-popover-anchor class="btn btn-info">anchor 1</a>
- *  <div ngeo-popover-content="">
+ *  <div ngeo-popover-content>
  *    <ul>
  *      <li>action 1:
  *        <input type="range"/>
@@ -110241,11 +110373,11 @@ ngeo.popoverAnchorDirective = function() {
 ngeo.popoverContentDirective = function() {
   return {
     restrict: 'A',
-    transclude: true,
+    transclude: 'element',
     require: '^^ngeoPopover',
     link: function(scope, elem, attrs, ngeoPopoverCtrl, transclude) {
       transclude(scope, function(transcludedElm, scope) {
-        ngeoPopoverCtrl.bodyElm = transcludedElm;
+        ngeoPopoverCtrl.bodyElm = transcludedElm.contents();
       });
     }
   };
@@ -118306,6 +118438,9 @@ ngeo.format.FeatureHash.readMultiPolygonGeometry_ = function(text) {
  * @private
  */
 ngeo.format.FeatureHash.setStyleInFeature_ = function(text, feature) {
+  if (text == '') {
+    return;
+  }
   var fillColor, fontSize, fontColor, pointRadius, strokeColor, strokeWidth;
   var properties = ngeo.format.FeatureHash.getStyleProperties_(text, feature);
   fillColor = properties.fillColor;
@@ -118377,6 +118512,7 @@ ngeo.format.FeatureHash.setStyleProperties_ = function(text, feature) {
       delete properties['fillColor'];
     } else {
       delete properties['fontColor'];
+      delete properties['fontSize'];
     }
   } else {
     delete properties['fontColor'];
@@ -118747,17 +118883,19 @@ ngeo.format.FeatureHash.prototype.readFeatureFromText = function(text, opt_optio
     var attributesText = splitIndex >= 0 ?
         attributesAndStylesText.substring(0, splitIndex) :
         attributesAndStylesText;
-    var parts = attributesText.split('\'');
-    for (var i = 0; i < parts.length; ++i) {
-      var part = decodeURIComponent(parts[i]);
-      var keyVal = part.split('*');
-      goog.asserts.assert(keyVal.length === 2);
-      var key = keyVal[0];
-      var value = keyVal[1];
-      if (!this.setStyle_ && ngeo.format.FeatureHashLegacyProperties_[key]) {
-        key = ngeo.format.FeatureHashLegacyProperties_[key];
+    if (attributesText != '') {
+      var parts = attributesText.split('\'');
+      for (var i = 0; i < parts.length; ++i) {
+        var part = decodeURIComponent(parts[i]);
+        var keyVal = part.split('*');
+        goog.asserts.assert(keyVal.length === 2);
+        var key = keyVal[0];
+        var value = keyVal[1];
+        if (!this.setStyle_ && ngeo.format.FeatureHashLegacyProperties_[key]) {
+          key = ngeo.format.FeatureHashLegacyProperties_[key];
+        }
+        feature.set(key, value);
       }
-      feature.set(key, value);
     }
     if (splitIndex >= 0) {
       var stylesText = attributesAndStylesText.substring(splitIndex + 1);
@@ -119641,7 +119779,7 @@ goog.inherits(ngeo.interaction.ModifyCircle, ol.interaction.Pointer);
  */
 ngeo.interaction.ModifyCircle.prototype.addFeature_ = function(feature) {
   if (feature.getGeometry().getType() === ol.geom.GeometryType.POLYGON &&
-      !!feature.get('isCircle')) {
+      !!feature.get(ngeo.FeatureProperties.IS_CIRCLE)) {
     var geometry = /** @type {ol.geom.Polygon}*/ (feature.getGeometry());
     this.writeCircleGeometry_(feature, geometry);
 
@@ -122197,77 +122335,88 @@ ngeo.debounceServiceFactory = function($timeout) {
 
 ngeo.module.factory('ngeoDebounce', ngeo.debounceServiceFactory);
 
-goog.provide('ngeo.DecorateLayer');
+goog.provide('ngeo.DecorateLayerLoading');
 
 goog.require('goog.asserts');
 goog.require('ngeo');
 
 
 /**
- * Provides a function that adds properties (using
- * `Object.defineProperty`) to the layer, making it possible to control layer
- * properties with ngModel.
+ * Provides a function that adds a 'loading 'property (using
+ * `Object.defineProperty`) to an ol.layer.Group or a layer with
+ * an ol.source.Tile or an ol.source.Image source.
+ * This property is true when the layer is loading and false otherwise.
  *
  * Example:
  *
- *      <input type="checkbox" ngModel="layer.visible" />
+ *      <span ng-if="layer.loading">please wait</span>
  *
- * See our live examples:
- * {@link ../examples/layeropacity.html}
- * {@link ../examples/layervisibility.html}
- *
- * @typedef {function(ol.layer.Base)}
+ * @typedef {function(ol.layer.Base, angular.Scope)}
  * @ngdoc service
- * @ngname ngeoDecorateLayer
+ * @ngname ngeoDecorateLayerLoading
  */
-ngeo.DecorateLayer;
+ngeo.DecorateLayerLoading;
 
 
 /**
  * @param {ol.layer.Base} layer Layer to decorate.
+ * @param {angular.Scope} $scope Scope.
  */
-ngeo.decorateLayer = function(layer) {
+ngeo.decorateLayerLoading = function(layer, $scope) {
   goog.asserts.assertInstanceof(layer, ol.layer.Base);
 
-  Object.defineProperty(layer, 'visible', {
+  var sources = [];
+  if (layer instanceof ol.layer.Group) {
+    // layer group
+    sources = layer.getLayersArray().map(function(layer) {
+      goog.asserts.assert(layer instanceof ol.layer.Layer);
+      return layer.getSource();
+    });
+  } else {
+    goog.asserts.assert(layer instanceof ol.layer.Layer);
+    sources = [layer.getSource()];
+  }
+
+  layer.set('load_count', 0, true);
+  sources.forEach(function(source) {
+    var incrementEvents, decrementEvents;
+    if (source instanceof ol.source.Tile) {
+      incrementEvents = ['tileloadstart'];
+      decrementEvents = ['tileloadend', 'tileloaderror'];
+    } else if (source instanceof ol.source.Image) {
+      incrementEvents = ['imageloadstart'];
+      decrementEvents = ['imageloadend', 'imageloaderror'];
+    } else {
+      goog.asserts.fail('unsupported source type');
+    }
+    source.on(incrementEvents, function() {
+      var load_count = /** @type {number} */ (layer.get('load_count'));
+      layer.set('load_count', ++load_count, true);
+      $scope.$applyAsync();
+    });
+    source.on(decrementEvents, function() {
+      var load_count = /** @type {number} */ (layer.get('load_count'));
+      layer.set('load_count', --load_count, true);
+      $scope.$applyAsync();
+    });
+
+  });
+
+  Object.defineProperty(layer, 'loading', {
     configurable: true,
     get:
         /**
-         * @return {boolean} Visible.
+         * @return {boolean} Loading.
          */
         function() {
-          return layer.getVisible();
-        },
-    set:
-        /**
-         * @param {boolean} val Visible.
-         */
-        function(val) {
-          layer.setVisible(val);
+          return /** @type {number} */ (layer.get('load_count')) > 0;
         }
   });
 
-  Object.defineProperty(layer, 'opacity', {
-    configurable: true,
-    get:
-        /**
-         * @return {string} Opacity.
-         */
-        function() {
-          return (Math.round(layer.getOpacity() * 100) / 100) + '';
-        },
-    set:
-        /**
-         * @param {string} val Opacity.
-         */
-        function(val) {
-          layer.setOpacity(+val);
-        }
-  });
 };
 
 
-ngeo.module.value('ngeoDecorateLayer', ngeo.decorateLayer);
+ngeo.module.value('ngeoDecorateLayerLoading', ngeo.decorateLayerLoading);
 
 goog.provide('ngeo.Features');
 goog.require('ngeo');
@@ -122276,6 +122425,19 @@ goog.require('ol.Collection');
 
 
 ngeo.module.value('ngeoFeatures', new ol.Collection());
+
+goog.provide('ngeo.filters');
+
+goog.require('ngeo');
+
+// format a number as a scale
+ngeo.module.filter('scalify', ['$filter', function(filter) {
+  var number = filter('number');
+  return function(scale) {
+    var text = number(scale, 0) || '';
+    return '1 : ' + text.replace(/,/g, '\'');
+  };
+}]);
 
 goog.provide('ngeo.GetBrowserLanguage');
 
@@ -122736,10 +122898,490 @@ ngeo.createPopupServiceFactory = function($compile, $rootScope) {
 };
 ngeo.module.factory('ngeoCreatePopup', ngeo.createPopupServiceFactory);
 
+// Copyright 2006 The Closure Library Authors. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS-IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @fileoverview Utilities related to alpha/transparent colors and alpha color
+ * conversion.
+ */
+
+goog.provide('goog.color.alpha');
+
+goog.require('goog.color');
+
+
+/**
+ * Parses an alpha color out of a string.
+ * @param {string} str Color in some format.
+ * @return {{hex: string, type: string}} 'hex' is a string containing
+ *     a hex representation of the color, and 'type' is a string
+ *     containing the type of color format passed in ('hex', 'rgb', 'named').
+ */
+goog.color.alpha.parse = function(str) {
+  var result = {};
+  str = String(str);
+
+  var maybeHex = goog.color.prependHashIfNecessaryHelper(str);
+  if (goog.color.alpha.isValidAlphaHexColor_(maybeHex)) {
+    result.hex = goog.color.alpha.normalizeAlphaHex_(maybeHex);
+    result.type = 'hex';
+    return result;
+  } else {
+    var rgba = goog.color.alpha.isValidRgbaColor_(str);
+    if (rgba.length) {
+      result.hex = goog.color.alpha.rgbaArrayToHex(rgba);
+      result.type = 'rgba';
+      return result;
+    } else {
+      var hsla = goog.color.alpha.isValidHslaColor_(str);
+      if (hsla.length) {
+        result.hex = goog.color.alpha.hslaArrayToHex(hsla);
+        result.type = 'hsla';
+        return result;
+      }
+    }
+  }
+  throw Error(str + ' is not a valid color string');
+};
+
+
+/**
+ * Converts a hex representation of a color to RGBA.
+ * @param {string} hexColor Color to convert.
+ * @return {string} string of the form 'rgba(R,G,B,A)' which can be used in
+ *    styles.
+ */
+goog.color.alpha.hexToRgbaStyle = function(hexColor) {
+  return goog.color.alpha.rgbaStyle_(goog.color.alpha.hexToRgba(hexColor));
+};
+
+
+/**
+ * Extracts a substring, from startIdx to endIdx, of the normalized (lowercase
+ * #rrggbbaa) form of a hex-with-alpha color.
+ * @param {string} colorWithAlpha The alpha hex color to get the hex color from.
+ *     This may be four or eight digits.
+ * @param {number} startIdx The start index within the #rrggbbaa color.
+ * @param {number} endIdx The end index within the #rrggbbbaa color.
+ * @return {string} The requested startIdx-to-endIdx substring from the color.
+ * @private
+ */
+goog.color.alpha.extractColor_ = function(colorWithAlpha, startIdx, endIdx) {
+  if (goog.color.alpha.isValidAlphaHexColor_(colorWithAlpha)) {
+    var fullColor = goog.color.prependHashIfNecessaryHelper(colorWithAlpha);
+    var normalizedColor = goog.color.alpha.normalizeAlphaHex_(fullColor);
+    return normalizedColor.substring(startIdx, endIdx);
+  } else {
+    throw Error(colorWithAlpha + ' is not a valid 8-hex color string');
+  }
+};
+
+
+/**
+ * Gets the hex color part of an alpha hex color. For example, both '#abcd' and
+ * '#AABBCC12' return '#aabbcc'.
+ * @param {string} colorWithAlpha The alpha hex color to get the hex color from.
+ * @return {string} The hex color where the alpha part has been stripped off.
+ */
+goog.color.alpha.extractHexColor = function(colorWithAlpha) {
+  return goog.color.alpha.extractColor_(colorWithAlpha, 0, 7);
+};
+
+
+/**
+ * Gets the alpha color part of an alpha hex color. For example, both '#123A'
+ * and '#123456aa' return 'aa'. The result is always two characters long.
+ * @param {string} colorWithAlpha The alpha hex color to get the hex color from.
+ * @return {string} The two-character alpha from the given color.
+ */
+goog.color.alpha.extractAlpha = function(colorWithAlpha) {
+  return goog.color.alpha.extractColor_(colorWithAlpha, 7, 9);
+};
+
+
+/**
+ * Regular expression for extracting the digits in a hex color quadruplet.
+ * @type {RegExp}
+ * @private
+ */
+goog.color.alpha.hexQuadrupletRe_ = /#(.)(.)(.)(.)/;
+
+
+/**
+ * Normalize a hex representation of an alpha color.
+ * @param {string} hexColor an alpha hex color string.
+ * @return {string} hex color in the format '#rrggbbaa' with all lowercase
+ *     literals.
+ * @private
+ */
+goog.color.alpha.normalizeAlphaHex_ = function(hexColor) {
+  if (!goog.color.alpha.isValidAlphaHexColor_(hexColor)) {
+    throw Error("'" + hexColor + "' is not a valid alpha hex color");
+  }
+  if (hexColor.length == 5) {  // of the form #RGBA
+    hexColor = hexColor.replace(
+        goog.color.alpha.hexQuadrupletRe_, '#$1$1$2$2$3$3$4$4');
+  }
+  return hexColor.toLowerCase();
+};
+
+
+/**
+ * Converts an 8-hex representation of a color to RGBA.
+ * @param {string} hexColor Color to convert.
+ * @return {!Array<number>} array containing [r, g, b, a].
+ *     r, g, b are ints between 0
+ *     and 255, and a is a value between 0 and 1.
+ */
+goog.color.alpha.hexToRgba = function(hexColor) {
+  // TODO(user): Enhance code sharing with goog.color, for example by
+  //     adding a goog.color.genericHexToRgb method.
+  hexColor = goog.color.alpha.normalizeAlphaHex_(hexColor);
+  var r = parseInt(hexColor.substr(1, 2), 16);
+  var g = parseInt(hexColor.substr(3, 2), 16);
+  var b = parseInt(hexColor.substr(5, 2), 16);
+  var a = parseInt(hexColor.substr(7, 2), 16);
+
+  return [r, g, b, a / 255];
+};
+
+
+/**
+ * Converts a color from RGBA to hex representation.
+ * @param {number} r Amount of red, int between 0 and 255.
+ * @param {number} g Amount of green, int between 0 and 255.
+ * @param {number} b Amount of blue, int between 0 and 255.
+ * @param {number} a Amount of alpha, float between 0 and 1.
+ * @return {string} hex representation of the color.
+ */
+goog.color.alpha.rgbaToHex = function(r, g, b, a) {
+  var intAlpha = Math.floor(a * 255);
+  if (isNaN(intAlpha) || intAlpha < 0 || intAlpha > 255) {
+    // TODO(user): The CSS spec says the value should be clamped.
+    throw Error(
+        '"(' + r + ',' + g + ',' + b + ',' + a +
+        '") is not a valid RGBA color');
+  }
+  var hexA = goog.color.prependZeroIfNecessaryHelper(intAlpha.toString(16));
+  return goog.color.rgbToHex(r, g, b) + hexA;
+};
+
+
+/**
+ * Converts a color from HSLA to hex representation.
+ * @param {number} h Amount of hue, int between 0 and 360.
+ * @param {number} s Amount of saturation, int between 0 and 100.
+ * @param {number} l Amount of lightness, int between 0 and 100.
+ * @param {number} a Amount of alpha, float between 0 and 1.
+ * @return {string} hex representation of the color.
+ */
+goog.color.alpha.hslaToHex = function(h, s, l, a) {
+  var intAlpha = Math.floor(a * 255);
+  if (isNaN(intAlpha) || intAlpha < 0 || intAlpha > 255) {
+    // TODO(user): The CSS spec says the value should be clamped.
+    throw Error(
+        '"(' + h + ',' + s + ',' + l + ',' + a +
+        '") is not a valid HSLA color');
+  }
+  var hexA = goog.color.prependZeroIfNecessaryHelper(intAlpha.toString(16));
+  return goog.color.hslToHex(h, s / 100, l / 100) + hexA;
+};
+
+
+/**
+ * Converts a color from RGBA to hex representation.
+ * @param {Array<number>} rgba Array of [r, g, b, a], with r, g, b in [0, 255]
+ *     and a in [0, 1].
+ * @return {string} hex representation of the color.
+ */
+goog.color.alpha.rgbaArrayToHex = function(rgba) {
+  return goog.color.alpha.rgbaToHex(rgba[0], rgba[1], rgba[2], rgba[3]);
+};
+
+
+/**
+ * Converts a color from RGBA to an RGBA style string.
+ * @param {number} r Value of red, in [0, 255].
+ * @param {number} g Value of green, in [0, 255].
+ * @param {number} b Value of blue, in [0, 255].
+ * @param {number} a Value of alpha, in [0, 1].
+ * @return {string} An 'rgba(r,g,b,a)' string ready for use in a CSS rule.
+ */
+goog.color.alpha.rgbaToRgbaStyle = function(r, g, b, a) {
+  if (isNaN(r) || r < 0 || r > 255 || isNaN(g) || g < 0 || g > 255 ||
+      isNaN(b) || b < 0 || b > 255 || isNaN(a) || a < 0 || a > 1) {
+    throw Error(
+        '"(' + r + ',' + g + ',' + b + ',' + a +
+        ')" is not a valid RGBA color');
+  }
+  return goog.color.alpha.rgbaStyle_([r, g, b, a]);
+};
+
+
+/**
+ * Converts a color from RGBA to an RGBA style string.
+ * @param {(Array<number>|Float32Array)} rgba Array of [r, g, b, a],
+ *     with r, g, b in [0, 255] and a in [0, 1].
+ * @return {string} An 'rgba(r,g,b,a)' string ready for use in a CSS rule.
+ */
+goog.color.alpha.rgbaArrayToRgbaStyle = function(rgba) {
+  return goog.color.alpha.rgbaToRgbaStyle(rgba[0], rgba[1], rgba[2], rgba[3]);
+};
+
+
+/**
+ * Converts a color from HSLA to hex representation.
+ * @param {Array<number>} hsla Array of [h, s, l, a], where h is an integer in
+ *     [0, 360], s and l are integers in [0, 100], and a is in [0, 1].
+ * @return {string} hex representation of the color, such as '#af457eff'.
+ */
+goog.color.alpha.hslaArrayToHex = function(hsla) {
+  return goog.color.alpha.hslaToHex(hsla[0], hsla[1], hsla[2], hsla[3]);
+};
+
+
+/**
+ * Converts a color from HSLA to an RGBA style string.
+ * @param {Array<number>} hsla Array of [h, s, l, a], where h is and integer in
+ *     [0, 360], s and l are integers in [0, 100], and a is in [0, 1].
+ * @return {string} An 'rgba(r,g,b,a)' string ready for use in a CSS rule.
+ */
+goog.color.alpha.hslaArrayToRgbaStyle = function(hsla) {
+  return goog.color.alpha.hslaToRgbaStyle(hsla[0], hsla[1], hsla[2], hsla[3]);
+};
+
+
+/**
+ * Converts a color from HSLA to an RGBA style string.
+ * @param {number} h Amount of hue, int between 0 and 360.
+ * @param {number} s Amount of saturation, int between 0 and 100.
+ * @param {number} l Amount of lightness, int between 0 and 100.
+ * @param {number} a Amount of alpha, float between 0 and 1.
+ * @return {string} An 'rgba(r,g,b,a)' string ready for use in a CSS rule.
+ *     styles.
+ */
+goog.color.alpha.hslaToRgbaStyle = function(h, s, l, a) {
+  return goog.color.alpha.rgbaStyle_(goog.color.alpha.hslaToRgba(h, s, l, a));
+};
+
+
+/**
+ * Converts a color from HSLA color space to RGBA color space.
+ * @param {number} h Amount of hue, int between 0 and 360.
+ * @param {number} s Amount of saturation, int between 0 and 100.
+ * @param {number} l Amount of lightness, int between 0 and 100.
+ * @param {number} a Amount of alpha, float between 0 and 1.
+ * @return {!Array<number>} [r, g, b, a] values for the color, where r, g, b
+ *     are integers in [0, 255] and a is a float in [0, 1].
+ */
+goog.color.alpha.hslaToRgba = function(h, s, l, a) {
+  return goog.color.hslToRgb(h, s / 100, l / 100).concat(a);
+};
+
+
+/**
+ * Converts a color from RGBA color space to HSLA color space.
+ * Modified from {@link http://en.wikipedia.org/wiki/HLS_color_space}.
+ * @param {number} r Value of red, in [0, 255].
+ * @param {number} g Value of green, in [0, 255].
+ * @param {number} b Value of blue, in [0, 255].
+ * @param {number} a Value of alpha, in [0, 255].
+ * @return {!Array<number>} [h, s, l, a] values for the color, with h an int in
+ *     [0, 360] and s, l and a in [0, 1].
+ */
+goog.color.alpha.rgbaToHsla = function(r, g, b, a) {
+  return goog.color.rgbToHsl(r, g, b).concat(a);
+};
+
+
+/**
+ * Converts a color from RGBA color space to HSLA color space.
+ * @param {Array<number>} rgba [r, g, b, a] values for the color, each in
+ *     [0, 255].
+ * @return {!Array<number>} [h, s, l, a] values for the color, with h in
+ *     [0, 360] and s, l and a in [0, 1].
+ */
+goog.color.alpha.rgbaArrayToHsla = function(rgba) {
+  return goog.color.alpha.rgbaToHsla(rgba[0], rgba[1], rgba[2], rgba[3]);
+};
+
+
+/**
+ * Helper for isValidAlphaHexColor_.
+ * @type {RegExp}
+ * @private
+ */
+goog.color.alpha.validAlphaHexColorRe_ = /^#(?:[0-9a-f]{4}){1,2}$/i;
+
+
+/**
+ * Checks if a string is a valid alpha hex color.  We expect strings of the
+ * format #RRGGBBAA (ex: #1b3d5f5b) or #RGBA (ex: #3CAF == #33CCAAFF).
+ * @param {string} str String to check.
+ * @return {boolean} Whether the string is a valid alpha hex color.
+ * @private
+ */
+// TODO(user): Support percentages when goog.color also supports them.
+goog.color.alpha.isValidAlphaHexColor_ = function(str) {
+  return goog.color.alpha.validAlphaHexColorRe_.test(str);
+};
+
+
+/**
+ * Helper for isNormalizedAlphaHexColor_.
+ * @type {RegExp}
+ * @private
+ */
+goog.color.alpha.normalizedAlphaHexColorRe_ = /^#[0-9a-f]{8}$/;
+
+
+/**
+ * Checks if a string is a normalized alpha hex color.
+ * We expect strings of the format #RRGGBBAA (ex: #1b3d5f5b)
+ * using only lowercase letters.
+ * @param {string} str String to check.
+ * @return {boolean} Whether the string is a normalized hex color.
+ * @private
+ */
+goog.color.alpha.isNormalizedAlphaHexColor_ = function(str) {
+  return goog.color.alpha.normalizedAlphaHexColorRe_.test(str);
+};
+
+
+/**
+ * Regular expression for matching and capturing RGBA style strings. Helper for
+ * isValidRgbaColor_.
+ * @type {RegExp}
+ * @private
+ */
+goog.color.alpha.rgbaColorRe_ =
+    /^(?:rgba)?\((0|[1-9]\d{0,2}),\s?(0|[1-9]\d{0,2}),\s?(0|[1-9]\d{0,2}),\s?(0|1|0\.\d{0,10})\)$/i;
+
+
+/**
+ * Regular expression for matching and capturing HSLA style strings. Helper for
+ * isValidHslaColor_.
+ * @type {RegExp}
+ * @private
+ */
+goog.color.alpha.hslaColorRe_ =
+    /^(?:hsla)\((0|[1-9]\d{0,2}),\s?(0|[1-9]\d{0,2})\%,\s?(0|[1-9]\d{0,2})\%,\s?(0|1|0\.\d{0,10})\)$/i;
+
+
+/**
+ * Checks if a string is a valid rgba color.  We expect strings of the format
+ * '(r, g, b, a)', or 'rgba(r, g, b, a)', where r, g, b are ints in [0, 255]
+ *     and a is a float in [0, 1].
+ * @param {string} str String to check.
+ * @return {!Array<number>} the integers [r, g, b, a] for valid colors or the
+ *     empty array for invalid colors.
+ * @private
+ */
+goog.color.alpha.isValidRgbaColor_ = function(str) {
+  // Each component is separate (rather than using a repeater) so we can
+  // capture the match. Also, we explicitly set each component to be either 0,
+  // or start with a non-zero, to prevent octal numbers from slipping through.
+  var regExpResultArray = str.match(goog.color.alpha.rgbaColorRe_);
+  if (regExpResultArray) {
+    var r = Number(regExpResultArray[1]);
+    var g = Number(regExpResultArray[2]);
+    var b = Number(regExpResultArray[3]);
+    var a = Number(regExpResultArray[4]);
+    if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255 &&
+        a >= 0 && a <= 1) {
+      return [r, g, b, a];
+    }
+  }
+  return [];
+};
+
+
+/**
+ * Checks if a string is a valid hsla color.  We expect strings of the format
+ * 'hsla(h, s, l, a)', where s in an int in [0, 360], s and l are percentages
+ *     between 0 and 100 such as '50%' or '70%', and a is a float in [0, 1].
+ * @param {string} str String to check.
+ * @return {!Array<number>} the integers [h, s, l, a] for valid colors or the
+ *     empty array for invalid colors.
+ * @private
+ */
+goog.color.alpha.isValidHslaColor_ = function(str) {
+  // Each component is separate (rather than using a repeater) so we can
+  // capture the match. Also, we explicitly set each component to be either 0,
+  // or start with a non-zero, to prevent octal numbers from slipping through.
+  var regExpResultArray = str.match(goog.color.alpha.hslaColorRe_);
+  if (regExpResultArray) {
+    var h = Number(regExpResultArray[1]);
+    var s = Number(regExpResultArray[2]);
+    var l = Number(regExpResultArray[3]);
+    var a = Number(regExpResultArray[4]);
+    if (h >= 0 && h <= 360 && s >= 0 && s <= 100 && l >= 0 && l <= 100 &&
+        a >= 0 && a <= 1) {
+      return [h, s, l, a];
+    }
+  }
+  return [];
+};
+
+
+/**
+ * Takes an array of [r, g, b, a] and converts it into a string appropriate for
+ * CSS styles. The alpha channel value is rounded to 3 decimal places to make
+ * sure the produced string is not too long.
+ * @param {Array<number>} rgba [r, g, b, a] with r, g, b in [0, 255] and a
+ *     in [0, 1].
+ * @return {string} string of the form 'rgba(r,g,b,a)'.
+ * @private
+ */
+goog.color.alpha.rgbaStyle_ = function(rgba) {
+  var roundedRgba = rgba.slice(0);
+  roundedRgba[3] = Math.round(rgba[3] * 1000) / 1000;
+  return 'rgba(' + roundedRgba.join(',') + ')';
+};
+
+
+/**
+ * Converts from h,s,v,a values to a hex string
+ * @param {number} h Hue, in [0, 1].
+ * @param {number} s Saturation, in [0, 1].
+ * @param {number} v Value, in [0, 255].
+ * @param {number} a Alpha, in [0, 1].
+ * @return {string} hex representation of the color.
+ */
+goog.color.alpha.hsvaToHex = function(h, s, v, a) {
+  var alpha = Math.floor(a * 255);
+  return goog.color.hsvArrayToHex([h, s, v]) +
+      goog.color.prependZeroIfNecessaryHelper(alpha.toString(16));
+};
+
+
+/**
+ * Converts from an HSVA array to a hex string
+ * @param {Array<number>} hsva Array of [h, s, v, a] in
+ *     [[0, 1], [0, 1], [0, 255], [0, 1]].
+ * @return {string} hex representation of the color.
+ */
+goog.color.alpha.hsvaArrayToHex = function(hsva) {
+  return goog.color.alpha.hsvaToHex(hsva[0], hsva[1], hsva[2], hsva[3]);
+};
+
 goog.provide('ngeo.CreatePrint');
 goog.provide('ngeo.Print');
 
 goog.require('goog.color');
+goog.require('goog.color.alpha');
 goog.require('goog.math');
 goog.require('goog.object');
 goog.require('ngeo');
@@ -122818,8 +123460,10 @@ ngeo.PrintStyleTypes_[ol.geom.GeometryType.MULTI_POLYGON] =
  *     var scale = 5000;
  *     var dpi = 72;
  *     var layout = 'A4 portrait';
- *     var reportSpec = print.createSpec(map, scale, dpi, layout, {
- *       'title': 'A title for my report'
+ *     var format = 'pdf';
+ *     var reportSpec = print.createSpec(map, scale, dpi, layout, format {
+ *       'title': 'A title for my report',
+ *       'rotation': 45 // degree
  *     });
  *
  * See our live example: {@link ../examples/mapfishprint.html}
@@ -122837,8 +123481,9 @@ ngeo.PrintStyleTypes_[ol.geom.GeometryType.MULTI_POLYGON] =
  * @constructor
  * @param {string} url URL to MapFish print web service.
  * @param {angular.$http} $http Angular $http service.
+ * @param {ngeo.LayerHelper} ngeoLayerHelper Ngeo Layer Helper service.
  */
-ngeo.Print = function(url, $http) {
+ngeo.Print = function(url, $http, ngeoLayerHelper) {
   /**
    * @type {string}
    * @private
@@ -122850,6 +123495,12 @@ ngeo.Print = function(url, $http) {
    * @private
    */
   this.$http_ = $http;
+
+  /**
+   * @type {ngeo.LayerHelper}
+   * @private
+   */
+  this.ngeoLayerHelper_ = ngeoLayerHelper;
 };
 
 
@@ -122882,15 +123533,17 @@ ngeo.Print.prototype.cancel = function(ref, opt_httpConfig) {
  * @param {number} scale Scale.
  * @param {number} dpi DPI.
  * @param {string} layout Layout.
+ * @param {string} format Formats.
  * @param {Object.<string, *>} customAttributes Custom attributes.
  * @return {MapFishPrintSpec} The print spec.
  * @export
  */
 ngeo.Print.prototype.createSpec = function(
-    map, scale, dpi, layout, customAttributes) {
+    map, scale, dpi, layout, format, customAttributes) {
 
   var specMap = /** @type {MapFishPrintMap} */ ({
-    dpi: dpi
+    dpi: dpi,
+    rotation: /** number */ (customAttributes['rotation'])
   });
 
   this.encodeMap_(map, scale, specMap);
@@ -122902,6 +123555,7 @@ ngeo.Print.prototype.createSpec = function(
 
   var spec = /** @type {MapFishPrintSpec} */ ({
     attributes: attributes,
+    format: format,
     layout: layout
   });
 
@@ -122920,20 +123574,21 @@ ngeo.Print.prototype.encodeMap_ = function(map, scale, object) {
   var viewCenter = view.getCenter();
   var viewProjection = view.getProjection();
   var viewResolution = view.getResolution();
-  var viewRotation = view.getRotation();
+  var viewRotation = object.rotation || ol.math.toDegrees(view.getRotation());
 
   goog.asserts.assert(viewCenter !== undefined);
   goog.asserts.assert(viewProjection !== undefined);
 
   object.center = viewCenter;
   object.projection = viewProjection.getCode();
-  object.rotation = viewRotation * 180 / Math.PI;
+  object.rotation = viewRotation;
   object.scale = scale;
   object.layers = [];
 
-  var layersCollection = map.getLayers();
-  goog.asserts.assert(layersCollection !== null);
-  var layers = layersCollection.getArray().slice().reverse();
+  var mapLayerGroup = map.getLayerGroup();
+  goog.asserts.assert(mapLayerGroup !== null);
+  var layers = this.ngeoLayerHelper_.getFlatLayers(mapLayerGroup);
+  layers = layers.slice().reverse();
 
   layers.forEach(function(layer) {
     if (layer.getVisible()) {
@@ -123006,6 +123661,7 @@ ngeo.Print.prototype.encodeWmsLayer_ = function(arr, opacity, url, params) {
 
   delete customParams['LAYERS'];
   delete customParams['FORMAT'];
+  delete customParams['SERVERTYPE'];
   delete customParams['VERSION'];
 
   var object = /** @type {MapFishPrintWmsLayer} */ ({
@@ -123013,6 +123669,7 @@ ngeo.Print.prototype.encodeWmsLayer_ = function(arr, opacity, url, params) {
     imageFormat: 'FORMAT' in params ? params['FORMAT'] : 'image/png',
     layers: params['LAYERS'].split(','),
     customParams: customParams,
+    serverType: params['SERVERTYPE'],
     type: 'wms',
     opacity: opacity,
     version: params['VERSION']
@@ -123064,21 +123721,21 @@ ngeo.Print.prototype.encodeTileWmtsLayer_ = function(arr, layer) {
   goog.asserts.assertInstanceof(tileGrid, ol.tilegrid.WMTS);
   var matrixIds = tileGrid.getMatrixIds();
 
-  // FIXME:
-  // matrixSize assumes a regular grid
-
   /** @type {Array.<MapFishPrintWmtsMatrix>} */
   var matrices = [];
 
   for (var i = 0, ii = matrixIds.length; i < ii; ++i) {
-    var sqrZ = Math.pow(2, i);
+    var tileRange = tileGrid.getFullTileRange(i);
     matrices.push(/** @type {MapFishPrintWmtsMatrix} */ ({
       identifier: matrixIds[i],
       scaleDenominator: tileGrid.getResolution(i) *
           projection.getMetersPerUnit() / 0.28E-3,
       tileSize: ol.size.toSize(tileGrid.getTileSize(i)),
       topLeftCorner: tileGrid.getOrigin(i),
-      matrixSize: [sqrZ, sqrZ]
+      matrixSize: [
+        tileRange.maxX - tileRange.minX,
+        tileRange.maxY - tileRange.minY
+      ]
     }));
   }
 
@@ -123275,11 +123932,14 @@ ngeo.Print.prototype.encodeVectorStyle_ = function(object, geometryType, style, 
  */
 ngeo.Print.prototype.encodeVectorStyleFill_ = function(symbolizer, fillStyle) {
   var fillColor = fillStyle.getColor();
-  goog.asserts.assert(Array.isArray(fillColor), 'only supporting fill colors');
   if (fillColor !== null) {
-    var fillColorRgba = ol.color.asArray(fillColor);
-    symbolizer.fillColor = goog.color.rgbArrayToHex(fillColorRgba);
-    symbolizer.fillOpacity = fillColorRgba[3];
+    if (typeof (fillColor) === 'string') {
+      var hex = goog.color.alpha.parse(fillColor).hex;
+      fillColor = goog.color.alpha.hexToRgba(hex);
+    }
+    goog.asserts.assert(Array.isArray(fillColor), 'only supporting fill colors');
+    symbolizer.fillColor = goog.color.rgbArrayToHex(fillColor);
+    symbolizer.fillOpacity = fillColor[3];
   }
 };
 
@@ -123537,7 +124197,8 @@ ngeo.Print.prototype.getWmtsUrl_ = function(source) {
  * @export
  */
 ngeo.Print.prototype.createReport = function(printSpec, opt_httpConfig) {
-  var url = this.url_ + '/report.pdf';
+  var format = printSpec.format || 'pdf';
+  var url = this.url_ + '/report.' + format;
   var httpConfig = /** @type {angular.$http.Config} */ ({
     headers: {
       'Content-Type': 'application/json; charset=UTF-8'
@@ -123590,18 +124251,19 @@ ngeo.Print.prototype.getCapabilities = function(opt_httpConfig) {
 
 /**
  * @param {angular.$http} $http Angular $http service.
+ * @param {ngeo.LayerHelper} ngeoLayerHelper Ngeo Layer Helper.
  * @return {ngeo.CreatePrint} The function to create a print service.
  * @ngInject
  * @ngdoc service
  * @ngname ngeoCreatePrint
  */
-ngeo.createPrintServiceFactory = function($http) {
+ngeo.createPrintServiceFactory = function($http, ngeoLayerHelper) {
   return (
       /**
        * @param {string} url URL to MapFish print service.
        */
       function(url) {
-        return new ngeo.Print(url, $http);
+        return new ngeo.Print(url, $http, ngeoLayerHelper);
       });
 };
 
@@ -123642,14 +124304,18 @@ ngeo.PrintUtils.DOTS_PER_INCH_ = 72;
  * Return a function to use as map postcompose listener for drawing a print
  * mask on the map.
  * @param {function():ol.Size} getSize User-defined function returning the
- * size in dots of the map to print.
+ *     size in dots of the map to print.
  * @param {function(olx.FrameState):number} getScale User-defined function
+ *     returning the scale of the map to print.
+ * @param {function():number=} opt_rotation User defined function returning the
+ *     inclination of the canevas in degree (-180 to 180).
  * returning the scale of the map to print.
  * @return {function(ol.render.Event)} Function to use as a map postcompose
  * listener.
  * @export
  */
-ngeo.PrintUtils.prototype.createPrintMaskPostcompose = function(getSize, getScale) {
+ngeo.PrintUtils.prototype.createPrintMaskPostcompose = function(getSize,
+    getScale, opt_rotation) {
   var self = this;
 
   return (
@@ -123684,11 +124350,6 @@ ngeo.PrintUtils.prototype.createPrintMaskPostcompose = function(getSize, getScal
         self.extentHalfVerticalDistance_ =
             (((size[1] / ppi) / ipm) * scale) / 2;
 
-        var minx = centerX - extentHalfWidth;
-        var miny = centerY - extentHalfHeight;
-        var maxx = centerX + extentHalfWidth;
-        var maxy = centerY + extentHalfHeight;
-
         context.beginPath();
         context.moveTo(0, 0);
         context.lineTo(viewportWidth, 0);
@@ -123697,11 +124358,29 @@ ngeo.PrintUtils.prototype.createPrintMaskPostcompose = function(getSize, getScal
         context.lineTo(0, 0);
         context.closePath();
 
-        context.moveTo(minx, miny);
-        context.lineTo(minx, maxy);
-        context.lineTo(maxx, maxy);
-        context.lineTo(maxx, miny);
-        context.lineTo(minx, miny);
+        var rotation = (opt_rotation ? ol.math.toRadians(opt_rotation()) : 0);
+        // diagonal = distance p1 to center.
+        var diagonal = Math.sqrt(Math.pow(extentHalfWidth, 2) +
+            Math.pow(extentHalfHeight, 2));
+        // gamma = angle between horizontal and diagonal (with rotation).
+        var gamma = Math.atan(extentHalfHeight / extentHalfWidth) - rotation;
+        // omega = angle between diagonal and vertical (with rotation).
+        var omega = Math.atan(extentHalfWidth / extentHalfHeight) - rotation;
+        // Calculation of each corner.
+        var x1 = centerX - Math.cos(gamma) * diagonal;
+        var y1 = centerY + Math.sin(gamma) * diagonal;
+        var x2 = centerX + Math.sin(omega) * diagonal;
+        var y2 = centerY + Math.cos(omega) * diagonal;
+        var x3 = centerX + Math.cos(gamma) * diagonal;
+        var y3 = centerY - Math.sin(gamma) * diagonal;
+        var x4 = centerX - Math.sin(omega) * diagonal;
+        var y4 = centerY - Math.cos(omega) * diagonal;
+
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.lineTo(x3, y3);
+        context.lineTo(x4, y4);
+        context.lineTo(x1, y1);
         context.closePath();
 
         context.fillStyle = 'rgba(0, 5, 25, 0.5)';
