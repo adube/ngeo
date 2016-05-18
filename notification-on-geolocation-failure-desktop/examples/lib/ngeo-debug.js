@@ -106840,6 +106840,7 @@ ngeo.module.directive('ngeoDesktopGeolocation',
  * @constructor
  * @param {angular.Scope} $scope The directive's scope.
  * @param {angular.JQLite} $element Element.
+ * @param {angularGettext.Catalog} gettextCatalog Gettext service.
  * @param {ngeo.DecorateGeolocation} ngeoDecorateGeolocation Decorate
  *     Geolocation service.
  * @param {ngeo.FeatureOverlayMgr} ngeoFeatureOverlayMgr The ngeo feature
@@ -106850,7 +106851,7 @@ ngeo.module.directive('ngeoDesktopGeolocation',
  * @ngdoc controller
  * @ngname NgeoDesktopGeolocationController
  */
-ngeo.DesktopGeolocationController = function($scope, $element,
+ngeo.DesktopGeolocationController = function($scope, $element, gettextCatalog,
     ngeoDecorateGeolocation, ngeoFeatureOverlayMgr, ngeoNotification) {
 
   $element.on('click', this.toggle.bind(this));
@@ -106872,6 +106873,12 @@ ngeo.DesktopGeolocationController = function($scope, $element,
    * @private
    */
   this.$scope_ = $scope;
+
+  /**
+   * @type {angularGettext.Catalog}
+   * @private
+   */
+  this.gettextCatalog_ = gettextCatalog;
 
   /**
    * @type {ngeo.Notification}
@@ -106997,6 +107004,10 @@ ngeo.DesktopGeolocationController.prototype.setPosition_ = function(event) {
   // doesn't return an error
   if (position === undefined) {
     this.deactivate_();
+    this.notification_.error(
+      this.gettextCatalog_.getString(
+          'User chose not to share his or her location for now.')
+    );
     this.$scope_.$emit(ngeo.DesktopGeolocationEventType.ERROR, null);
     return;
   }
@@ -111859,7 +111870,8 @@ ngeo.popoverDirective = function() {
       ngeoPopoverCtrl.anchorElm.popover({
         container: 'body',
         html: true,
-        content: ngeoPopoverCtrl.bodyElm
+        content: ngeoPopoverCtrl.bodyElm,
+        placement : attrs['ngeoPopoverPlacement'] || 'right'
       });
 
       if (attrs['ngeoPopoverDismiss']) {
