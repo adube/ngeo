@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html ng-app='app'>
   <head>
-    <title>GeoMapFish's mobile background layer selector example</title>
+    <title>GeoMapFish's background layer selector example</title>
     <meta charset="utf-8">
     <meta name="viewport"
           content="initial-scale=1.0, user-scalable=no, width=device-width">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="../../lib/ngeo.css" type="text/css">
+    <link rel="stylesheet" href="../../lib/bootstrap.min.css" type="text/css">
     <style>
       gmf-map > div {
-        width: 600px;
-        height: 400px;
+        border: 1px solid #ddd;
+        width: 800px;
+        height: 600px;
+      }
+      gmf-backgroundlayerbutton {
+        bottom: 0.5rem;
+        left: 0.5rem;
+        position: absolute;
+      }
+      gmf-backgroundlayerbutton .panel {
+        display: table;
+        margin-bottom: 0.5rem;
       }
       .gmf-backgroundlayerselector {
         list-style: none;
@@ -52,15 +63,16 @@
   </head>
   <body ng-controller="MainController as ctrl">
     <p id="desc">This example shows how to use the
-    <code>gmf-backgroundlayerselector</code>
-    directive to select the map background layer on mobile devices.</p>
-    <div>
-        <span>Select base layer:</span>
-        <gmf-backgroundlayerselector
-          gmf-backgroundlayerselector-map="::ctrl.map">
-        </gmf-backgroundlayerselector>
+    <code>gmf-backgroundlayerbutton</code>
+    directive to select the map background layer.</p>
+    <div style="position:relative;">
+      <gmf-map gmf-map-map="ctrl.map"></gmf-map>
+      <gmf-backgroundlayerbutton
+          gmf-backgroundlayerbutton-image="images/background-layer-button.jpg"
+          gmf-backgroundlayerbutton-map="::ctrl.map">
+      </gmf-backgroundlayerbutton>
     </div>
-    <gmf-map gmf-map-map="ctrl.map"></gmf-map>
+
     <script src="../../lib/angular.min.js"></script>
     <script src="../../lib/angular-animate.min.js"></script>
     <script src="../../lib/angular-sanitize.min.js"></script>
@@ -69,7 +81,7 @@
     <script src="../../lib/tmhDynamicLocale.min.js" type="text/javascript"></script>
     <script src="../../lib/proj4.js"></script>
     <script src="../../lib/gmf.js"></script>
-    <script src="mobilebackgroundlayerselector.js"></script>
+    <script src="backgroundlayerbutton.js"></script>
     <script src="../../lib/watchwatchers.js"></script>
     <script>
       var gmfModule = angular.module('gmf');
