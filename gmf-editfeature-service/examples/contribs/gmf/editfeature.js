@@ -124,7 +124,7 @@ app.MainController.prototype.handleMapSingleClick_ = function(evt) {
   var resolution = view.getResolution();
   var buffer = resolution * this.pixelBuffer_;
   var extent = ol.extent.buffer(
-    ol.extent.createOrUpdateFromCoordinate(coordinate),
+    [coordinate[0], coordinate[1], coordinate[0], coordinate[1]],
     buffer
   );
 
