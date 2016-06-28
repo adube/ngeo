@@ -37,21 +37,21 @@
     <p id="desc">This example shows how to use the <code>gmf-date-picker</code> directive.</p>
     <ul>
       <li>Select a periode with a datepicker
-          <gmf-date-picker time="ctrl.datePickerRange" on-date-selected="ctrl.onDateRangeSelected(time)"></gmf-date-picker>
+          <gmf-date-picker time="ctrl.wmsTimeRangeMode" on-date-selected="ctrl.onDateRangeSelected(time)"></gmf-date-picker>
       </li>
       <li style="margin-top: 50px">
-        Date selected:
+        Date formated for a WMS request (resolution set on 'day'):
         <pre>
-          {{ctrl.rangeValue | json}}
+          {{ctrl.rangeValue}}
         </pre>
       </li>
       <li>Select a single date with a datepicker
-          <gmf-date-picker time="ctrl.datePicker" on-date-selected="ctrl.onDateSelected(time)"></gmf-date-picker>
+          <gmf-date-picker time="ctrl.wmsTimeValueMode" on-date-selected="ctrl.onDateSelected(time)"></gmf-date-picker>
       </li>
       <li style="margin-top: 50px">
-        Date selected:
+        Date formated for a WMS request (resolution set on 'month'):
         <pre>
-          {{ctrl.value | json}}
+          {{ctrl.value}}
         </pre>
       </li>
     </ul>

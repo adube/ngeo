@@ -11,56 +11,65 @@ app.module = angular.module('app', ['gmf']);
 /**
  * @constructor
  * @param {!angular.Scope} $scope Angular scope.
+ * @param {!gmf.WMSTime} gmfWMSTime wmstime service.
  * @ngInject
  */
-app.MainController = function($scope) {
+app.MainController = function($scope, gmfWMSTime) {
 
   /**
-   * @type {Object}
+   * @type {gmf.WMSTime}
+   * @private
+   */
+  this.gmfWMSTime_ = gmfWMSTime;
+
+  /**
+   * @type {gmfx.TimeProperty}
    * @export
    */
-  this.datePickerRange = {
-    widget: 'datepicker',
+  this.wmsTimeRangeMode = {
+    widget: /** @type {gmfx.TimePropertyWidgetEnum} */ ('datepicker'),
     maxValue: '2013-12-31T00:00:00Z',
     minValue: '2006-01-01T00:00:00Z',
     maxDefValue: null,
     minDefValue: null,
-    resolution: 'day',
-    mode: 'range'
+    resolution: /** @type {gmfx.TimePropertyResolutionEnum}*/ ('day'),
+    mode: /** @type {gmfx.TimePropertyModeEnum} */ ('range'),
+    interval : [0,1,0,0]
   };
 
   /**
-   * @type {Object}
+   * @type {gmfx.TimeProperty}
    * @export
    */
-  this.datePicker = {
-    widget: 'datepicker',
+  this.wmsTimeValueMode = {
+    widget: /** @type {gmfx.TimePropertyWidgetEnum} */ ('datepicker'),
     maxValue: '2015-12-31T00:00:00Z',
     minValue: '2014-01-01T00:00:00Z',
     maxDefValue: null,
     minDefValue: null,
-    resolution: 'day',
-    mode: 'single'
+    resolution: /** @type {gmfx.TimePropertyResolutionEnum}*/ ('month'),
+    mode: /** @type {gmfx.TimePropertyModeEnum} */ ('value'),
+    interval : [0,1,0,0]
   };
 
   /**
-   * @type {Object}
+   * @type {string}
    * @export
    */
-  this.value = {};
+  this.value;
 
   /**
-   * @type {Object}
+   * @type {string}
    * @export
    */
-  this.rangeValue = {};
+  this.rangeValue;
 
   this.onDateSelected = function(date) {
-    this.value = date;
+    this.value = this.gmfWMSTime_.formatWMSTimeParam(this.wmsTimeValueMode, date);
   };
 
   this.onDateRangeSelected = function(date) {
-    this.rangeValue = date;
+    this.rangeValue = this.gmfWMSTime_.formatWMSTimeParam(this.wmsTimeRangeMode, date);
   };
 
 };
