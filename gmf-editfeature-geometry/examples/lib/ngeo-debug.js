@@ -94630,6 +94630,11 @@ ngeo.GeometryType = {
    * @type {string}
    * @export
    */
+  GEOMETRY_COLLECTION: 'GeometryCollection',
+  /**
+   * @type {string}
+   * @export
+   */
   LINE_STRING: 'LineString',
   /**
    * @type {string}
