@@ -135,7 +135,7 @@ app.MainController = function($scope, gmfThemes, gmfUser, ngeoFeatureHelper,
 
       // (2) Then, add the vertex style if the geometry is different than points
       var geom = feature.getGeometry();
-      goog.asserts.assert(geom);
+      console.assert(geom);
       var type = geom.getType();
       if (type !== ngeo.GeometryType.POINT) {
         styles.push(ngeoFeatureHelper.getVertexStyle(true));
