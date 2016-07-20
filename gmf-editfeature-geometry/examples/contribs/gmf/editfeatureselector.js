@@ -129,15 +129,13 @@ app.MainController = function($scope, gmfThemes, gmfUser, ngeoFeatureHelper,
     style: function(feature, resolution) {
       // (1) Use the geometry collection style, which works fine for any
       //     geometry types
-      var styles = [].concat(
-        this.editingStyles_[ngeo.GeometryType.GEOMETRY_COLLECTION]
-      );
+      var styles = [].concat(this.editingStyles_['GeometryCollection']);
 
       // (2) Then, add the vertex style if the geometry is different than points
       var geom = feature.getGeometry();
       console.assert(geom);
       var type = geom.getType();
-      if (type !== ngeo.GeometryType.POINT) {
+      if (type !== 'Point') {
         styles.push(ngeoFeatureHelper.getVertexStyle(true));
       }
       return styles;
