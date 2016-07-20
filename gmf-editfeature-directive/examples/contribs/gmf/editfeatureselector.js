@@ -56,6 +56,40 @@ app.MainController = function($scope, gmfThemes, gmfUser, ngeoToolActivateMgr) {
    * @type {ol.source.ImageWMS}
    * @private
    */
+  this.polygonWMSSource_ = new ol.source.ImageWMS({
+    url: proxyUrl,
+    params: {'LAYERS': 'polygon'}
+  });
+
+  /**
+   * @type {ol.layer.Image}
+   * @private
+   */
+  this.polygonWMSLayer_ = new ol.layer.Image({
+    source: this.polygonWMSSource_
+  });
+
+  /**
+   * @type {ol.source.ImageWMS}
+   * @private
+   */
+  this.lineWMSSource_ = new ol.source.ImageWMS({
+    url: proxyUrl,
+    params: {'LAYERS': 'line'}
+  });
+
+  /**
+   * @type {ol.layer.Image}
+   * @private
+   */
+  this.lineWMSLayer_ = new ol.layer.Image({
+    source: this.lineWMSSource_
+  });
+
+  /**
+   * @type {ol.source.ImageWMS}
+   * @private
+   */
   this.pointWMSSource_ = new ol.source.ImageWMS({
     url: proxyUrl,
     params: {'LAYERS': 'point'}
@@ -89,6 +123,8 @@ app.MainController = function($scope, gmfThemes, gmfUser, ngeoToolActivateMgr) {
       new ol.layer.Tile({
         source: new ol.source.OSM()
       }),
+      this.polygonWMSLayer_,
+      this.lineWMSLayer_,
       this.pointWMSLayer_,
       this.vectorLayer
     ],
