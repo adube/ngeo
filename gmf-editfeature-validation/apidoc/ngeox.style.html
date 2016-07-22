@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: editfeatureselectorDirective <small>directive:gmfEditfeatureselector</small></title>
+    <title>JSDoc: Namespace: ngeox.style</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: editfeatureselectorDirective <small>directive:gmfEditfeatureselector</small></h1>
+    <h1 class="page-title">Namespace: ngeox.style</h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2 id="editfeatureselectorDirective">
-            <span class="ancestors">gmf.</span>editfeatureselectorDirective
+        <h2 id="TextOptions">
+            <span class="ancestors">ngeox.style.</span>TextOptions
         </h2>
         
     
@@ -39,42 +39,19 @@
     <div class="container-overview">
     
         
+            <div class="description"><p>The options for creating a text style.</p></div>
+        
+
+        
+
+
+    
+    <h5 class="subsection-title">Properties:</h5>
+    
 
     
 
-    <h4 class="name" id="editfeatureselectorDirective"><span class="type-signature"></span>new editfeatureselectorDirective<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Directive that uses the GMF Theme service to collect the editable layers
-and create a drop-down list out of them. When the user selects one of the
-layer from the list, a <code>gmf-editfeature</code> directive is created and shown,
-which allows the user to edit that layer.</p>
-<p>Example:</p>
-<pre class="prettyprint source"><code>&lt;gmf-editfeatureselector
-    gmf-editfeatureselector-active=&quot;ctrl.editFeatureSelectorActive&quot;
-    gmf-editfeatureselector-map=&quot;::ctrl.map&quot;
-    gmf-editfeatureselector-vector=&quot;::ctrl.vectorLayer&quot;>
-&lt;/gmf-editfeatureselector></code></pre>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>HTML attributes:</h5>
-    
-
-<table class="params">
+<table class="props">
     <thead>
     <tr>
         
@@ -87,7 +64,7 @@ which allows the user to edit that layer.</p>
 
         
 
-        <th class="last">Description</th>
+        
     </tr>
     </thead>
 
@@ -96,13 +73,13 @@ which allows the user to edit that layer.</p>
 
         <tr>
             
-                <td class="name"><code>gmf-editfeatureselector-active</code></td>
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
 
 
             
@@ -112,21 +89,23 @@ which allows the user to edit that layer.</p>
 
             
 
-            <td class="description last">Whether the
-    directive is active or not.</td>
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>gmf-editfeatureselector-map</code></td>
+                <td class="name"><code>size</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
 
 
             
@@ -136,20 +115,23 @@ which allows the user to edit that layer.</p>
 
             
 
-            <td class="description last">The map.</td>
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>gmf-editfeatureselector-vector</code></td>
+                <td class="name"><code>angle</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Vector.html">ol.layer.Vector</a></span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
 
 
             
@@ -159,15 +141,116 @@ which allows the user to edit that layer.</p>
 
             
 
-            <td class="description last">The vector
-    layer where the selected or created features are drawn.</td>
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.html#.Color">ol.Color</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offsetX</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offsetY</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            </td>
         </tr>
 
     
     </tbody>
 </table>
-
-
 
 
 
@@ -202,8 +285,8 @@ which allows the user to edit that layer.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/editfeatureselector.js">contribs/gmf/src/directives/editfeatureselector.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/editfeatureselector.js#L33">line 33</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/externs/ngeox.js">externs/ngeox.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/externs/ngeox.js#L1285">line 1285</a>
     </li></ul></dd>
     
 
@@ -215,20 +298,7 @@ which allows the user to edit that layer.</p>
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
     
     </div>
 
