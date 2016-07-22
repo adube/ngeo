@@ -107285,8 +107285,9 @@ ngeo.FeatureHelper.prototype.getLineStringStyle_ = function(feature) {
   };
 
   if (showMeasure) {
-    var measure = this.getMeasure(feature);
-    options.text = this.createTextStyle_(measure, 10);
+    options.text = this.createTextStyle_({
+      text: this.getMeasure(feature)
+    });
   }
 
   return new ol.style.Style(options);
@@ -107315,17 +107316,10 @@ ngeo.FeatureHelper.prototype.getPointStyle_ = function(feature) {
   var showMeasure = this.getShowMeasureProperty(feature);
 
   if (showMeasure) {
-    var fontSize = 10;
-    var measure = this.getMeasure(feature);
-    options.text = this.createTextStyle_(
-        measure,
-        fontSize,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        -(size + fontSize / 2 + 4)
-    );
+    options.text = this.createTextStyle_({
+      text: this.getMeasure(feature),
+      offsetY: -(size + 10 / 2 + 4)
+    });
   }
 
   return new ol.style.Style(options);
@@ -107360,8 +107354,9 @@ ngeo.FeatureHelper.prototype.getPolygonStyle_ = function(feature) {
   var showMeasure = this.getShowMeasureProperty(feature);
 
   if (showMeasure) {
-    var measure = this.getMeasure(feature);
-    options.text = this.createTextStyle_(measure, 10);
+    options.text = this.createTextStyle_({
+      text: this.getMeasure(feature)
+    });
   }
 
   return new ol.style.Style(options);
@@ -107375,13 +107370,13 @@ ngeo.FeatureHelper.prototype.getPolygonStyle_ = function(feature) {
  */
 ngeo.FeatureHelper.prototype.getTextStyle_ = function(feature) {
 
-  var label = this.getNameProperty(feature);
-  var size = this.getSizeProperty(feature);
-  var angle = this.getAngleProperty(feature);
-  var color = this.getRGBAColorProperty(feature);
-
   return new ol.style.Style({
-    text: this.createTextStyle_(label, size, angle, color)
+    text: this.createTextStyle_({
+      text: this.getNameProperty(feature),
+      size: this.getSizeProperty(feature),
+      angle: this.getAngleProperty(feature),
+      color: this.getRGBAColorProperty(feature)
+    })
   });
 };
 
@@ -107464,11 +107459,10 @@ ngeo.FeatureHelper.prototype.getHaloStyle_ = function(feature) {
   var type = this.getType(feature);
   var style;
   var haloSize = 3;
-  var size;
 
   switch (type) {
     case ngeo.GeometryType.POINT:
-      size = this.getSizeProperty(feature);
+      var size = this.getSizeProperty(feature);
       style = new ol.style.Style({
         image: new ol.style.Circle({
           radius: size + haloSize,
@@ -107491,12 +107485,13 @@ ngeo.FeatureHelper.prototype.getHaloStyle_ = function(feature) {
       });
       break;
     case ngeo.GeometryType.TEXT:
-      var label = this.getNameProperty(feature);
-      size = this.getSizeProperty(feature);
-      var angle = this.getAngleProperty(feature);
-      var color = [255, 255, 255, 1];
       style = new ol.style.Style({
-        text: this.createTextStyle_(label, size, angle, color, haloSize * 2)
+        text: this.createTextStyle_({
+          text: this.getNameProperty(feature),
+          size: this.getSizeProperty(feature),
+          angle: this.getAngleProperty(feature),
+          width: haloSize * 3
+        })
       });
       break;
     default:
@@ -107731,36 +107726,32 @@ ngeo.FeatureHelper.prototype.export_ = function(features, format, fileName,
 
 
 /**
- * @param {string} text The text to display.
- * @param {number} size The size in `pt` of the text font.
- * @param {number=} opt_angle The angle in degrees of the text.
- * @param {ol.Color=} opt_color The color of the text.
- * @param {number=} opt_width The width of the outline color.
- * @param {number=} opt_offsetX The offset in pixels.
- * @param {number=} opt_offsetY The offset in pixels.
+ * @param {ngeox.style.TextOptions} options Options.
  * @return {ol.style.Text} Style.
  * @private
  */
-ngeo.FeatureHelper.prototype.createTextStyle_ = function(text, size,
-    opt_angle, opt_color, opt_width, opt_offsetX, opt_offsetY) {
+ngeo.FeatureHelper.prototype.createTextStyle_ = function(options) {
+  if (options.angle) {
+    var angle = options.angle !== undefined ? options.angle : 0;
+    var rotation = angle * Math.PI / 180;
+    options.rotation = rotation;
+    delete options.angle;
+  }
 
-  var angle = opt_angle !== undefined ? opt_angle : 0;
-  var rotation = angle * Math.PI / 180;
-  var font = ['normal', size + 'pt', 'Arial'].join(' ');
-  var color = opt_color !== undefined ? opt_color : [0, 0, 0, 1];
-  var width = opt_width !== undefined ? opt_width : 3;
-  var offsetX = opt_offsetX !== undefined ? opt_offsetX : 0;
-  var offsetY = opt_offsetY !== undefined ? opt_offsetY : 0;
+  options.font = ['normal', (options.size || 10) + 'pt', 'Arial'].join(' ');
 
-  return new ol.style.Text({
-    font: font,
-    text: text,
-    fill: new ol.style.Fill({color: color}),
-    stroke: new ol.style.Stroke({color: [255, 255, 255, 1], width: width}),
-    rotation: rotation,
-    offsetX: offsetX,
-    offsetY: offsetY
+  if (options.color) {
+    options.fill = new ol.style.Fill({color: options.color || [0, 0, 0, 1]});
+    delete options.color;
+  }
+
+  options.stroke = new ol.style.Stroke({
+    color: [255, 255, 255, 1],
+    width: options.width || 3
   });
+  delete options.width;
+
+  return new ol.style.Text(options);
 };
 
 
@@ -130159,7 +130150,7 @@ goog.require('ngeo');
     $templateCache.put('ngeo/attributes.html', '<form class=form> <div class=form-group ng-repeat="attribute in ::attrCtrl.attributes"> <div ng-if="attribute.type !== \'geometry\'"> <label>{{ attribute.name }}:</label> <div ng-switch=attribute.type> <select ng-switch-when=select ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <option ng-repeat="attribute in ::attribute.choices" value="{{ ::attribute }}"> {{ ::attribute }} </option> </select> <input ng-switch-default ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> </div> </div> </div> </form> ');
     $templateCache.put('ngeo/popup.html', '<h4 class="popover-title ngeo-popup-title"> <span ng-bind-html=title></span> <button type=button class=close ng-click="open = false"> &times;</button> </h4> <div class=popover-content ng-bind-html=content></div> ');
     $templateCache.put('ngeo/scaleselector.html', '<div class="btn-group btn-block" ng-class="::{\'dropup\': scaleselectorCtrl.options.dropup}"> <button type=button class="btn btn-default dropdown-toggle" data-toggle=dropdown aria-expanded=false> <span ng-bind-html=scaleselectorCtrl.currentScale></span>&nbsp;<i class=caret></i> </button> <ul class="dropdown-menu btn-block" role=menu> <li ng-repeat="zoomLevel in ::scaleselectorCtrl.zoomLevels"> <a href ng-click=scaleselectorCtrl.changeZoom(zoomLevel) ng-bind-html=scaleselectorCtrl.getScale(zoomLevel)> </a> </li> </ul> </div> ');
-    $templateCache.put('ngeo/datepicker.html', '<div class=gmf-datepicker> <form name=dateForm class=datepicker-form novalidate> <div ng-if="::datepickerCtrl.time.widget === \'datepicker\'"> <div class=start-date> <span ng-if="::datepickerCtrl.time.mode === \'range\'" translate>From:</span> <span ng-if="::datepickerCtrl.time.mode !== \'range\'" translate>Date:</span> <input name=sdate ui-date=datepickerCtrl.sdateOptions ng-model=datepickerCtrl.sdate required> </div> <div class=end-date ng-if="::datepickerCtrl.time.mode === \'range\'"> <span translate>To:</span> <input name=edate ui-date=datepickerCtrl.edateOptions ng-model=datepickerCtrl.edate required> </div> </div> </form> </div> ');
+    $templateCache.put('ngeo/datepicker.html', '<div class=ngeo-datepicker> <form name=dateForm class=datepicker-form novalidate> <div ng-if="::datepickerCtrl.time.widget === \'datepicker\'"> <div class=start-date> <span ng-if="::datepickerCtrl.time.mode === \'range\'" translate>From:</span> <span ng-if="::datepickerCtrl.time.mode !== \'range\'" translate>Date:</span> <input name=sdate ui-date=datepickerCtrl.sdateOptions ng-model=datepickerCtrl.sdate required> </div> <div class=end-date ng-if="::datepickerCtrl.time.mode === \'range\'"> <span translate>To:</span> <input name=edate ui-date=datepickerCtrl.edateOptions ng-model=datepickerCtrl.edate required> </div> </div> </form> </div> ');
     $templateCache.put('ngeo/layertree.html', '<span ng-if=::!layertreeCtrl.isRoot>{{::layertreeCtrl.node.name}}</span> <input type=checkbox ng-if="::layertreeCtrl.node && !layertreeCtrl.node.children" ng-model=layertreeCtrl.getSetActive ng-model-options="{getterSetter: true}"> <ul ng-if=::layertreeCtrl.node.children> <li ng-repeat="node in ::layertreeCtrl.node.children" ngeo-layertree=::node ngeo-layertree-notroot ngeo-layertree-map=layertreeCtrl.map ngeo-layertree-nodelayerexpr=layertreeCtrl.nodelayerExpr ngeo-layertree-listenersexpr=layertreeCtrl.listenersExpr> </li> </ul> ');
     $templateCache.put('ngeo/colorpicker.html', '<table class=palette> <tr ng-repeat="colors in ::ctrl.colors"> <td ng-repeat="color in ::colors" ng-click=ctrl.setColor(color) ng-class="{\'selected\': color == ctrl.color}"> <div ng-style="::{\'background-color\': color}"></div> </td> </tr> </table> ');
   };
