@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: editfeatureDirective <small>directive:gmfEditfeature</small></title>
+    <title>JSDoc: Namespace: ngeox.style</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: editfeatureDirective <small>directive:gmfEditfeature</small></h1>
+    <h1 class="page-title">Namespace: ngeox.style</h1>
 
     
 
@@ -28,8 +28,8 @@
 
 <header>
     
-        <h2 id="editfeatureDirective">
-            <span class="ancestors">gmf.</span>editfeatureDirective
+        <h2 id="TextOptions">
+            <span class="ancestors">ngeox.style.</span>TextOptions
         </h2>
         
     
@@ -39,45 +39,19 @@
     <div class="container-overview">
     
         
+            <div class="description"><p>The options for creating a text style.</p></div>
+        
+
+        
+
+
+    
+    <h5 class="subsection-title">Properties:</h5>
+    
 
     
 
-    <h4 class="name" id="editfeatureDirective"><span class="type-signature"></span>new editfeatureDirective<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Directive used to insert, modify and delete features from a single layer.
-It allows you to modify the geometry of the feature in addition to its
-attributes.</p>
-<p>In order to modify or delete a feature, you must click on the map at the
-location of the feature to select it first.</p>
-<p>In order to create a new feature, you use the &quot;Draw&quot; button and digitalize
-the feature on the map.</p>
-<p>Example:</p>
-<pre class="prettyprint source"><code>&lt;gmf-editfeature
-    gmf-editfeature-layer=&quot;::ctrl.layer&quot;>
-    gmf-editfeature-map=&quot;::ctrl.map&quot;
-    gmf-editfeature-vector=&quot;::ctrl.vectorLayer&quot;>
-&lt;/gmf-editfeature></code></pre>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>HTML attributes:</h5>
-    
-
-<table class="params">
+<table class="props">
     <thead>
     <tr>
         
@@ -90,7 +64,7 @@ the feature on the map.</p>
 
         
 
-        <th class="last">Description</th>
+        
     </tr>
     </thead>
 
@@ -99,13 +73,13 @@ the feature on the map.</p>
 
         <tr>
             
-                <td class="name"><code>gmf-editfeature-layer</code></td>
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="GmfThemesNode.html">GmfThemesNode</a></span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>
 
 
             
@@ -115,21 +89,23 @@ the feature on the map.</p>
 
             
 
-            <td class="description last">The GMF node of the
-    editable layer.</td>
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>gmf-editfeature-map</code></td>
+                <td class="name"><code>size</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.Map.html">ol.Map</a></span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
 
 
             
@@ -139,20 +115,23 @@ the feature on the map.</p>
 
             
 
-            <td class="description last">The map.</td>
+            </td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>gmf-editfeature-vector</code></td>
+                <td class="name"><code>angle</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Vector.html">ol.layer.Vector</a></span>
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
 
 
             
@@ -162,15 +141,116 @@ the feature on the map.</p>
 
             
 
-            <td class="description last">The vector layer in
-    which to draw the vector features.</td>
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>color</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.html#.Color">ol.Color</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>width</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offsetX</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>offsetY</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>
+|
+
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined">undefined</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            </td>
         </tr>
 
     
     </tbody>
 </table>
-
-
 
 
 
@@ -205,8 +285,8 @@ the feature on the map.</p>
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
     
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/editfeature.js">contribs/gmf/src/directives/editfeature.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/editfeature.js#L48">line 48</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/externs/ngeox.js">externs/ngeox.js</a>,
+        <a href="https://github.com/camptocamp/ngeo/blob/master/externs/ngeox.js#L1285">line 1285</a>
     </li></ul></dd>
     
 
@@ -218,20 +298,7 @@ the feature on the map.</p>
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
     
     </div>
 
