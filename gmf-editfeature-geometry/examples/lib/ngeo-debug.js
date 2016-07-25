@@ -94599,6 +94599,11 @@ ngeo.FeatureProperties = {
    */
   OPACITY: 'o',
   /**
+   * @type {number}
+   * @export
+   */
+  AZIMUT: 'z',
+  /**
    * @type {string}
    * @export
    */
@@ -107085,15 +107090,447 @@ ngeo.decorateInteraction = function(interaction) {
 
 ngeo.module.value('ngeoDecorateInteraction', ngeo.decorateInteraction);
 
+goog.provide('ngeo.interaction.DrawAzimut');
+goog.provide('ngeo.interaction.MeasureAzimut');
+
+goog.require('goog.asserts');
+goog.require('ngeo.interaction.Measure');
+goog.require('ol.Feature');
+goog.require('ol.MapBrowserEvent');
+goog.require('ol.MapBrowserEvent.EventType');
+goog.require('ol.events');
+goog.require('ol.geom.Circle');
+goog.require('ol.geom.GeometryCollection');
+goog.require('ol.geom.LineString');
+goog.require('ol.geom.Point');
+goog.require('ol.interaction.Draw');
+goog.require('ol.interaction.DrawEvent');
+goog.require('ol.interaction.InteractionProperty');
+goog.require('ol.interaction.Pointer');
+goog.require('ol.layer.Vector');
+goog.require('ol.source.Vector');
+
+
+/**
+ * @classdesc
+ * Interaction dedicated to measure length.
+ *
+ * See our live example: {@link ../examples/measure.html}
+ *
+ * @constructor
+ * @fires ol.interaction.DrawEvent
+ * @extends {ngeo.interaction.Measure}
+ * @param {ngeox.unitPrefix} format The format function
+ * @param {ngeox.interaction.MeasureOptions=} opt_options Options
+ * @export
+ */
+ngeo.interaction.MeasureAzimut = function(format, opt_options) {
+
+  var options = opt_options !== undefined ? opt_options : {};
+
+  goog.base(this, options);
+
+
+  /**
+   * Message to show after the first point is clicked.
+   * @type {Element}
+   */
+  this.continueMsg = options.continueMsg !== undefined ? options.continueMsg :
+      goog.dom.createDom(goog.dom.TagName.SPAN, {}, 'Click to finish.');
+
+  /**
+   * The format function
+   * @type {ngeox.unitPrefix}
+   */
+  this.format = format;
+
+};
+goog.inherits(ngeo.interaction.MeasureAzimut, ngeo.interaction.Measure);
+
+
+/**
+ * @inheritDoc
+ */
+ngeo.interaction.MeasureAzimut.prototype.createDrawInteraction = function(style,
+    source) {
+
+  return new ngeo.interaction.DrawAzimut({
+    source: source,
+    style: style
+  });
+
+
+};
+
+
+/**
+ * @inheritDoc
+ */
+ngeo.interaction.MeasureAzimut.prototype.handleMeasure = function(callback) {
+  var geom = /** @type {ol.geom.GeometryCollection} */
+      (this.sketchFeature.getGeometry());
+  var line = /** @type {ol.geom.LineString} */ (geom.getGeometries()[0]);
+  var output = ngeo.interaction.MeasureAzimut.getFormattedAzimutRadius(line, this.getMap().getView().getProjection(), this.decimals, this.format);
+  callback(output, line.getLastCoordinate());
+};
+
+
+/**
+ * Format measure output of azimut and radius.
+ * @param {ol.geom.LineString} line LineString.
+ * @param {ol.proj.Projection} projection Projection of the polygon coords.
+ * @param {?number} decimals Decimals.
+ * @param {ngeox.unitPrefix} format The format function.
+ * @return {string} Formated measure.
+ */
+ngeo.interaction.MeasureAzimut.getFormattedAzimutRadius = function(
+    line, projection, decimals, format) {
+
+  var output = ngeo.interaction.MeasureAzimut.getFormattedAzimut(line);
+
+  output += ', ' + ngeo.interaction.Measure.getFormattedLength(
+      line, projection, decimals, format);
+
+  return output;
+};
+
+
+/**
+ * Format measure output of azimut.
+ * @param {ol.geom.LineString} line LineString.
+ * @return {string} Formated measure.
+ */
+ngeo.interaction.MeasureAzimut.getFormattedAzimut = function(line) {
+  var azimut = ngeo.interaction.MeasureAzimut.getAzimut(line);
+  return azimut + '°';
+};
+
+
+/**
+ * Compute azimut from a 2 points line.
+ * @param {ol.geom.LineString} line LineString.
+ * @return {number} Azimut value.
+ */
+ngeo.interaction.MeasureAzimut.getAzimut = function(line) {
+  var coords = line.getCoordinates();
+  var dx = coords[1][0] - coords[0][0];
+  var dy = coords[1][1] - coords[0][1];
+  var rad = Math.acos(dy / Math.sqrt(dx * dx + dy * dy));
+  var factor = dx > 0 ? 1 : -1;
+  return Math.round(factor * rad * 180 / Math.PI) % 360;
+};
+
+
+/**
+ * @classdesc
+ * Interaction dedicated to measure azimut.
+ *
+ * @constructor
+ * @extends {ol.interaction.Pointer}
+ * @param {olx.interaction.PointerOptions} options Options.
+ * @export
+ */
+ngeo.interaction.DrawAzimut = function(options) {
+
+  goog.base(this, {
+    handleDownEvent: ngeo.interaction.DrawAzimut.handleDownEvent_,
+    handleEvent: ngeo.interaction.DrawAzimut.handleEvent_,
+    handleUpEvent: ngeo.interaction.DrawAzimut.handleUpEvent_
+  });
+
+  /**
+   * @type {ol.Pixel}
+   * @private
+   */
+  this.downPx_ = null;
+
+  /**
+   * Target source for drawn features.
+   * @type {ol.source.Vector}
+   * @private
+   */
+  this.source_ = options.source !== undefined ? options.source : null;
+
+  /**
+   * Tglls whether the drawing has started or not.
+   * @type {boolean}
+   * @private
+   */
+  this.started_ = false;
+
+  /**
+   * Sketch feature.
+   * @type {ol.Feature}
+   * @private
+   */
+  this.sketchFeature_ = null;
+
+  /**
+   * Sketch point.
+   * @type {ol.Feature}
+   * @private
+   */
+  this.sketchPoint_ = null;
+
+
+  /**
+   * Squared tolerance for handling up events.  If the squared distance
+   * between a down and up event is greater than this tolerance, up events
+   * will not be handled.
+   * @type {number}
+   * @private
+   */
+  this.squaredClickTolerance_ = 4;
+
+
+  /**
+   * Vector layer where our sketch features are drawn.
+   * @type {ol.layer.Vector}
+   * @private
+   */
+  this.sketchLayer_ = new ol.layer.Vector({
+    source: new ol.source.Vector({
+      useSpatialIndex: false,
+      wrapX: false
+    }),
+    style: options.style !== undefined ?
+        options.style : ol.interaction.Draw.getDefaultStyleFunction()
+  });
+
+
+  ol.events.listen(this,
+      ol.Object.getChangeEventType(ol.interaction.InteractionProperty.ACTIVE),
+      this.updateState_, this);
+};
+goog.inherits(ngeo.interaction.DrawAzimut, ol.interaction.Pointer);
+
+
+/**
+ * @param {ol.MapBrowserPointerEvent} event Event.
+ * @return {boolean} Start drag sequence?
+ * @this {ngeo.interaction.DrawAzimut}
+ * @private
+ */
+ngeo.interaction.DrawAzimut.handleDownEvent_ = function(event) {
+  this.downPx_ = event.pixel;
+  return true;
+};
+
+
+/**
+ * @param {ol.MapBrowserPointerEvent} event Event.
+ * @return {boolean} Stop drag sequence?
+ * @this {ngeo.interaction.DrawAzimut}
+ * @private
+ */
+ngeo.interaction.DrawAzimut.handleUpEvent_ = function(event) {
+  var downPx = this.downPx_;
+  var clickPx = event.pixel;
+  var dx = downPx[0] - clickPx[0];
+  var dy = downPx[1] - clickPx[1];
+  var squaredDistance = dx * dx + dy * dy;
+  var pass = true;
+  if (squaredDistance <= this.squaredClickTolerance_) {
+    this.handlePointerMove_(event);
+    if (!this.started_) {
+      this.startDrawing_(event);
+    } else {
+      this.finishDrawing_();
+    }
+    pass = false;
+  }
+  return pass;
+};
+
+
+/**
+ * @param {ol.MapBrowserEvent} mapBrowserEvent Map browser event.
+ * @return {boolean} `false` to stop event propagation.
+ * @this {ngeo.interaction.DrawAzimut}
+ * @private
+ */
+ngeo.interaction.DrawAzimut.handleEvent_ = function(mapBrowserEvent) {
+  var pass = true;
+  if (mapBrowserEvent.type === ol.MapBrowserEvent.EventType.POINTERMOVE) {
+    pass = this.handlePointerMove_(mapBrowserEvent);
+  } else if (mapBrowserEvent.type === ol.MapBrowserEvent.EventType.DBLCLICK) {
+    pass = false;
+  }
+  return ol.interaction.Pointer.handleEvent.call(this, mapBrowserEvent) && pass;
+};
+
+
+/**
+ * Handle move events.
+ * @param {ol.MapBrowserEvent} event A move event.
+ * @return {boolean} Pass the event to other interactions.
+ * @private
+ */
+ngeo.interaction.DrawAzimut.prototype.handlePointerMove_ = function(event) {
+  if (this.started_) {
+    this.modifyDrawing_(event);
+  } else {
+    this.createOrUpdateSketchPoint_(event);
+  }
+  return true;
+};
+
+
+/**
+ * @param {ol.MapBrowserEvent} event Event.
+ * @private
+ */
+ngeo.interaction.DrawAzimut.prototype.createOrUpdateSketchPoint_ = function(event) {
+  var coordinates = event.coordinate.slice();
+  if (this.sketchPoint_ === null) {
+    this.sketchPoint_ = new ol.Feature(new ol.geom.Point(coordinates));
+    this.updateSketchFeatures_();
+  } else {
+    var sketchPointGeom = this.sketchPoint_.getGeometry();
+    goog.asserts.assertInstanceof(sketchPointGeom, ol.geom.Point);
+    sketchPointGeom.setCoordinates(coordinates);
+  }
+};
+
+
+/**
+ * Redraw the skecth features.
+ * @private
+ */
+ngeo.interaction.DrawAzimut.prototype.updateSketchFeatures_ = function() {
+  var sketchFeatures = [];
+  if (this.sketchFeature_ !== null) {
+    sketchFeatures.push(this.sketchFeature_);
+  }
+  if (this.sketchPoint_ !== null) {
+    sketchFeatures.push(this.sketchPoint_);
+  }
+  var source = this.sketchLayer_.getSource();
+  source.clear(true);
+  source.addFeatures(sketchFeatures);
+};
+
+
+/**
+ * Start the drawing.
+ * @param {ol.MapBrowserEvent} event Event.
+ * @private
+ */
+ngeo.interaction.DrawAzimut.prototype.startDrawing_ = function(event) {
+  var start = event.coordinate;
+  this.started_ = true;
+  var line = new ol.geom.LineString([start.slice(), start.slice()]);
+  var circle = new ol.geom.Circle(start, 0);
+  var geometry = new ol.geom.GeometryCollection([line, circle]);
+  goog.asserts.assert(geometry !== undefined);
+  this.sketchFeature_ = new ol.Feature();
+  this.sketchFeature_.setGeometry(geometry);
+  this.updateSketchFeatures_();
+  this.dispatchEvent(new ol.interaction.DrawEvent(
+      ol.interaction.DrawEventType.DRAWSTART, this.sketchFeature_));
+};
+
+
+/**
+ * Modify the drawing.
+ * @param {ol.MapBrowserEvent} event Event.
+ * @private
+ */
+ngeo.interaction.DrawAzimut.prototype.modifyDrawing_ = function(event) {
+  var coordinate = event.coordinate;
+  var geometry = /** @type {ol.geom.GeometryCollection} */
+      (this.sketchFeature_.getGeometry());
+  var geometries = geometry.getGeometriesArray();
+  var line = geometries[0];
+  var coordinates, last;
+  goog.asserts.assertInstanceof(line, ol.geom.LineString);
+  coordinates = line.getCoordinates();
+  var sketchPointGeom = this.sketchPoint_.getGeometry();
+  goog.asserts.assertInstanceof(sketchPointGeom, ol.geom.Point);
+  sketchPointGeom.setCoordinates(coordinate);
+  last = coordinates[coordinates.length - 1];
+  last[0] = coordinate[0];
+  last[1] = coordinate[1];
+  goog.asserts.assertInstanceof(line, ol.geom.LineString);
+  line.setCoordinates(coordinates);
+  var circle = /** @type {ol.geom.Circle} */ (geometries[1]);
+  circle.setRadius(line.getLength());
+  this.updateSketchFeatures_();
+};
+
+
+/**
+ * Stop drawing without adding the sketch feature to the target layer.
+ * @return {ol.Feature} The sketch feature (or null if none).
+ * @private
+ */
+ngeo.interaction.DrawAzimut.prototype.abortDrawing_ = function() {
+  this.started_ = false;
+  var sketchFeature = this.sketchFeature_;
+  if (sketchFeature !== null) {
+    this.sketchFeature_ = null;
+    this.sketchPoint_ = null;
+    this.sketchLayer_.getSource().clear(true);
+  }
+  return sketchFeature;
+};
+
+
+/**
+ * @inheritDoc
+ */
+ngeo.interaction.DrawAzimut.prototype.shouldStopEvent = goog.functions.FALSE;
+
+
+/**
+ * @private
+ */
+ngeo.interaction.DrawAzimut.prototype.updateState_ = function() {
+  var map = this.getMap();
+  var active = this.getActive();
+  if (map === null || !active) {
+    this.abortDrawing_();
+  }
+  this.sketchLayer_.setMap(active ? map : null);
+};
+
+
+/**
+ * Stop drawing and add the sketch feature to the target layer.
+ * @private
+ */
+ngeo.interaction.DrawAzimut.prototype.finishDrawing_ = function() {
+  var sketchFeature = this.abortDrawing_();
+  goog.asserts.assert(sketchFeature !== null);
+
+  if (this.source_ !== null) {
+    this.source_.addFeature(sketchFeature);
+  }
+
+  this.dispatchEvent(new ol.interaction.DrawEvent(
+      ol.interaction.DrawEventType.DRAWEND, sketchFeature));
+};
+
+
+/**
+ * @inheritDoc
+ */
+ngeo.interaction.DrawAzimut.prototype.setMap = function(map) {
+  goog.base(this, 'setMap', map);
+  this.updateState_();
+};
+
 goog.provide('ngeo.FeatureHelper');
 
 goog.require('ngeo');
 /** @suppress {extraRequire} */
 goog.require('ngeo.filters');
 goog.require('ngeo.interaction.Measure');
+goog.require('ngeo.interaction.MeasureAzimut');
 goog.require('ol.Feature');
 goog.require('ol.geom.LineString');
 goog.require('ol.geom.MultiPoint');
+goog.require('ol.geom.Point');
 goog.require('ol.geom.Polygon');
 goog.require('ol.format.GPX');
 goog.require('ol.format.KML');
@@ -107197,7 +107634,7 @@ ngeo.FeatureHelper.prototype.setProjection = function(projection) {
  * @export
  */
 ngeo.FeatureHelper.prototype.setStyle = function(feature, opt_select) {
-  var styles = [this.getStyle(feature)];
+  var styles = this.getStyle(feature);
   if (opt_select) {
     if (this.supportsVertex_(feature)) {
       styles.push(this.getVertexStyle());
@@ -107212,7 +107649,7 @@ ngeo.FeatureHelper.prototype.setStyle = function(feature, opt_select) {
  * Create and return a style object from a given feature using its inner
  * properties and depending on its geometry type.
  * @param {ol.Feature} feature Feature.
- * @return {ol.style.Style} The style object.
+ * @return {Array.<ol.style.Style>} The style object.
  * @export
  */
 ngeo.FeatureHelper.prototype.getStyle = function(feature) {
@@ -107240,7 +107677,14 @@ ngeo.FeatureHelper.prototype.getStyle = function(feature) {
 
   goog.asserts.assert(style, 'Style should be thruthy');
 
-  return style;
+  var styles;
+  if (style.constructor === Array) {
+    styles = /** @type {Array.<ol.style.Style>}*/ (style);
+  } else {
+    styles = [style];
+  }
+
+  return styles;
 };
 
 
@@ -107306,7 +107750,7 @@ ngeo.FeatureHelper.prototype.getPointStyle_ = function(feature) {
 
 /**
  * @param {ol.Feature} feature Feature with polygon geometry.
- * @return {ol.style.Style} Style.
+ * @return {Array.<ol.style.Style>} Style.
  * @private
  */
 ngeo.FeatureHelper.prototype.getPolygonStyle_ = function(feature) {
@@ -107314,12 +107758,17 @@ ngeo.FeatureHelper.prototype.getPolygonStyle_ = function(feature) {
   var strokeWidth = this.getStrokeProperty(feature);
   var opacity = this.getOpacityProperty(feature);
   var color = this.getRGBAColorProperty(feature);
+  var showMeasure = this.getShowMeasureProperty(feature);
+
 
   // fill color with opacity
   var fillColor = color.slice();
   fillColor[3] = opacity;
 
-  var options = {
+  var azimut = /** @type {number} */ (
+    feature.get(ngeo.FeatureProperties.AZIMUT));
+
+  var styles = [new ol.style.Style({
     fill: new ol.style.Fill({
       color: fillColor
     }),
@@ -107327,17 +107776,50 @@ ngeo.FeatureHelper.prototype.getPolygonStyle_ = function(feature) {
       color: color,
       width: strokeWidth
     })
-  };
-
-  var showMeasure = this.getShowMeasureProperty(feature);
+  })];
 
   if (showMeasure) {
-    options.text = this.createTextStyle_({
-      text: this.getMeasure(feature)
-    });
+    if (azimut !== undefined) {
+      // Radius style:
+      var line = this.getRadiusLine(feature, azimut);
+      var length = ngeo.interaction.Measure.getFormattedLength(
+        line, this.projection_, this.decimals_, this.format_);
+
+      styles.push(new ol.style.Style({
+        geometry: line,
+        fill: new ol.style.Fill({
+          color: fillColor
+        }),
+        stroke: new ol.style.Stroke({
+          color: color,
+          width: strokeWidth
+        }),
+        text: this.createTextStyle_({
+          text: length,
+          angle: ((azimut % 180) + 180) % 180 - 90
+        })
+      }));
+
+      // Azimut style
+      styles.push(new ol.style.Style({
+        geometry: new ol.geom.Point(line.getLastCoordinate()),
+        text: this.createTextStyle_({
+          text: azimut + '°',
+          size: 10,
+          offsetX: Math.cos((azimut - 90) * Math.PI / 180) * 15,
+          offsetY: Math.sin((azimut - 90) * Math.PI / 180) * 15
+        })
+      }));
+    } else {
+      styles.push(new ol.style.Style({
+        text: this.createTextStyle_({
+          text: this.getMeasure(feature)
+        })
+      }));
+    }
   }
 
-  return new ol.style.Style(options);
+  return styles;
 };
 
 
@@ -107749,8 +108231,17 @@ ngeo.FeatureHelper.prototype.getMeasure = function(feature) {
   var measure = '';
 
   if (geometry instanceof ol.geom.Polygon) {
-    measure = ngeo.interaction.Measure.getFormattedArea(
-      geometry, this.projection_, this.decimals_, this.format_);
+    if (this.getType(feature) === ngeo.GeometryType.CIRCLE) {
+      var azimut = /** @type {number} */ (
+        feature.get(ngeo.FeatureProperties.AZIMUT));
+      var line = this.getRadiusLine(feature, azimut);
+
+      measure = ngeo.interaction.MeasureAzimut.getFormattedAzimutRadius(
+        line, this.projection_, this.decimals_, this.format_);
+    } else {
+      measure = ngeo.interaction.Measure.getFormattedArea(
+        geometry, this.projection_, this.decimals_, this.format_);
+    }
   } else if (geometry instanceof ol.geom.LineString) {
     measure = ngeo.interaction.Measure.getFormattedLength(
       geometry, this.projection_, this.decimals_, this.format_);
@@ -107847,6 +108338,28 @@ ngeo.FeatureHelper.prototype.panMapToFeature = function(feature, map,
     }
     map.getView().setCenter(featureCenter);
   }
+};
+
+
+/**
+ * This method generates a line string geometry that represents the radius for
+ * a given azimut. It expects the input geometry to be a circle.
+ * @param {ol.Feature} feature Feature.
+ * @param {number} azimut Azimut in degrees.
+ * @return {ol.geom.LineString} The line geometry.
+ */
+ngeo.FeatureHelper.prototype.getRadiusLine = function(feature, azimut) {
+  var geometry = feature.getGeometry();
+  // Determine the radius for the circle
+  var extent = geometry.getExtent();
+  var radius = (extent[3] - extent[1]) / 2;
+
+  var center = ol.extent.getCenter(geometry.getExtent());
+
+  var x = Math.cos((azimut - 90) * Math.PI / 180) * radius;
+  var y = -Math.sin((azimut - 90) * Math.PI / 180) * radius;
+  var endPoint = [x + center[0], y + center[1]];
+  return new ol.geom.LineString([center, endPoint]);
 };
 
 
@@ -108109,411 +108622,6 @@ ngeo.measureareaDirective = function($compile, gettext, $filter) {
 
 ngeo.module.directive('ngeoMeasurearea', ngeo.measureareaDirective);
 
-goog.provide('ngeo.interaction.DrawAzimut');
-goog.provide('ngeo.interaction.MeasureAzimut');
-
-goog.require('goog.asserts');
-goog.require('ngeo.interaction.Measure');
-goog.require('ol.Feature');
-goog.require('ol.MapBrowserEvent');
-goog.require('ol.MapBrowserEvent.EventType');
-goog.require('ol.events');
-goog.require('ol.geom.Circle');
-goog.require('ol.geom.GeometryCollection');
-goog.require('ol.geom.LineString');
-goog.require('ol.geom.Point');
-goog.require('ol.interaction.Draw');
-goog.require('ol.interaction.DrawEvent');
-goog.require('ol.interaction.InteractionProperty');
-goog.require('ol.interaction.Pointer');
-goog.require('ol.layer.Vector');
-goog.require('ol.source.Vector');
-
-
-/**
- * @classdesc
- * Interaction dedicated to measure length.
- *
- * See our live example: {@link ../examples/measure.html}
- *
- * @constructor
- * @fires ol.interaction.DrawEvent
- * @extends {ngeo.interaction.Measure}
- * @param {ngeox.unitPrefix} format The format function
- * @param {ngeox.interaction.MeasureOptions=} opt_options Options
- * @export
- */
-ngeo.interaction.MeasureAzimut = function(format, opt_options) {
-
-  var options = opt_options !== undefined ? opt_options : {};
-
-  goog.base(this, options);
-
-
-  /**
-   * Message to show after the first point is clicked.
-   * @type {Element}
-   */
-  this.continueMsg = options.continueMsg !== undefined ? options.continueMsg :
-      goog.dom.createDom(goog.dom.TagName.SPAN, {}, 'Click to finish.');
-
-  /**
-   * The format function
-   * @type {ngeox.unitPrefix}
-   */
-  this.format = format;
-
-};
-goog.inherits(ngeo.interaction.MeasureAzimut, ngeo.interaction.Measure);
-
-
-/**
- * @inheritDoc
- */
-ngeo.interaction.MeasureAzimut.prototype.createDrawInteraction = function(style,
-    source) {
-
-  return new ngeo.interaction.DrawAzimut({
-    source: source,
-    style: style
-  });
-
-
-};
-
-
-/**
- * @inheritDoc
- */
-ngeo.interaction.MeasureAzimut.prototype.handleMeasure = function(callback) {
-  var geom = /** @type {ol.geom.GeometryCollection} */
-      (this.sketchFeature.getGeometry());
-  var line = /** @type {ol.geom.LineString} */ (geom.getGeometries()[0]);
-  var output = this.formatMeasure_(line);
-  callback(output, line.getLastCoordinate());
-};
-
-
-/**
- * Format measure output.
- * @param {ol.geom.LineString} line LineString.
- * @return {string} Formated measure.
- * @private
- */
-ngeo.interaction.MeasureAzimut.prototype.formatMeasure_ = function(line) {
-  var coords = line.getCoordinates();
-  var dx = coords[1][0] - coords[0][0];
-  var dy = coords[1][1] - coords[0][1];
-  var rad = Math.acos(dy / Math.sqrt(dx * dx + dy * dy));
-  var factor = dx > 0 ? 1 : -1;
-  var azimut = Math.round(factor * rad * 180 / Math.PI) % 360;
-  var output = azimut + '°';
-  var proj = this.getMap().getView().getProjection();
-  var dec = this.decimals;
-  output += '<br/>' + ngeo.interaction.Measure.getFormattedLength(
-      line, proj, dec, this.format);
-  return output;
-};
-
-
-/**
- * @classdesc
- * Interaction dedicated to measure azimut.
- *
- * @constructor
- * @extends {ol.interaction.Pointer}
- * @param {olx.interaction.PointerOptions} options Options.
- * @export
- */
-ngeo.interaction.DrawAzimut = function(options) {
-
-  goog.base(this, {
-    handleDownEvent: ngeo.interaction.DrawAzimut.handleDownEvent_,
-    handleEvent: ngeo.interaction.DrawAzimut.handleEvent_,
-    handleUpEvent: ngeo.interaction.DrawAzimut.handleUpEvent_
-  });
-
-  /**
-   * @type {ol.Pixel}
-   * @private
-   */
-  this.downPx_ = null;
-
-  /**
-   * Target source for drawn features.
-   * @type {ol.source.Vector}
-   * @private
-   */
-  this.source_ = options.source !== undefined ? options.source : null;
-
-  /**
-   * Tglls whether the drawing has started or not.
-   * @type {boolean}
-   * @private
-   */
-  this.started_ = false;
-
-  /**
-   * Sketch feature.
-   * @type {ol.Feature}
-   * @private
-   */
-  this.sketchFeature_ = null;
-
-  /**
-   * Sketch point.
-   * @type {ol.Feature}
-   * @private
-   */
-  this.sketchPoint_ = null;
-
-
-  /**
-   * Squared tolerance for handling up events.  If the squared distance
-   * between a down and up event is greater than this tolerance, up events
-   * will not be handled.
-   * @type {number}
-   * @private
-   */
-  this.squaredClickTolerance_ = 4;
-
-
-  /**
-   * Vector layer where our sketch features are drawn.
-   * @type {ol.layer.Vector}
-   * @private
-   */
-  this.sketchLayer_ = new ol.layer.Vector({
-    source: new ol.source.Vector({
-      useSpatialIndex: false,
-      wrapX: false
-    }),
-    style: options.style !== undefined ?
-        options.style : ol.interaction.Draw.getDefaultStyleFunction()
-  });
-
-
-  ol.events.listen(this,
-      ol.Object.getChangeEventType(ol.interaction.InteractionProperty.ACTIVE),
-      this.updateState_, this);
-};
-goog.inherits(ngeo.interaction.DrawAzimut, ol.interaction.Pointer);
-
-
-/**
- * @param {ol.MapBrowserPointerEvent} event Event.
- * @return {boolean} Start drag sequence?
- * @this {ngeo.interaction.DrawAzimut}
- * @private
- */
-ngeo.interaction.DrawAzimut.handleDownEvent_ = function(event) {
-  this.downPx_ = event.pixel;
-  return true;
-};
-
-
-/**
- * @param {ol.MapBrowserPointerEvent} event Event.
- * @return {boolean} Stop drag sequence?
- * @this {ngeo.interaction.DrawAzimut}
- * @private
- */
-ngeo.interaction.DrawAzimut.handleUpEvent_ = function(event) {
-  var downPx = this.downPx_;
-  var clickPx = event.pixel;
-  var dx = downPx[0] - clickPx[0];
-  var dy = downPx[1] - clickPx[1];
-  var squaredDistance = dx * dx + dy * dy;
-  var pass = true;
-  if (squaredDistance <= this.squaredClickTolerance_) {
-    this.handlePointerMove_(event);
-    if (!this.started_) {
-      this.startDrawing_(event);
-    } else {
-      this.finishDrawing_();
-    }
-    pass = false;
-  }
-  return pass;
-};
-
-
-/**
- * @param {ol.MapBrowserEvent} mapBrowserEvent Map browser event.
- * @return {boolean} `false` to stop event propagation.
- * @this {ngeo.interaction.DrawAzimut}
- * @private
- */
-ngeo.interaction.DrawAzimut.handleEvent_ = function(mapBrowserEvent) {
-  var pass = true;
-  if (mapBrowserEvent.type === ol.MapBrowserEvent.EventType.POINTERMOVE) {
-    pass = this.handlePointerMove_(mapBrowserEvent);
-  } else if (mapBrowserEvent.type === ol.MapBrowserEvent.EventType.DBLCLICK) {
-    pass = false;
-  }
-  return ol.interaction.Pointer.handleEvent.call(this, mapBrowserEvent) && pass;
-};
-
-
-/**
- * Handle move events.
- * @param {ol.MapBrowserEvent} event A move event.
- * @return {boolean} Pass the event to other interactions.
- * @private
- */
-ngeo.interaction.DrawAzimut.prototype.handlePointerMove_ = function(event) {
-  if (this.started_) {
-    this.modifyDrawing_(event);
-  } else {
-    this.createOrUpdateSketchPoint_(event);
-  }
-  return true;
-};
-
-
-/**
- * @param {ol.MapBrowserEvent} event Event.
- * @private
- */
-ngeo.interaction.DrawAzimut.prototype.createOrUpdateSketchPoint_ = function(event) {
-  var coordinates = event.coordinate.slice();
-  if (this.sketchPoint_ === null) {
-    this.sketchPoint_ = new ol.Feature(new ol.geom.Point(coordinates));
-    this.updateSketchFeatures_();
-  } else {
-    var sketchPointGeom = this.sketchPoint_.getGeometry();
-    goog.asserts.assertInstanceof(sketchPointGeom, ol.geom.Point);
-    sketchPointGeom.setCoordinates(coordinates);
-  }
-};
-
-
-/**
- * Redraw the skecth features.
- * @private
- */
-ngeo.interaction.DrawAzimut.prototype.updateSketchFeatures_ = function() {
-  var sketchFeatures = [];
-  if (this.sketchFeature_ !== null) {
-    sketchFeatures.push(this.sketchFeature_);
-  }
-  if (this.sketchPoint_ !== null) {
-    sketchFeatures.push(this.sketchPoint_);
-  }
-  var source = this.sketchLayer_.getSource();
-  source.clear(true);
-  source.addFeatures(sketchFeatures);
-};
-
-
-/**
- * Start the drawing.
- * @param {ol.MapBrowserEvent} event Event.
- * @private
- */
-ngeo.interaction.DrawAzimut.prototype.startDrawing_ = function(event) {
-  var start = event.coordinate;
-  this.started_ = true;
-  var line = new ol.geom.LineString([start.slice(), start.slice()]);
-  var circle = new ol.geom.Circle(start, 0);
-  var geometry = new ol.geom.GeometryCollection([line, circle]);
-  goog.asserts.assert(geometry !== undefined);
-  this.sketchFeature_ = new ol.Feature();
-  this.sketchFeature_.setGeometry(geometry);
-  this.updateSketchFeatures_();
-  this.dispatchEvent(new ol.interaction.DrawEvent(
-      ol.interaction.DrawEventType.DRAWSTART, this.sketchFeature_));
-};
-
-
-/**
- * Modify the drawing.
- * @param {ol.MapBrowserEvent} event Event.
- * @private
- */
-ngeo.interaction.DrawAzimut.prototype.modifyDrawing_ = function(event) {
-  var coordinate = event.coordinate;
-  var geometry = /** @type {ol.geom.GeometryCollection} */
-      (this.sketchFeature_.getGeometry());
-  var geometries = geometry.getGeometriesArray();
-  var line = geometries[0];
-  var coordinates, last;
-  goog.asserts.assertInstanceof(line, ol.geom.LineString);
-  coordinates = line.getCoordinates();
-  var sketchPointGeom = this.sketchPoint_.getGeometry();
-  goog.asserts.assertInstanceof(sketchPointGeom, ol.geom.Point);
-  sketchPointGeom.setCoordinates(coordinate);
-  last = coordinates[coordinates.length - 1];
-  last[0] = coordinate[0];
-  last[1] = coordinate[1];
-  goog.asserts.assertInstanceof(line, ol.geom.LineString);
-  line.setCoordinates(coordinates);
-  var circle = /** @type {ol.geom.Circle} */ (geometries[1]);
-  circle.setRadius(line.getLength());
-  this.updateSketchFeatures_();
-};
-
-
-/**
- * Stop drawing without adding the sketch feature to the target layer.
- * @return {ol.Feature} The sketch feature (or null if none).
- * @private
- */
-ngeo.interaction.DrawAzimut.prototype.abortDrawing_ = function() {
-  this.started_ = false;
-  var sketchFeature = this.sketchFeature_;
-  if (sketchFeature !== null) {
-    this.sketchFeature_ = null;
-    this.sketchPoint_ = null;
-    this.sketchLayer_.getSource().clear(true);
-  }
-  return sketchFeature;
-};
-
-
-/**
- * @inheritDoc
- */
-ngeo.interaction.DrawAzimut.prototype.shouldStopEvent = goog.functions.FALSE;
-
-
-/**
- * @private
- */
-ngeo.interaction.DrawAzimut.prototype.updateState_ = function() {
-  var map = this.getMap();
-  var active = this.getActive();
-  if (map === null || !active) {
-    this.abortDrawing_();
-  }
-  this.sketchLayer_.setMap(active ? map : null);
-};
-
-
-/**
- * Stop drawing and add the sketch feature to the target layer.
- * @private
- */
-ngeo.interaction.DrawAzimut.prototype.finishDrawing_ = function() {
-  var sketchFeature = this.abortDrawing_();
-  goog.asserts.assert(sketchFeature !== null);
-
-  if (this.source_ !== null) {
-    this.source_.addFeature(sketchFeature);
-  }
-  this.dispatchEvent(new ol.interaction.DrawEvent(
-      ol.interaction.DrawEventType.DRAWEND, sketchFeature));
-};
-
-
-/**
- * @inheritDoc
- */
-ngeo.interaction.DrawAzimut.prototype.setMap = function(map) {
-  goog.base(this, 'setMap', map);
-  this.updateState_();
-};
-
 goog.provide('ngeo.measureazimutDirective');
 
 goog.require('ngeo');
@@ -108575,6 +108683,11 @@ ngeo.measureazimutDirective = function($compile, gettext, $filter) {
                 geometry.getGeometries()[1]);
             var polygon = ol.geom.Polygon.fromCircle(circle, 64);
             event.feature = new ol.Feature(polygon);
+            var azimut = ngeo.interaction.MeasureAzimut.getAzimut(
+              /** @type {ol.geom.LineString} */ (geometry.getGeometries()[0])
+            );
+            event.feature.set('azimut', azimut);
+
             drawFeatureCtrl.handleDrawEnd(ngeo.GeometryType.CIRCLE, event);
           },
           drawFeatureCtrl
@@ -108926,6 +109039,9 @@ ngeo.DrawfeatureController.prototype.handleDrawEnd = function(type, event) {
   switch (type) {
     case ngeo.GeometryType.CIRCLE:
       feature.set(prop.IS_CIRCLE, true);
+      if (event.feature.get('azimut') !== undefined) {
+        feature.set(prop.AZIMUT, event.feature.get('azimut'));
+      }
       break;
     case ngeo.GeometryType.TEXT:
       feature.set(prop.IS_TEXT, true);
