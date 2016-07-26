@@ -94677,7 +94677,7 @@ goog.require('ngeo');
 ngeo.EventHelper = function() {
 
   /**
-   * @type {Object.<number, ngeo.EventHelper.ListenerKeys>}
+   * @type {Object.<number|string, ngeo.EventHelper.ListenerKeys>}
    * @private
    */
   this.listenerKeys_ = {};
@@ -94688,7 +94688,7 @@ ngeo.EventHelper = function() {
 /**
  * Utility method to add a listener key bound to a unique id. The key can
  * come from an `ol.events` (default) or `goog.events`.
- * @param {number} uid Unique id.
+ * @param {number|string} uid Unique id.
  * @param {ol.EventsKey|goog.events.Key} key Key.
  * @param {boolean=} opt_isol Whether it's an OpenLayers event or not. Defaults
  *     to true.
@@ -94710,7 +94710,7 @@ ngeo.EventHelper.prototype.addListenerKey = function(uid, key, opt_isol) {
 
 /**
  * Clear all listener keys from the given unique id.
- * @param {number} uid Unique id.
+ * @param {number|string} uid Unique id.
  * @export
  */
 ngeo.EventHelper.prototype.clearListenerKey = function(uid) {
@@ -94724,7 +94724,7 @@ ngeo.EventHelper.prototype.clearListenerKey = function(uid) {
  *   has not array set yet)
  * - unlisten any events if the array already exists for the given uid and
  *   empty the array.
- * @param {number} uid Unique id.
+ * @param {number|string} uid Unique id.
  * @private
  */
 ngeo.EventHelper.prototype.initListenerKey_ = function(uid) {
@@ -94774,11 +94774,14 @@ goog.require('ngeo.EventHelper');
  *
  *     <ngeo-attributes
  *       ngeo-attributes-attributes="::ctrl.attributes"
+ *       ngeo-attributes-disabled="ctrl.attributesDisabled"
  *       ngeo-attributes-feature="::ctrl.feature">
  *     </ngeo-attributes>
  *
  * @htmlAttribute {Array.<ngeox.Attribute>} ngeo-attributes-attributes The
  *     list of attributes to use.
+ * @htmlAttribute {boolean} ngeo-attributes-disabled Whether the fieldset should
+ *     be disabled or not.
  * @htmlAttribute {ol.Feature} ngeo-attributes-feature The feature.
  * @return {angular.Directive} The directive specs.
  * @ngInject
@@ -94791,6 +94794,7 @@ ngeo.attributesDirective = function() {
     scope: true,
     bindToController: {
       'attributes': '=ngeoAttributesAttributes',
+      'disabled': '<ngeoAttributesDisabled',
       'feature': '=ngeoAttributesFeature'
     },
     controllerAs: 'attrCtrl',
@@ -94817,6 +94821,13 @@ ngeo.AttributesController = function($scope, ngeoEventHelper) {
    * @export
    */
   this.attributes;
+
+  /**
+   * Whether the fieldset should be disabled or not.
+   * @type {boolean}
+   * @export
+   */
+  this.disabled = this.disabled === true;
 
   /**
    * The feature containing the values.
@@ -94957,6 +94968,12 @@ ngeo.LayerHelper = function($q, $http) {
  * @const
  */
 ngeo.LayerHelper.GROUP_KEY = 'groupName';
+
+
+/**
+ * @const
+ */
+ngeo.LayerHelper.REFRESH_PARAM = 'random';
 
 
 /**
@@ -95212,6 +95229,22 @@ ngeo.LayerHelper.prototype.isLayerVisible = function(layer, map) {
   var currentResolution = map.getView().getResolution();
   return currentResolution > layer.getMinResolution() &&
       currentResolution < layer.getMaxResolution();
+};
+
+
+/**
+ * Force a WMS layer to refresh using a random value.
+ * @param {ol.layer.Image|ol.layer.Tile} layer Layer to refresh.
+ */
+ngeo.LayerHelper.prototype.refreshWMSLayer = function(layer) {
+  var source = layer.getSource();
+  goog.asserts.assert(
+    source instanceof ol.source.ImageWMS ||
+    source instanceof ol.source.TileWMS
+  );
+  var params = source.getParams();
+  params[ngeo.LayerHelper.REFRESH_PARAM] = Math.random();
+  source.updateParams(params);
 };
 
 
@@ -123544,8 +123577,6 @@ ngeo.interaction.ModifyCircle.prototype.addFeature_ = function(feature) {
     if (map) {
       this.handlePointerAtPixel_(this.lastPixel_, map);
     }
-    ol.events.listen(feature, ol.events.EventType.CHANGE,
-        this.handleFeatureChange_, this);
   }
 };
 
@@ -123575,8 +123606,6 @@ ngeo.interaction.ModifyCircle.prototype.removeFeature_ = function(feature) {
     this.overlay_.getSource().removeFeature(this.vertexFeature_);
     this.vertexFeature_ = null;
   }
-  ol.events.unlisten(feature, ol.events.EventType.CHANGE,
-      this.handleFeatureChange_, this);
 };
 
 
@@ -123620,19 +123649,6 @@ ngeo.interaction.ModifyCircle.prototype.handleFeatureAdd_ = function(evt) {
   goog.asserts.assertInstanceof(feature, ol.Feature,
       'feature should be an ol.Feature');
   this.addFeature_(feature);
-};
-
-
-/**
- * @param {ol.events.Event} evt Event.
- * @private
- */
-ngeo.interaction.ModifyCircle.prototype.handleFeatureChange_ = function(evt) {
-  if (!this.changingFeature_) {
-    var feature = /** @type {ol.Feature} */ (evt.target);
-    this.removeFeature_(feature);
-    this.addFeature_(feature);
-  }
 };
 
 
@@ -123766,6 +123782,10 @@ ngeo.interaction.ModifyCircle.handleDragEvent_ = function(evt) {
   var circle = new ol.geom.Circle(center, line.getLength());
   var coordinates = ol.geom.Polygon.fromCircle(circle, 64).getCoordinates();
   this.setGeometryCoordinates_(geometry, coordinates);
+
+
+  var azimut = ngeo.interaction.MeasureAzimut.getAzimut(line);
+  this.features_.getArray()[0].set(ngeo.FeatureProperties.AZIMUT, azimut);
 
   this.createOrUpdateVertexFeature_(vertex);
 };
@@ -129970,6 +129990,35 @@ ngeo.module.constant('ngeoWfsPermalinkOptions',
  * WFS permalink service that can be used to load features with a WFS
  * GetFeature request given query parameters.
  *
+ * Resulting features are then highlighted and
+ * the map is zoomed to the nearest map extent.
+ *
+ * Parameters:
+ *
+ * - ``wfs_layer`` tells what layer will be queried
+ * - ``wfs_showFeatures`` (boolean) tells if the features should be
+ *   highlighted and listed (when true) or if the map should only be
+ *   recentered on the features (when false). Default is true.
+ * - other parameters will be considered as WFS attribute/values filters and
+ *   must be of the form:
+ *   ``wfs_<layer attribute name>=<a comma-separated list of values>``
+ *
+ * Example:
+ * http://example.com?wfs_layer=parcels&wfs_city=Oslo&wfs_number=12,34,56
+ * will load parcels #12, 34 and 56 of the city of Oslo.
+ *
+ * It is possible to define several groups of filtering parameters by:
+ *
+ * - adding a ``wfs_ngroups`` parameter telling how many groups are defined
+ * - prefixing all filtering parameters by the number of each group,
+ *   starting at 0. For instance ``wfs_0_<layer attribute name>``
+ *
+ * Example:
+ * http://example.com?wfs_layer=parcels&wfs_ngroups=2
+ * &wfs_0_city=Oslo&wfs_0_number=12,34,56&wfs_1_city=Paris&wfs_1_number=78,90
+ * will load parcels #12, 34 and 56 of the city of Oslo as well as
+ * parcels #78 and 90 of the city of Paris.
+ *
  * @constructor
  * @param {angular.$http} $http Angular $http service.
  * @param {ngeox.QueryResult} ngeoQueryResult The ngeo query result service.
@@ -130242,7 +130291,7 @@ goog.require('ngeo');
    * @ngInject
    */
   var runner = function($templateCache) {
-    $templateCache.put('ngeo/attributes.html', '<form class=form> <div class=form-group ng-repeat="attribute in ::attrCtrl.attributes"> <div ng-if="attribute.type !== \'geometry\'"> <label>{{ attribute.name }}:</label> <div ng-switch=attribute.type> <select ng-switch-when=select ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <option ng-repeat="attribute in ::attribute.choices" value="{{ ::attribute }}"> {{ ::attribute }} </option> </select> <input ng-switch-default ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> </div> </div> </div> </form> ');
+    $templateCache.put('ngeo/attributes.html', '<form class=form> <fieldset ng-disabled=attrCtrl.disabled> <div class=form-group ng-repeat="attribute in ::attrCtrl.attributes"> <div ng-if="attribute.type !== \'geometry\'"> <label>{{ attribute.name }}:</label> <div ng-switch=attribute.type> <select ng-switch-when=select ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <option ng-repeat="attribute in ::attribute.choices" value="{{ ::attribute }}"> {{ ::attribute }} </option> </select> <input ng-switch-default ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> </div> </div> </div> </fieldset> </form> ');
     $templateCache.put('ngeo/popup.html', '<h4 class="popover-title ngeo-popup-title"> <span ng-bind-html=title></span> <button type=button class=close ng-click="open = false"> &times;</button> </h4> <div class=popover-content ng-bind-html=content></div> ');
     $templateCache.put('ngeo/scaleselector.html', '<div class="btn-group btn-block" ng-class="::{\'dropup\': scaleselectorCtrl.options.dropup}"> <button type=button class="btn btn-default dropdown-toggle" data-toggle=dropdown aria-expanded=false> <span ng-bind-html=scaleselectorCtrl.currentScale></span>&nbsp;<i class=caret></i> </button> <ul class="dropdown-menu btn-block" role=menu> <li ng-repeat="zoomLevel in ::scaleselectorCtrl.zoomLevels"> <a href ng-click=scaleselectorCtrl.changeZoom(zoomLevel) ng-bind-html=scaleselectorCtrl.getScale(zoomLevel)> </a> </li> </ul> </div> ');
     $templateCache.put('ngeo/datepicker.html', '<div class=ngeo-datepicker> <form name=dateForm class=datepicker-form novalidate> <div ng-if="::datepickerCtrl.time.widget === \'datepicker\'"> <div class=start-date> <span ng-if="::datepickerCtrl.time.mode === \'range\'" translate>From:</span> <span ng-if="::datepickerCtrl.time.mode !== \'range\'" translate>Date:</span> <input name=sdate ui-date=datepickerCtrl.sdateOptions ng-model=datepickerCtrl.sdate required> </div> <div class=end-date ng-if="::datepickerCtrl.time.mode === \'range\'"> <span translate>To:</span> <input name=edate ui-date=datepickerCtrl.edateOptions ng-model=datepickerCtrl.edate required> </div> </div> </form> </div> ');
