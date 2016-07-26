@@ -58,10 +58,11 @@ location of the feature to select it first.</p>
 the feature on the map.</p>
 <p>Example:</p>
 <pre class="prettyprint source"><code>&lt;gmf-editfeature
-    gmf-editfeature-layer=&quot;::ctrl.layer&quot;>
+    gmf-editfeature-layer=&quot;::ctrl.layer&quot;
     gmf-editfeature-map=&quot;::ctrl.map&quot;
     gmf-editfeature-tolerance=&quot;::ctrl.tolerance&quot;
-    gmf-editfeature-vector=&quot;::ctrl.vectorLayer&quot;>
+    gmf-editfeature-vector=&quot;::ctrl.vectorLayer&quot;
+    gmf-editfeature-wmslayer=&quot;::ctrl.selectedWMSLayer&quot;>
 &lt;/gmf-editfeature></code></pre>
 </div>
 
@@ -195,6 +196,33 @@ the feature on the map.</p>
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>gmf-editfeature-wmslayer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Image.html">ol.layer.Image</a></span>
+|
+
+<span class="param-type"><a href="http://openlayers.org/en/master/apidoc/ol.layer.Tile.html">ol.layer.Tile</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The
+    WMS layer to refresh after each saved modification.</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -234,7 +262,7 @@ the feature on the map.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/editfeature.js">contribs/gmf/src/directives/editfeature.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/editfeature.js#L54">line 54</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/editfeature.js#L58">line 58</a>
     </li></ul></dd>
     
 

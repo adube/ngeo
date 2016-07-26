@@ -51,6 +51,32 @@
 <div class="description">
     <p>WFS permalink service that can be used to load features with a WFS
 GetFeature request given query parameters.</p>
+<p>Resulting features are then highlighted and
+the map is zoomed to the nearest map extent.</p>
+<p>Parameters:</p>
+<ul>
+<li><code>wfs_layer</code> tells what layer will be queried</li>
+<li><code>wfs_showFeatures</code> (boolean) tells if the features should be
+highlighted and listed (when true) or if the map should only be
+recentered on the features (when false). Default is true.</li>
+<li>other parameters will be considered as WFS attribute/values filters and
+must be of the form:
+<code>wfs_&lt;layer attribute name&gt;=&lt;a comma-separated list of values&gt;</code></li>
+</ul>
+<p>Example:
+http://example.com?wfs_layer=parcels&amp;wfs_city=Oslo&amp;wfs_number=12,34,56
+will load parcels #12, 34 and 56 of the city of Oslo.</p>
+<p>It is possible to define several groups of filtering parameters by:</p>
+<ul>
+<li>adding a <code>wfs_ngroups</code> parameter telling how many groups are defined</li>
+<li>prefixing all filtering parameters by the number of each group,
+starting at 0. For instance <code>wfs_0_&lt;layer attribute name&gt;</code></li>
+</ul>
+<p>Example:
+http://example.com?wfs_layer=parcels&amp;wfs_ngroups=2
+&amp;wfs_0_city=Oslo&amp;wfs_0_number=12,34,56&amp;wfs_1_city=Paris&amp;wfs_1_number=78,90
+will load parcels #12, 34 and 56 of the city of Oslo as well as
+parcels #78 and 90 of the city of Paris.</p>
 </div>
 
 
@@ -179,7 +205,7 @@ GetFeature request given query parameters.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/src/services/wfspermalink.js">src/services/wfspermalink.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/services/wfspermalink.js#L59">line 59</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/services/wfspermalink.js#L88">line 88</a>
     </li></ul></dd>
     
 
@@ -283,7 +309,7 @@ GetFeature request given query parameters.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/src/services/wfspermalink.js">src/services/wfspermalink.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/services/wfspermalink.js#L120">line 120</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/services/wfspermalink.js#L149">line 149</a>
     </li></ul></dd>
     
 
@@ -432,7 +458,7 @@ request and add the received features to <a href="ngeox.html#QueryResult"><code>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/src/services/wfspermalink.js">src/services/wfspermalink.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/services/wfspermalink.js#L133">line 133</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/services/wfspermalink.js#L162">line 162</a>
     </li></ul></dd>
     
 

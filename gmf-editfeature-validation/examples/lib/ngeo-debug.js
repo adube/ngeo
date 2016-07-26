@@ -94677,7 +94677,7 @@ goog.require('ngeo');
 ngeo.EventHelper = function() {
 
   /**
-   * @type {Object.<number, ngeo.EventHelper.ListenerKeys>}
+   * @type {Object.<number|string, ngeo.EventHelper.ListenerKeys>}
    * @private
    */
   this.listenerKeys_ = {};
@@ -94688,7 +94688,7 @@ ngeo.EventHelper = function() {
 /**
  * Utility method to add a listener key bound to a unique id. The key can
  * come from an `ol.events` (default) or `goog.events`.
- * @param {number} uid Unique id.
+ * @param {number|string} uid Unique id.
  * @param {ol.EventsKey|goog.events.Key} key Key.
  * @param {boolean=} opt_isol Whether it's an OpenLayers event or not. Defaults
  *     to true.
@@ -94710,7 +94710,7 @@ ngeo.EventHelper.prototype.addListenerKey = function(uid, key, opt_isol) {
 
 /**
  * Clear all listener keys from the given unique id.
- * @param {number} uid Unique id.
+ * @param {number|string} uid Unique id.
  * @export
  */
 ngeo.EventHelper.prototype.clearListenerKey = function(uid) {
@@ -94724,7 +94724,7 @@ ngeo.EventHelper.prototype.clearListenerKey = function(uid) {
  *   has not array set yet)
  * - unlisten any events if the array already exists for the given uid and
  *   empty the array.
- * @param {number} uid Unique id.
+ * @param {number|string} uid Unique id.
  * @private
  */
 ngeo.EventHelper.prototype.initListenerKey_ = function(uid) {
@@ -94957,6 +94957,12 @@ ngeo.LayerHelper = function($q, $http) {
  * @const
  */
 ngeo.LayerHelper.GROUP_KEY = 'groupName';
+
+
+/**
+ * @const
+ */
+ngeo.LayerHelper.REFRESH_PARAM = 'random';
 
 
 /**
@@ -95212,6 +95218,22 @@ ngeo.LayerHelper.prototype.isLayerVisible = function(layer, map) {
   var currentResolution = map.getView().getResolution();
   return currentResolution > layer.getMinResolution() &&
       currentResolution < layer.getMaxResolution();
+};
+
+
+/**
+ * Force a WMS layer to refresh using a random value.
+ * @param {ol.layer.Image|ol.layer.Tile} layer Layer to refresh.
+ */
+ngeo.LayerHelper.prototype.refreshWMSLayer = function(layer) {
+  var source = layer.getSource();
+  goog.asserts.assert(
+    source instanceof ol.source.ImageWMS ||
+    source instanceof ol.source.TileWMS
+  );
+  var params = source.getParams();
+  params[ngeo.LayerHelper.REFRESH_PARAM] = Math.random();
+  source.updateParams(params);
 };
 
 
@@ -123596,8 +123618,6 @@ ngeo.interaction.ModifyCircle.prototype.addFeature_ = function(feature) {
     if (map) {
       this.handlePointerAtPixel_(this.lastPixel_, map);
     }
-    ol.events.listen(feature, ol.events.EventType.CHANGE,
-        this.handleFeatureChange_, this);
   }
 };
 
@@ -123627,8 +123647,6 @@ ngeo.interaction.ModifyCircle.prototype.removeFeature_ = function(feature) {
     this.overlay_.getSource().removeFeature(this.vertexFeature_);
     this.vertexFeature_ = null;
   }
-  ol.events.unlisten(feature, ol.events.EventType.CHANGE,
-      this.handleFeatureChange_, this);
 };
 
 
@@ -123672,19 +123690,6 @@ ngeo.interaction.ModifyCircle.prototype.handleFeatureAdd_ = function(evt) {
   goog.asserts.assertInstanceof(feature, ol.Feature,
       'feature should be an ol.Feature');
   this.addFeature_(feature);
-};
-
-
-/**
- * @param {ol.events.Event} evt Event.
- * @private
- */
-ngeo.interaction.ModifyCircle.prototype.handleFeatureChange_ = function(evt) {
-  if (!this.changingFeature_) {
-    var feature = /** @type {ol.Feature} */ (evt.target);
-    this.removeFeature_(feature);
-    this.addFeature_(feature);
-  }
 };
 
 
@@ -123818,6 +123823,10 @@ ngeo.interaction.ModifyCircle.handleDragEvent_ = function(evt) {
   var circle = new ol.geom.Circle(center, line.getLength());
   var coordinates = ol.geom.Polygon.fromCircle(circle, 64).getCoordinates();
   this.setGeometryCoordinates_(geometry, coordinates);
+
+
+  var azimut = ngeo.interaction.MeasureAzimut.getAzimut(line);
+  this.features_.getArray()[0].set(ngeo.FeatureProperties.AZIMUT, azimut);
 
   this.createOrUpdateVertexFeature_(vertex);
 };
@@ -130021,6 +130030,35 @@ ngeo.module.constant('ngeoWfsPermalinkOptions',
 /**
  * WFS permalink service that can be used to load features with a WFS
  * GetFeature request given query parameters.
+ *
+ * Resulting features are then highlighted and
+ * the map is zoomed to the nearest map extent.
+ *
+ * Parameters:
+ *
+ * - ``wfs_layer`` tells what layer will be queried
+ * - ``wfs_showFeatures`` (boolean) tells if the features should be
+ *   highlighted and listed (when true) or if the map should only be
+ *   recentered on the features (when false). Default is true.
+ * - other parameters will be considered as WFS attribute/values filters and
+ *   must be of the form:
+ *   ``wfs_<layer attribute name>=<a comma-separated list of values>``
+ *
+ * Example:
+ * http://example.com?wfs_layer=parcels&wfs_city=Oslo&wfs_number=12,34,56
+ * will load parcels #12, 34 and 56 of the city of Oslo.
+ *
+ * It is possible to define several groups of filtering parameters by:
+ *
+ * - adding a ``wfs_ngroups`` parameter telling how many groups are defined
+ * - prefixing all filtering parameters by the number of each group,
+ *   starting at 0. For instance ``wfs_0_<layer attribute name>``
+ *
+ * Example:
+ * http://example.com?wfs_layer=parcels&wfs_ngroups=2
+ * &wfs_0_city=Oslo&wfs_0_number=12,34,56&wfs_1_city=Paris&wfs_1_number=78,90
+ * will load parcels #12, 34 and 56 of the city of Oslo as well as
+ * parcels #78 and 90 of the city of Paris.
  *
  * @constructor
  * @param {angular.$http} $http Angular $http service.
