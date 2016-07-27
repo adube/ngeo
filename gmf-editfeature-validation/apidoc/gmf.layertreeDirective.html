@@ -59,6 +59,7 @@ path).</p>
 <p>Example:</p>
 <pre class="prettyprint source"><code> &lt;gmf-layertree
    gmf-layertree-source=&quot;ctrl.source&quot;
+   gmf-layertree-dimensions=&quot;ctrl.dimensions&quot;
    gmf-layertree-map=&quot;ctrl.map&quot;
  &lt;/gmf-layertree></code></pre><p>You can add an attribute 'gmf-layertree-openlinksinnewwindow=&quot;true&quot;' to open
 metadata URLs in a new window. By default, and in the default template,
@@ -66,6 +67,7 @@ links will be opened in a popup.</p>
 <p>Used UI metadata:</p>
 <ul>
 <li>isChecked: if 'false' the layer visibility will be set to false.</li>
+<li>iconUrl: layer icon full URL.</li>
 <li>legendRule: WMS rule used to get a layer icon.</li>
 <li>isLegendExpanded: if 'true' the legend is expanded by default.</li>
 <li>metadataUrl: Display a popup with the content of the given URL if
@@ -131,6 +133,29 @@ possible also open a new window.</li>
 
         <tr>
             
+                <td class="name"><code>gmf-layertree-dimensions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>.&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Global dimensions object.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>gmf-layertree-map</code></td>
             
 
@@ -190,7 +215,7 @@ possible also open a new window.</li>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L85">line 85</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L88">line 88</a>
     </li></ul></dd>
     
 
