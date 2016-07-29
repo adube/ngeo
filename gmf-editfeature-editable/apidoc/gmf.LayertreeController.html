@@ -474,7 +474,7 @@
 
     
 
-    <h4 class="name" id=".getLayerNodeIds"><span class="type-signature">(static) </span>getLayerNodeIds<span class="signature">(node)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getLayerNodeIds"><span class="type-signature">(static) </span>getLayerNodeIds<span class="signature">(node, [opt_editable]<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -505,6 +505,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -525,10 +527,47 @@
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last"><p>Layer tree node.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>[opt_editable]</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Whether the node needs to be editable to
+    have its id returned.</p></td>
         </tr>
 
     
@@ -573,7 +612,7 @@
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L980">line 980</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L984">line 984</a>
     </li></ul></dd>
     
 
@@ -704,7 +743,7 @@
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L928">line 928</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L930">line 930</a>
     </li></ul></dd>
     
 
@@ -884,7 +923,7 @@ be set to true.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L338">line 338</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L340">line 340</a>
     </li></ul></dd>
     
 
@@ -1016,7 +1055,7 @@ string for internal WMS layers without multiple childlayers in the node.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L848">line 848</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L850">line 850</a>
     </li></ul></dd>
     
 
@@ -1147,7 +1186,7 @@ string for internal WMS layers without multiple childlayers in the node.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L881">line 881</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L883">line 883</a>
     </li></ul></dd>
     
 
@@ -1279,7 +1318,7 @@ Return a class name that match with the current node activation state.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L724">line 724</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L726">line 726</a>
     </li></ul></dd>
     
 
@@ -1410,7 +1449,7 @@ the min/max resolution in the node.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L560">line 560</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L562">line 562</a>
     </li></ul></dd>
     
 
@@ -1560,7 +1599,7 @@ a ngeo layertree destroy event.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L544">line 544</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L546">line 546</a>
     </li></ul></dd>
     
 
@@ -1686,7 +1725,7 @@ a ngeo layertree destroy event.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L954">line 954</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L956">line 956</a>
     </li></ul></dd>
     
 
@@ -1817,7 +1856,7 @@ a ngeo layertree destroy event.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L579">line 579</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L581">line 581</a>
     </li></ul></dd>
     
 
@@ -1947,7 +1986,7 @@ a ngeo layertree destroy event.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L999">line 999</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L1004">line 1004</a>
     </li></ul></dd>
     
 
@@ -2098,7 +2137,7 @@ and optionally the end datetime (for time range selection) selected by user</p><
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L799">line 799</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L801">line 801</a>
     </li></ul></dd>
     
 
@@ -2229,7 +2268,7 @@ and optionally the end datetime (for time range selection) selected by user</p><
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js">contribs/gmf/src/directives/layertree.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L965">line 965</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/contribs/gmf/src/directives/layertree.js#L967">line 967</a>
     </li></ul></dd>
     
 
