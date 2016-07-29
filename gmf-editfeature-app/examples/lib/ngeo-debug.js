@@ -114478,13 +114478,7 @@ ngeo.ScaleselectorOptions;
  * The expression passed to the ngeo-scaleselector attribute should return an
  * object of this form:
  *
- *     {
- *       '0': $sce.trustAsHtml('1&nbsp;:&nbsp;200\'000\'000'),
- *       '1': $sce.trustAsHtml('1&nbsp;:&nbsp;100\'000\'000'),
- *       '2': $sce.trustAsHtml('1&nbsp;:&nbsp;50\'000\'000'),
- *       '3': $sce.trustAsHtml('1&nbsp;:&nbsp;25\'000\'000'),
- *       '4': $sce.trustAsHtml('1&nbsp;:&nbsp;12\'000\'000')
- *     }
+ *    [20000, 10000, 5000, 2500]
  *
  * This object's keys are strings representing zoom levels, the values are
  * strings representing scales. The directive's partial uses ng-bind-html so
@@ -114544,10 +114538,10 @@ ngeo.ScaleselectorController = function($scope, $element, $attrs) {
 
   /**
    * The zoom level/scale map object.
-   * @type {!Object.<string, string>}
+   * @type {!Array.<number>}
    * @export
    */
-  this.scales = /** @type {!Object.<string, string>} */
+  this.scales = /** @type {!Array.<number>} */
       ($scope.$eval(scalesExpr));
   goog.asserts.assert(this.scales !== undefined);
 
@@ -114595,7 +114589,7 @@ ngeo.ScaleselectorController = function($scope, $element, $attrs) {
   this.resolutionChangeKey_ = null;
 
   /**
-   * @type {string|undefined}
+   * @type {number|undefined}
    * @export
    */
   this.currentScale = undefined;
@@ -114639,11 +114633,11 @@ ngeo.ScaleselectorController.getOptions_ = function(options) {
 
 /**
  * @param {number} zoom Zoom level.
- * @return {string} Scale.
+ * @return {number} Scale.
  * @export
  */
 ngeo.ScaleselectorController.prototype.getScale = function(zoom) {
-  return this.scales[zoom.toString()];
+  return this.scales[zoom];
 };
 
 
@@ -114662,7 +114656,7 @@ ngeo.ScaleselectorController.prototype.changeZoom = function(zoom) {
  */
 ngeo.ScaleselectorController.prototype.handleResolutionChange_ = function(e) {
   var view = this.map_.getView();
-  var currentScale = this.scales[view.getZoom().toString()];
+  var currentScale = this.scales[/** @type {number} */ (view.getZoom())];
 
   // handleResolutionChange_ is a change:resolution listener. The listener
   // may be executed outside the Angular context, for example when the user
@@ -130304,7 +130298,7 @@ goog.require('ngeo');
   var runner = function($templateCache) {
     $templateCache.put('ngeo/attributes.html', '<form class=form> <fieldset ng-disabled=attrCtrl.disabled> <div class=form-group ng-repeat="attribute in ::attrCtrl.attributes"> <div ng-if="attribute.type !== \'geometry\'"> <label>{{ attribute.name }}:</label> <div ng-switch=attribute.type> <select ng-switch-when=select ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <option ng-repeat="attribute in ::attribute.choices" value="{{ ::attribute }}"> {{ ::attribute }} </option> </select> <input ng-switch-when=date ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input ng-switch-when=datetime ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input ng-switch-default ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> </div> </div> </div> </fieldset> </form> ');
     $templateCache.put('ngeo/popup.html', '<h4 class="popover-title ngeo-popup-title"> <span ng-bind-html=title></span> <button type=button class=close ng-click="open = false"> &times;</button> </h4> <div class=popover-content ng-bind-html=content></div> ');
-    $templateCache.put('ngeo/scaleselector.html', '<div class="btn-group btn-block" ng-class="::{\'dropup\': scaleselectorCtrl.options.dropup}"> <button type=button class="btn btn-default dropdown-toggle" data-toggle=dropdown aria-expanded=false> <span ng-bind-html=scaleselectorCtrl.currentScale></span>&nbsp;<i class=caret></i> </button> <ul class="dropdown-menu btn-block" role=menu> <li ng-repeat="zoomLevel in ::scaleselectorCtrl.zoomLevels"> <a href ng-click=scaleselectorCtrl.changeZoom(zoomLevel) ng-bind-html=scaleselectorCtrl.getScale(zoomLevel)> </a> </li> </ul> </div> ');
+    $templateCache.put('ngeo/scaleselector.html', '<div class="btn-group btn-block" ng-class="::{\'dropup\': scaleselectorCtrl.options.dropup}"> <button type=button class="btn btn-default dropdown-toggle" data-toggle=dropdown aria-expanded=false> <span ng-bind-html=scaleselectorCtrl.currentScale|ngeoScalify></span>&nbsp;<i class=caret></i> </button> <ul class="dropdown-menu btn-block" role=menu> <li ng-repeat="zoomLevel in ::scaleselectorCtrl.zoomLevels"> <a href ng-click=scaleselectorCtrl.changeZoom(zoomLevel) ng-bind-html=::scaleselectorCtrl.getScale(zoomLevel)|ngeoScalify> </a> </li> </ul> </div> ');
     $templateCache.put('ngeo/datepicker.html', '<div class=ngeo-datepicker> <form name=dateForm class=datepicker-form novalidate> <div ng-if="::datepickerCtrl.time.widget === \'datepicker\'"> <div class=start-date> <span ng-if="::datepickerCtrl.time.mode === \'range\'" translate>From:</span> <span ng-if="::datepickerCtrl.time.mode !== \'range\'" translate>Date:</span> <input name=sdate ui-date=datepickerCtrl.sdateOptions ng-model=datepickerCtrl.sdate required> </div> <div class=end-date ng-if="::datepickerCtrl.time.mode === \'range\'"> <span translate>To:</span> <input name=edate ui-date=datepickerCtrl.edateOptions ng-model=datepickerCtrl.edate required> </div> </div> </form> </div> ');
     $templateCache.put('ngeo/layertree.html', '<span ng-if=::!layertreeCtrl.isRoot>{{::layertreeCtrl.node.name}}</span> <input type=checkbox ng-if="::layertreeCtrl.node && !layertreeCtrl.node.children" ng-model=layertreeCtrl.getSetActive ng-model-options="{getterSetter: true}"> <ul ng-if=::layertreeCtrl.node.children> <li ng-repeat="node in ::layertreeCtrl.node.children" ngeo-layertree=::node ngeo-layertree-notroot ngeo-layertree-map=layertreeCtrl.map ngeo-layertree-nodelayerexpr=layertreeCtrl.nodelayerExpr ngeo-layertree-listenersexpr=layertreeCtrl.listenersExpr> </li> </ul> ');
     $templateCache.put('ngeo/colorpicker.html', '<table class=palette> <tr ng-repeat="colors in ::ctrl.colors"> <td ng-repeat="color in ::colors" ng-click=ctrl.setColor(color) ng-class="{\'selected\': color == ctrl.color}"> <div ng-style="::{\'background-color\': color}"></div> </td> </tr> </table> ');
