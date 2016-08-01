@@ -55,13 +55,8 @@ selecting map scales.</p>
 <pre class="prettyprint source"><code>&lt;div ngeo-scaleselector=&quot;ctrl.scales&quot; ngeo-scaleselector-map=&quot;ctrl.map&quot;>
 &lt;/div></code></pre><p>The expression passed to the ngeo-scaleselector attribute should return an
 object of this form:</p>
-<pre class="prettyprint source"><code>{
-  '0': $sce.trustAsHtml('1&nbsp;:&nbsp;200\'000\'000'),
-  '1': $sce.trustAsHtml('1&nbsp;:&nbsp;100\'000\'000'),
-  '2': $sce.trustAsHtml('1&nbsp;:&nbsp;50\'000\'000'),
-  '3': $sce.trustAsHtml('1&nbsp;:&nbsp;25\'000\'000'),
-  '4': $sce.trustAsHtml('1&nbsp;:&nbsp;12\'000\'000')
-}</code></pre><p>This object's keys are strings representing zoom levels, the values are
+<p>   [20000, 10000, 5000, 2500]</p>
+<p>This object's keys are strings representing zoom levels, the values are
 strings representing scales. The directive's partial uses ng-bind-html so
 the scale strings should be trusted.</p>
 <p>That directive's partial uses Bootstrap's <code>dropdown</code> and <code>dropdown-menu</code>
@@ -194,7 +189,7 @@ the scales information is now watched.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/scaleselector.js">src/directives/scaleselector.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/scaleselector.js#L80">line 80</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/scaleselector.js#L74">line 74</a>
     </li></ul></dd>
     
 
