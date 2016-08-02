@@ -126578,12 +126578,20 @@ ngeo.createGeoJSONBloodhound = function(url, opt_filter, opt_featureProjection,
     datumTokenizer: goog.nullFunction,
     queryTokenizer: Bloodhound.tokenizers.whitespace
   });
-  if (opt_options) {
-    goog.object.extend(bloodhoundOptions, opt_options);
+
+  // the options objects are cloned to avoid updating the passed object
+  var options = goog.object.clone(opt_options || {});
+  var remoteOptions = goog.object.clone(opt_remoteOptions || {});
+
+  if (options.remote) {
+    // move the remote options to opt_remoteOptions
+    goog.object.extend(remoteOptions, options.remote);
+    delete options.remote;
   }
-  if (opt_remoteOptions) {
-    goog.object.extend(bloodhoundOptions.remote, opt_remoteOptions);
-  }
+
+  goog.object.extend(bloodhoundOptions, options);
+  goog.object.extend(bloodhoundOptions.remote, remoteOptions);
+
   return new Bloodhound(bloodhoundOptions);
 };
 
@@ -128893,18 +128901,20 @@ ngeo.PrintUtils.prototype.createPrintMaskPostcompose = function(getSize,
         var center = [viewportWidth / 2, viewportHeight / 2];
 
         var size = getSize();
+        var height = size[1] * ol.has.DEVICE_PIXEL_RATIO;
+        var width = size[0] * ol.has.DEVICE_PIXEL_RATIO;
         var scale = getScale(frameState);
 
         var ppi = ngeo.PrintUtils.DOTS_PER_INCH_;
         var ipm = ngeo.PrintUtils.INCHES_PER_METER_;
 
         var extentHalfWidth =
-            (((size[0] / ppi) / ipm) * scale / resolution) / 2;
+            (((width / ppi) / ipm) * scale / resolution) / 2;
         self.extentHalfHorizontalDistance_ =
             (((size[0] / ppi) / ipm) * scale) / 2;
 
         var extentHalfHeight =
-            (((size[1] / ppi) / ipm) * scale / resolution) / 2;
+            (((height / ppi) / ipm) * scale / resolution) / 2;
         self.extentHalfVerticalDistance_ =
             (((size[1] / ppi) / ipm) * scale) / 2;
 
