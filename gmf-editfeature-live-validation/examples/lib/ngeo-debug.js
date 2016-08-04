@@ -94806,14 +94806,13 @@ ngeo.module.directive('ngeoAttributes', ngeo.attributesDirective);
 
 /**
  * @param {!angular.Scope} $scope Angular scope.
- * @param {angular.$timeout} $timeout Angular timeout service.
  * @param {ngeo.EventHelper} ngeoEventHelper Ngeo event helper service
  * @constructor
  * @ngInject
  * @ngdoc controller
  * @ngname ngeoAttributesController
  */
-ngeo.AttributesController = function($scope, $timeout, ngeoEventHelper) {
+ngeo.AttributesController = function($scope, ngeoEventHelper) {
 
   /**
    * The list of attributes to create the form with.
@@ -107914,6 +107913,11 @@ ngeo.FeatureHelper.prototype.getTextStyle_ = function(feature) {
 };
 
 
+/**
+ * @param {ol.Feature} feature Feature to create the editing styles with.
+ * @return {Array.<ol.style.Style>} List of style.
+ * @export
+ */
 ngeo.FeatureHelper.prototype.createEditingStyles = function(feature) {
   // (1) Style definition depends on geometry type
   var white = [255, 255, 255, 1];
@@ -122869,8 +122873,7 @@ ngeo.format.XSDAttribute.prototype.readFromElementNode_ = function(node) {
   goog.asserts.assert(name, 'name should be defined in element node.');
 
   var nillable = node.getAttribute('nillable');
-  console.log(nillable);
-  var required = true;//!(nillable === true || nillable === 'true');
+  var required = !(nillable === true || nillable === 'true');
 
   var attribute = {
     name: name,
