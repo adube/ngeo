@@ -94775,7 +94775,7 @@ goog.require('ngeo.EventHelper');
  *       ngeo-attributes-attributes="::ctrl.attributes"
  *       ngeo-attributes-disabled="ctrl.attributesDisabled"
  *       ngeo-attributes-feature="::ctrl.feature"
- *       ngeo-attributes-validity="ctrl.validity">
+ *       ngeo-attributes-valid="ctrl.valid">
  *     </ngeo-attributes>
  *
  * @htmlAttribute {Array.<ngeox.Attribute>} ngeo-attributes-attributes The
@@ -94783,7 +94783,7 @@ goog.require('ngeo.EventHelper');
  * @htmlAttribute {boolean} ngeo-attributes-disabled Whether the fieldset should
  *     be disabled or not.
  * @htmlAttribute {ol.Feature} ngeo-attributes-feature The feature.
- * @htmlAttribute {boolean} ngeo-attributes-validity Whether the form is valid
+ * @htmlAttribute {boolean} ngeo-attributes-valid Whether the form is valid
  *     or not.
  * @return {angular.Directive} The directive specs.
  * @ngInject
@@ -94798,7 +94798,7 @@ ngeo.attributesDirective = function() {
       'attributes': '=ngeoAttributesAttributes',
       'disabled': '<ngeoAttributesDisabled',
       'feature': '=ngeoAttributesFeature',
-      'validity': '=ngeoAttributesValidity'
+      'valid': '=ngeoAttributesValid'
     },
     controllerAs: 'attrCtrl',
     templateUrl: ngeo.baseTemplateUrl + '/attributes.html'
@@ -94832,10 +94832,10 @@ ngeo.AttributesController = function($element, $scope, $timeout,
    * @type {boolean}
    * @export
    */
-  this.validity;
+  this.valid;
 
   $(this.form).on('input', function() {
-    this.validity = this.form.checkValidity();
+    this.valid = this.form.checkValidity();
     this.scope_.$apply();
   }.bind(this));
 
@@ -94918,7 +94918,7 @@ ngeo.AttributesController = function($element, $scope, $timeout,
   $scope.$on('$destroy', this.handleDestroy_.bind(this));
 
   $timeout(function() {
-    this.validity = this.form.checkValidity();
+    this.valid = this.form.checkValidity();
   }.bind(this), 0);
 
 };
@@ -130430,7 +130430,7 @@ goog.require('ngeo');
    * @ngInject
    */
   var runner = function($templateCache) {
-    $templateCache.put('ngeo/attributes.html', '<form class=form name=form> <fieldset ng-disabled=attrCtrl.disabled> <div class=form-group ng-repeat="attribute in ::attrCtrl.attributes"> <div ng-if="attribute.type !== \'geometry\'"> <label>{{ attribute.name }}:</label> <div ng-switch=attribute.type> <select name={{attribute.name}} ng-required=attribute.required ng-switch-when=select ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <option ng-repeat="attribute in ::attribute.choices" value="{{ ::attribute }}"> {{ ::attribute }} </option> </select> <input name={{attribute.name}} ng-required=attribute.required ng-switch-when=date ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{attribute.name}} ng-required=attribute.required ng-switch-when=datetime ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{attribute.name}} ng-required=attribute.required ng-switch-default ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <div ng-show="form.$submitted || form[attribute.name].$touched"> <p class=bg-danger ng-show=form[attribute.name].$error.required> {{\'This field is required\' | translate}} </p> </div> </div> </div> </div> </fieldset> </form> ');
+    $templateCache.put('ngeo/attributes.html', '<form class=form name=form> <fieldset ng-disabled=attrCtrl.disabled> <div class=form-group ng-repeat="attribute in ::attrCtrl.attributes"> <div ng-if="attribute.type !== \'geometry\'"> <label>{{ attribute.name }}:</label> <div ng-switch=attribute.type> <select name={{attribute.name}} ng-required=attribute.required ng-switch-when=select ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <option ng-repeat="attribute in ::attribute.choices" value="{{ ::attribute }}"> {{ ::attribute }} </option> </select> <input name={{attribute.name}} ng-required=attribute.required ng-switch-when=date ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{attribute.name}} ng-required=attribute.required ng-switch-when=datetime ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{attribute.name}} ng-required=attribute.required ng-switch-default ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <div ng-show="form.$submitted || form[attribute.name].$touched"> <p class=text-danger ng-show=form[attribute.name].$error.required> {{\'This field is required\' | translate}} </p> </div> </div> </div> </div> </fieldset> </form> ');
     $templateCache.put('ngeo/popup.html', '<h4 class="popover-title ngeo-popup-title"> <span ng-bind-html=title></span> <button type=button class=close ng-click="open = false"> &times;</button> </h4> <div class=popover-content ng-bind-html=content></div> ');
     $templateCache.put('ngeo/scaleselector.html', '<div class="btn-group btn-block" ng-class="::{\'dropup\': scaleselectorCtrl.options.dropup}"> <button type=button class="btn btn-default dropdown-toggle" data-toggle=dropdown aria-expanded=false> <span ng-bind-html=scaleselectorCtrl.currentScale|ngeoScalify></span>&nbsp;<i class=caret></i> </button> <ul class="dropdown-menu btn-block" role=menu> <li ng-repeat="zoomLevel in ::scaleselectorCtrl.zoomLevels"> <a href ng-click=scaleselectorCtrl.changeZoom(zoomLevel) ng-bind-html=::scaleselectorCtrl.getScale(zoomLevel)|ngeoScalify> </a> </li> </ul> </div> ');
     $templateCache.put('ngeo/datepicker.html', '<div class=ngeo-datepicker> <form name=dateForm class=datepicker-form novalidate> <div ng-if="::datepickerCtrl.time.widget === \'datepicker\'"> <div class=start-date> <span ng-if="::datepickerCtrl.time.mode === \'range\'" translate>From:</span> <span ng-if="::datepickerCtrl.time.mode !== \'range\'" translate>Date:</span> <input name=sdate ui-date=datepickerCtrl.sdateOptions ng-model=datepickerCtrl.sdate required> </div> <div class=end-date ng-if="::datepickerCtrl.time.mode === \'range\'"> <span translate>To:</span> <input name=edate ui-date=datepickerCtrl.edateOptions ng-model=datepickerCtrl.edate required> </div> </div> </form> </div> ');
