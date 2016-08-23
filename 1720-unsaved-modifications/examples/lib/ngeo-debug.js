@@ -95715,10 +95715,12 @@ ngeo.Query.prototype.getQueryableSources_ = function(map, wfsOnly) {
             'validateLayerParams option.'
         );
         var layerLayers = layerSource.getParams()['LAYERS'].split(',');
-        var cfgLayer = item.source.wmsSource.getParams()['LAYERS'];
-        goog.asserts.assert(cfgLayer.indexOf(',') === -1,
-            'The LAYERS param contains more than one item');
-        if (layerLayers.indexOf(cfgLayer) === -1) {
+        var cfgLayer = item.source.wmsSource.getParams()['LAYERS'].split(',');
+
+        var every = cfgLayer.every(function(layer) {
+          return layerLayers.indexOf(layer) != -1;
+        });
+        if (!every) {
           continue;
         }
       }
@@ -105166,7 +105168,7 @@ ngeo.MeasureEventType = {
  */
 ngeo.MeasureEvent = function(type, feature) {
 
-  goog.base(this, type);
+  ol.events.Event.call(this, type);
 
   /**
    * The feature being drawn.
@@ -105176,7 +105178,7 @@ ngeo.MeasureEvent = function(type, feature) {
   this.feature = feature;
 
 };
-goog.inherits(ngeo.MeasureEvent, ol.events.Event);
+ol.inherits(ngeo.MeasureEvent, ol.events.Event);
 
 
 /**
@@ -105190,7 +105192,7 @@ ngeo.interaction.Measure = function(opt_options) {
 
   var options = opt_options !== undefined ? opt_options : {};
 
-  goog.base(this, {
+  ol.interaction.Interaction.call(this, {
     handleEvent: ngeo.interaction.Measure.handleEvent_
   });
 
@@ -105325,7 +105327,7 @@ ngeo.interaction.Measure = function(opt_options) {
       ol.Object.getChangeEventType(ol.interaction.InteractionProperty.ACTIVE),
       this.updateState_, this);
 };
-goog.inherits(ngeo.interaction.Measure, ol.interaction.Interaction);
+ol.inherits(ngeo.interaction.Measure, ol.interaction.Interaction);
 
 /**
  * Calculate the area of the passed polygon and return a formatted string
@@ -105457,7 +105459,8 @@ ngeo.interaction.Measure.prototype.createDrawInteraction = goog.abstractMethod;
  * @inheritDoc
  */
 ngeo.interaction.Measure.prototype.setMap = function(map) {
-  goog.base(this, 'setMap', map);
+
+  ol.interaction.Interaction.prototype.setMap.call(this, map);
 
   this.vectorLayer_.setMap(map);
 
@@ -105665,7 +105668,7 @@ ngeo.interaction.MeasureArea = function(format, opt_options) {
 
   var options = opt_options !== undefined ? opt_options : {};
 
-  goog.base(this, options);
+  ngeo.interaction.Measure.call(this, options);
 
 
   /**
@@ -105685,7 +105688,7 @@ ngeo.interaction.MeasureArea = function(format, opt_options) {
   this.format = format;
 
 };
-goog.inherits(ngeo.interaction.MeasureArea, ngeo.interaction.Measure);
+ol.inherits(ngeo.interaction.MeasureArea, ngeo.interaction.Measure);
 
 
 /**
@@ -105744,7 +105747,7 @@ ngeo.interaction.MeasureLength = function(format, opt_options) {
 
   var options = opt_options !== undefined ? opt_options : {};
 
-  goog.base(this, options);
+  ngeo.interaction.Measure.call(this, options);
 
 
   /**
@@ -105764,7 +105767,7 @@ ngeo.interaction.MeasureLength = function(format, opt_options) {
   this.format = format;
 
 };
-goog.inherits(ngeo.interaction.MeasureLength, ngeo.interaction.Measure);
+ol.inherits(ngeo.interaction.MeasureLength, ngeo.interaction.Measure);
 
 
 /**
@@ -107310,7 +107313,7 @@ ngeo.interaction.MeasureAzimut = function(format, opt_options) {
 
   var options = opt_options !== undefined ? opt_options : {};
 
-  goog.base(this, options);
+  ngeo.interaction.Measure.call(this, options);
 
 
   /**
@@ -107327,7 +107330,7 @@ ngeo.interaction.MeasureAzimut = function(format, opt_options) {
   this.format = format;
 
 };
-goog.inherits(ngeo.interaction.MeasureAzimut, ngeo.interaction.Measure);
+ol.inherits(ngeo.interaction.MeasureAzimut, ngeo.interaction.Measure);
 
 
 /**
@@ -107414,7 +107417,7 @@ ngeo.interaction.MeasureAzimut.getAzimut = function(line) {
  */
 ngeo.interaction.DrawAzimut = function(options) {
 
-  goog.base(this, {
+  ol.interaction.Pointer.call(this, {
     handleDownEvent: ngeo.interaction.DrawAzimut.handleDownEvent_,
     handleEvent: ngeo.interaction.DrawAzimut.handleEvent_,
     handleUpEvent: ngeo.interaction.DrawAzimut.handleUpEvent_
@@ -107484,7 +107487,7 @@ ngeo.interaction.DrawAzimut = function(options) {
       ol.Object.getChangeEventType(ol.interaction.InteractionProperty.ACTIVE),
       this.updateState_, this);
 };
-goog.inherits(ngeo.interaction.DrawAzimut, ol.interaction.Pointer);
+ol.inherits(ngeo.interaction.DrawAzimut, ol.interaction.Pointer);
 
 
 /**
@@ -107698,7 +107701,7 @@ ngeo.interaction.DrawAzimut.prototype.finishDrawing_ = function() {
  * @inheritDoc
  */
 ngeo.interaction.DrawAzimut.prototype.setMap = function(map) {
-  goog.base(this, 'setMap', map);
+  ol.interaction.Pointer.prototype.setMap.call(this, map);
   this.updateState_();
 };
 
@@ -122176,7 +122179,8 @@ ngeo.format.FeatureHashLegacyProperties_ = {};
  * @export
  */
 ngeo.format.FeatureHash = function(opt_options) {
-  goog.base(this);
+
+  ol.format.TextFeature.call(this);
 
   var options = opt_options !== undefined ? opt_options : {};
 
@@ -122226,7 +122230,7 @@ ngeo.format.FeatureHash = function(opt_options) {
   ngeo.format.FeatureHashLegacyProperties_ = (options.propertiesType !== undefined) &&  options.propertiesType;
 
 };
-goog.inherits(ngeo.format.FeatureHash, ol.format.TextFeature);
+ol.inherits(ngeo.format.FeatureHash, ol.format.TextFeature);
 
 
 /**
@@ -123324,9 +123328,9 @@ goog.require('ol.format.XML');
  * @export
  */
 ngeo.format.XSDAttribute = function() {
-  goog.base(this);
+  ol.format.XML.call(this);
 };
-goog.inherits(ngeo.format.XSDAttribute, ol.format.XML);
+ol.inherits(ngeo.format.XSDAttribute, ol.format.XML);
 
 
 /**
@@ -123335,7 +123339,7 @@ goog.inherits(ngeo.format.XSDAttribute, ol.format.XML);
  */
 ngeo.format.XSDAttribute.prototype.read = function(source) {
   return /** @type {Array.<ngeox.Attribute>} */ (
-    goog.base(this, 'read', source)
+    ol.format.XML.prototype.read.call(this, source)
   );
 };
 
@@ -123530,7 +123534,7 @@ ngeo.interaction.MobileDrawProperty = {
  */
 ngeo.interaction.MobileDraw = function(options) {
 
-  goog.base(this, {
+  ol.interaction.Interaction.call(this, {
     handleEvent: goog.functions.TRUE
   });
 
@@ -123605,7 +123609,7 @@ ngeo.interaction.MobileDraw = function(options) {
   this.set(ngeo.interaction.MobileDrawProperty.VALID, false);
 
 };
-goog.inherits(ngeo.interaction.MobileDraw, ol.interaction.Interaction);
+ol.inherits(ngeo.interaction.MobileDraw, ol.interaction.Interaction);
 
 
 /**
@@ -123620,7 +123624,7 @@ ngeo.interaction.MobileDraw.prototype.setMap = function(map) {
     }
   }
 
-  goog.base(this, 'setMap', map);
+  ol.interaction.Interaction.prototype.setMap.call(this, map);
 
   if (map) {
     this.changeEventKey_ = ol.events.listen(map.getView(),
@@ -123988,11 +123992,11 @@ ngeo.interaction.MeasureLengthMobile = function(format, opt_options) {
 
   goog.object.extend(options, {displayHelpTooltip: false});
 
-  goog.base(this, format, options);
+  ngeo.interaction.MeasureLength.call(this, format, options);
 
 };
-goog.inherits(ngeo.interaction.MeasureLengthMobile,
-              ngeo.interaction.MeasureLength);
+ol.inherits(
+  ngeo.interaction.MeasureLengthMobile, ngeo.interaction.MeasureLength);
 
 
 /**
@@ -124029,10 +124033,10 @@ ngeo.interaction.MeasurePointMobile = function(opt_options) {
 
   goog.object.extend(options, {displayHelpTooltip: false});
 
-  goog.base(this, options);
+  ngeo.interaction.Measure.call(this, options);
 
 };
-goog.inherits(ngeo.interaction.MeasurePointMobile, ngeo.interaction.Measure);
+ol.inherits(ngeo.interaction.MeasurePointMobile, ngeo.interaction.Measure);
 
 
 /**
@@ -124100,7 +124104,7 @@ goog.require('ol.structs.RBush');
  */
 ngeo.interaction.ModifyCircle = function(options) {
 
-  goog.base(this, {
+  ol.interaction.Pointer.call(this, {
     handleDownEvent: ngeo.interaction.ModifyCircle.handleDownEvent_,
     handleDragEvent: ngeo.interaction.ModifyCircle.handleDragEvent_,
     handleEvent: ngeo.interaction.ModifyCircle.handleEvent,
@@ -124189,7 +124193,7 @@ ngeo.interaction.ModifyCircle = function(options) {
       this.handleFeatureRemove_, this);
 
 };
-goog.inherits(ngeo.interaction.ModifyCircle, ol.interaction.Pointer);
+ol.inherits(ngeo.interaction.ModifyCircle, ol.interaction.Pointer);
 
 
 /**
@@ -124265,7 +124269,7 @@ ngeo.interaction.ModifyCircle.prototype.removeFeatureSegmentData_ = function(fea
  */
 ngeo.interaction.ModifyCircle.prototype.setMap = function(map) {
   this.overlay_.setMap(map);
-  goog.base(this, 'setMap', map);
+  ol.interaction.Pointer.prototype.setMap.call(this, map);
 };
 
 
@@ -124591,7 +124595,7 @@ goog.require('ol.source.Vector');
  */
 ngeo.interaction.ModifyRectangle = function(options) {
 
-  goog.base(this, {
+  ol.interaction.Pointer.call(this, {
     handleDownEvent: this.handleDown_,
     handleMoveEvent: this.handleMove_,
     handleDragEvent: this.handleDrag_,
@@ -124668,7 +124672,7 @@ ngeo.interaction.ModifyRectangle = function(options) {
   this.features_.forEach(this.addFeature_, this);
 
 };
-goog.inherits(ngeo.interaction.ModifyRectangle, ol.interaction.Pointer);
+ol.inherits(ngeo.interaction.ModifyRectangle, ol.interaction.Pointer);
 
 
 /**
@@ -124784,7 +124788,7 @@ ngeo.interaction.ModifyRectangle.prototype.removeFeature_ = function(feature) {
 ngeo.interaction.ModifyRectangle.prototype.setMap = function(map) {
   this.vectorPoints_.setMap(map);
   this.vectorPoints_.setVisible(false);
-  goog.base(this, 'setMap', map);
+  ol.interaction.Pointer.prototype.setMap.call(this, map);
 };
 
 
@@ -125066,12 +125070,12 @@ ngeo.interaction.Modify = function(options) {
   }));
 
 
-  goog.base(this, {
+  ol.interaction.Interaction.call(this, {
     handleEvent: goog.functions.TRUE
   });
 
 };
-goog.inherits(ngeo.interaction.Modify, ol.interaction.Interaction);
+ol.inherits(ngeo.interaction.Modify, ol.interaction.Interaction);
 
 
 /**
@@ -125080,7 +125084,7 @@ goog.inherits(ngeo.interaction.Modify, ol.interaction.Interaction);
  * @export
  */
 ngeo.interaction.Modify.prototype.setActive = function(active) {
-  goog.base(this, 'setActive', active);
+  ol.interaction.Interaction.prototype.setActive.call(this, active);
   this.setState_();
 };
 
@@ -125102,7 +125106,7 @@ ngeo.interaction.Modify.prototype.setMap = function(map) {
     }, this);
   }
 
-  goog.base(this, 'setMap', map);
+  ol.interaction.Interaction.prototype.setMap.call(this, map);
 
   if (map) {
     interactions.forEach(function(interaction) {
@@ -125250,7 +125254,7 @@ ngeo.RotateEventType = {
  */
 ngeo.RotateEvent = function(type, feature) {
 
-  goog.base(this, type);
+  ol.events.Event.call(this, type);
 
   /**
    * The feature being rotated.
@@ -125260,7 +125264,7 @@ ngeo.RotateEvent = function(type, feature) {
   this.feature = feature;
 
 };
-goog.inherits(ngeo.RotateEvent, ol.events.Event);
+ol.inherits(ngeo.RotateEvent, ol.events.Event);
 
 
 /**
@@ -125357,14 +125361,14 @@ ngeo.interaction.Rotate = function(options) {
    */
   this.centerFeatures_ = {};
 
-  goog.base(this, {
+  ol.interaction.Pointer.call(this, {
     handleDownEvent: this.handleDown_,
     handleDragEvent: this.handleDrag_,
     handleUpEvent: this.handleUp_
   });
 
 };
-goog.inherits(ngeo.interaction.Rotate, ol.interaction.Pointer);
+ol.inherits(ngeo.interaction.Rotate, ol.interaction.Pointer);
 
 
 /**
@@ -125379,7 +125383,7 @@ ngeo.interaction.Rotate.prototype.setActive = function(active) {
     this.keyPressListenerKey_ = null;
   }
 
-  goog.base(this, 'setActive', active);
+  ol.interaction.Pointer.prototype.setActive.call(this, active);
 
   if (active) {
     this.keyPressListenerKey_ = goog.events.listen(
@@ -125461,7 +125465,7 @@ ngeo.interaction.Rotate.prototype.removeFeature_ = function(feature) {
  */
 ngeo.interaction.Rotate.prototype.setMap = function(map) {
   this.overlay_.setMap(map);
-  goog.base(this, 'setMap', map);
+  ol.interaction.Pointer.prototype.setMap.call(this, map);
 };
 
 
@@ -126110,9 +126114,10 @@ ngeo.interaction.Translate = function(options) {
    */
   this.centerFeatures_ = {};
 
-  goog.base(this, /** @type {olx.interaction.TranslateOptions} */ (options));
+  ol.interaction.Translate.call(
+    this, /** @type {olx.interaction.TranslateOptions} */ (options));
 };
-goog.inherits(ngeo.interaction.Translate, ol.interaction.Translate);
+ol.inherits(ngeo.interaction.Translate, ol.interaction.Translate);
 
 
 /**
@@ -126127,7 +126132,7 @@ ngeo.interaction.Translate.prototype.setActive = function(active) {
     this.keyPressListenerKey_ = null;
   }
 
-  goog.base(this, 'setActive', active);
+  ol.interaction.Translate.prototype.setActive.call(this, active);
 
   if (active) {
     this.keyPressListenerKey_ = goog.events.listen(
@@ -126156,7 +126161,7 @@ ngeo.interaction.Translate.prototype.setMap = function(map) {
     this.vectorLayer_.setMap(null);
   }
 
-  goog.base(this, 'setMap', map);
+  ol.interaction.Translate.prototype.setMap.call(this, map);
 
   if (map) {
     this.vectorLayer_.setMap(map);
@@ -126346,7 +126351,7 @@ ngeo.MenuEventType = {
  */
 ngeo.MenuEvent = function(type, action) {
 
-  goog.base(this, type);
+  ol.events.Event.call(this, type);
 
   /**
    * The action name that was clicked.
@@ -126356,7 +126361,7 @@ ngeo.MenuEvent = function(type, action) {
   this.action = action;
 
 };
-goog.inherits(ngeo.MenuEvent, ol.events.Event);
+ol.inherits(ngeo.MenuEvent, ol.events.Event);
 
 
 /**
@@ -126446,10 +126451,10 @@ ngeo.Menu = function(menuOptions, opt_overlayOptions) {
 
   options.element = contentEl[0];
 
-  goog.base(this, options);
+  ol.Overlay.call(this, options);
 
 };
-goog.inherits(ngeo.Menu, ol.Overlay);
+ol.inherits(ngeo.Menu, ol.Overlay);
 
 
 /**
@@ -126473,7 +126478,7 @@ ngeo.Menu.prototype.setMap = function(map) {
     olKeys.length = 0;
   }
 
-  goog.base(this, 'setMap', map);
+  ol.Overlay.prototype.setMap.call(this, map);
 
   if (map) {
     this.actions_.forEach(function(action) {
@@ -126642,10 +126647,10 @@ ngeo.Popover = function(opt_options) {
 
   options.element = $('<div />')[0];
 
-  goog.base(this, options);
+  ol.Overlay.call(this, options);
 
 };
-goog.inherits(ngeo.Popover, ol.Overlay);
+ol.inherits(ngeo.Popover, ol.Overlay);
 
 
 /**
@@ -126665,7 +126670,7 @@ ngeo.Popover.prototype.setMap = function(map) {
     $(element).popover('destroy');
   }
 
-  goog.base(this, 'setMap', map);
+  ol.Overlay.prototype.setMap.call(this, map);
 
   if (map) {
     var contentEl = this.contentEl_;
@@ -127197,13 +127202,14 @@ goog.require('ngeo');
  * Service to generate and download a CSV file from tabular data.
  * Column headers are translated using {@link angularGettext.Catalog}.
  *
+ * @param {angular.$injector} $injector Main injector.
  * @param {angularGettext.Catalog} gettextCatalog Gettext service.
  * @constructor
  * @ngdoc service
  * @ngname ngeoCsvDownload
  * @ngInject
  */
-ngeo.CsvDownload = function(gettextCatalog) {
+ngeo.CsvDownload = function($injector, gettextCatalog) {
 
   /**
    * @type {angularGettext.Catalog}
@@ -127212,18 +127218,44 @@ ngeo.CsvDownload = function(gettextCatalog) {
   this.gettextCatalog_ = gettextCatalog;
 
   /**
-   * Separator character.
+   * File extension of the CSV file.
    * @type {string}
    * @private
    */
-  this.separator_ = ',';
+  this.encoding_ = $injector.has('ngeoCsvEncoding') ?
+    $injector.get('ngeoCsvEncoding') : 'utf-8';
+
+  /**
+   * File extension of the CSV file.
+   * @type {string}
+   * @private
+   */
+  this.extension_ = $injector.has('ngeoCsvExtension') ?
+    $injector.get('ngeoCsvExtension') : '.csv';
+
+  /**
+   * Whether to include the header in the exported file or not.
+   * @type {boolean}
+   * @private
+   */
+  this.includeHeader_ = $injector.has('ngeoCsvIncludeHeader') ?
+    $injector.get('ngeoCsvIncludeHeader') : true;
 
   /**
    * Quote character.
    * @type {string}
    * @private
    */
-  this.quote_ = '"';
+  this.quote_ = $injector.has('ngeoCsvQuote') ?
+    $injector.get('ngeoCsvQuote') : '"';
+
+  /**
+   * Separator character.
+   * @type {string}
+   * @private
+   */
+  this.separator_ = $injector.has('ngeoCsvSeparator') ?
+    $injector.get('ngeoCsvSeparator') : ',';
 };
 
 
@@ -127252,7 +127284,7 @@ ngeo.CsvDownload.prototype.generateCsv = function(data, columnDefs) {
     return this.getRow_(rowValues);
   }.bind(this));
 
-  return header + dataRows.join('');
+  return this.includeHeader_ ? header + dataRows.join('') : dataRows.join('');
 };
 
 
@@ -127284,7 +127316,7 @@ ngeo.CsvDownload.prototype.getRow_ = function(values) {
  *
  * @param {Array.<Object>} data Entries/objects to include in the CSV.
  * @param {Array.<ngeox.GridColumnDef>} columnDefs Column definitions.
- * @param {string} fileName The CSV file name.
+ * @param {string} fileName The CSV file name, without the extension.
  * @export
  */
 ngeo.CsvDownload.prototype.startDownload = function(data, columnDefs, fileName) {
@@ -127293,9 +127325,10 @@ ngeo.CsvDownload.prototype.startDownload = function(data, columnDefs, fileName) 
   var hiddenElement = document.createElement('a');
   // FF requires the link to be in the body
   document.body.appendChild(hiddenElement);
-  hiddenElement.href = 'data:attachment/csv,' + encodeURI(fileContent);
+  hiddenElement.href = 'data:attachment/csv;charset=' + this.encoding_ +
+    ',' + encodeURI(fileContent);
   hiddenElement.target = '_blank';
-  hiddenElement.download = fileName;
+  hiddenElement.download = fileName + this.extension_;
   hiddenElement.click();
   document.body.removeChild(hiddenElement);
 };
@@ -131194,7 +131227,7 @@ goog.require('ngeo');
    * @ngInject
    */
   var runner = function($templateCache) {
-    $templateCache.put('ngeo/attributes.html', '<fieldset ng-disabled=attrCtrl.disabled> <div class=form-group ng-repeat="attribute in ::attrCtrl.attributes"> <div ng-if="attribute.type !== \'geometry\'"> <label>{{::attribute.required ? "* " : ""}}{{ ::attribute.name }}:</label> <div ng-switch=attribute.type> <select name={{::attribute.name}} ng-required=attribute.required ng-switch-when=select ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <option ng-repeat="attribute in ::attribute.choices" value="{{ ::attribute }}"> {{ ::attribute }} </option> </select> <input name={{::attribute.name}} ng-required=attribute.required ng-switch-when=date ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{::attribute.name}} ng-required=attribute.required ng-switch-when=datetime ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{::attribute.name}} ng-required=attribute.required ng-switch-default ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <div ng-show="form.$submitted || form[attribute.name].$touched"> <p class=text-danger ng-show=form[attribute.name].$error.required> {{\'This field is required\' | translate}} </p> </div> </div> </div> </div> </fieldset> ');
+    $templateCache.put('ngeo/attributes.html', '<fieldset ng-disabled=attrCtrl.disabled> <div class=form-group ng-repeat="attribute in ::attrCtrl.attributes"> <div ng-if="attribute.type !== \'geometry\'"> <label>{{::attribute.required ? "* " : ""}}{{ ::attribute.name | translate }}:</label> <div ng-switch=attribute.type> <select name={{::attribute.name}} ng-required=attribute.required ng-switch-when=select ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <option ng-repeat="attribute in ::attribute.choices" value="{{ ::attribute }}"> {{ ::attribute }} </option> </select> <input name={{::attribute.name}} ng-required=attribute.required ng-switch-when=date ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{::attribute.name}} ng-required=attribute.required ng-switch-when=datetime ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{::attribute.name}} ng-required=attribute.required ng-switch-default ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <div ng-show="form.$submitted || form[attribute.name].$touched"> <p class=text-danger ng-show=form[attribute.name].$error.required> {{\'This field is required\' | translate}} </p> </div> </div> </div> </div> </fieldset> ');
     $templateCache.put('ngeo/popup.html', '<h4 class="popover-title ngeo-popup-title"> <span ng-bind-html=title></span> <button type=button class=close ng-click="open = false"> &times;</button> </h4> <div class=popover-content ng-bind-html=content></div> ');
     $templateCache.put('ngeo/grid.html', '<div class=table-container> <table float-thead=ctrl.floatTheadConfig ng-model=ctrl.configuration.data class="table table-bordered table-striped table-hover"> <thead class=table-header> <tr> <th ng-repeat="columnDefs in ctrl.configuration.columnDefs" ng-click=ctrl.sort(columnDefs.name)>{{columnDefs.name | translate}} <i ng-show="ctrl.sortedBy !== columnDefs.name" class="fa fa-fw"></i> <i ng-show="ctrl.sortedBy === columnDefs.name && ctrl.sortAscending === true" class="fa fa-caret-up"></i> <i ng-show="ctrl.sortedBy === columnDefs.name && ctrl.sortAscending === false" class="fa fa-caret-down"></i> </th> </tr> </thead> <tbody> <tr ng-repeat="attributes in ctrl.configuration.data" ng-class="[\'row-\' + ctrl.configuration.getRowUid(attributes), ctrl.configuration.isRowSelected(attributes) ? \'active\': \'\']" ng-click="ctrl.clickRow(attributes, $event)" ng-mousedown=ctrl.preventTextSelection($event)> <td ng-repeat="columnDefs in ctrl.configuration.columnDefs" ng-bind-html="attributes[columnDefs.name] | ngeoTrustHtml"></td> </tr> </tbody> </table> </div> ');
     $templateCache.put('ngeo/scaleselector.html', '<div class="btn-group btn-block" ng-class="::{\'dropup\': scaleselectorCtrl.options.dropup}"> <button type=button class="btn btn-default dropdown-toggle" data-toggle=dropdown aria-expanded=false> <span ng-bind-html=scaleselectorCtrl.currentScale|ngeoScalify></span>&nbsp;<i class=caret></i> </button> <ul class="dropdown-menu btn-block" role=menu> <li ng-repeat="zoomLevel in ::scaleselectorCtrl.zoomLevels"> <a href ng-click=scaleselectorCtrl.changeZoom(zoomLevel) ng-bind-html=::scaleselectorCtrl.getScale(zoomLevel)|ngeoScalify> </a> </li> </ul> </div> ');
