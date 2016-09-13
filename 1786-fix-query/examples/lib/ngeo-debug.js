@@ -85795,22 +85795,9 @@ ngeo.Query.prototype.issue = function(map, object) {
 ngeo.Query.prototype.issueIdentifyFeaturesRequests_ = function(map, coordinate) {
   var sources = this.getQueryableSources_(map, false);
 
-  // Launch requests only if there are queryable sources
-  var doneRequest = false;
-
-  if (Object.keys(/** @type {!Object} */ (sources.wms)).length) {
-    this.doGetFeatureInfoRequests_(sources.wms, coordinate, map);
-    doneRequest = true;
-  }
-
-  if (Object.keys(/** @type {!Object} */ (sources.wfs)).length) {
-    this.doGetFeatureRequestsWithCoordinate_(sources.wfs, coordinate, map);
-    doneRequest = true;
-  }
-
-  if (doneRequest) {
-    this.updatePendingState_();
-  }
+  this.doGetFeatureInfoRequests_(sources.wms, coordinate, map);
+  this.doGetFeatureRequestsWithCoordinate_(sources.wfs, coordinate, map);
+  this.updatePendingState_();
 };
 
 
@@ -85824,11 +85811,8 @@ ngeo.Query.prototype.issueIdentifyFeaturesRequests_ = function(map, coordinate) 
  */
 ngeo.Query.prototype.issueGetFeatureRequests_ = function(map, extent) {
   var sources = this.getQueryableSources_(map, true);
-  // Launch a request only if there are queryable sources
-  if (Object.keys(/** @type {!Object} */ (sources.wfs)).length) {
-    this.doGetFeatureRequests_(sources.wfs, extent, map);
-    this.updatePendingState_();
-  }
+  this.doGetFeatureRequests_(sources.wfs, extent, map);
+  this.updatePendingState_();
 };
 
 
@@ -85898,9 +85882,6 @@ ngeo.Query.prototype.getQueryableSources_ = function(map, wfsOnly) {
         }
       }
 
-      item['resultSource'].pending = true;
-      item['resultSource'].queried = true;
-
       if (item.source.wfsQuery) {
         // use WFS GetFeature
         url = item.source.urlWfs || item.source.wmsSource.getUrl();
@@ -85924,8 +85905,6 @@ ngeo.Query.prototype.getQueryableSources_ = function(map, wfsOnly) {
           this.pushSourceIfUnique_(item, wmsItemsByUrl[url]);
         } else {
           // TODO - support other kinds of infoFormats
-          item['resultSource'].pending = false;
-          item['resultSource'].queried = false;
         }
       }
     }
@@ -85973,6 +85952,12 @@ ngeo.Query.prototype.doGetFeatureInfoRequests_ = function(
   var resolution = /** @type {number} */(view.getResolution());
 
   angular.forEach(wmsItemsByUrl, function(items) {
+
+    items.forEach(function(item) {
+      item['resultSource'].pending = true;
+      item['resultSource'].queried = true;
+    }.bind(this));
+
     var infoFormat = items[0].source.infoFormat;
     var wmsGetFeatureInfoUrl = items[0].source.wmsSource.getGetFeatureInfoUrl(
         coordinate, resolution, projCode, {
@@ -86043,10 +86028,11 @@ ngeo.Query.prototype.doGetFeatureRequests_ = function(
 
       if (layers.length == 0 || layers[0] === '') {
         // do not query source if no valid layers
-        item['resultSource'].pending = false;
-        item['resultSource'].queried = false;
         return;
       }
+
+      item['resultSource'].pending = true;
+      item['resultSource'].queried = true;
 
       /** @type{olx.format.WFSWriteGetFeatureOptions} */
       var getFeatureOptions = {
@@ -126431,7 +126417,7 @@ goog.require('ngeo');
   var runner = function($templateCache) {
     $templateCache.put('ngeo/attributes.html', '<fieldset ng-disabled=attrCtrl.disabled> <div class=form-group ng-repeat="attribute in ::attrCtrl.attributes"> <div ng-if="attribute.type !== \'geometry\'"> <label class=control-label>{{ ::attribute.name | translate }} <span class=text-muted>{{::attribute.required ? "*" : ""}}</span></label> <div ng-switch=attribute.type> <select name={{::attribute.name}} ng-required=attribute.required ng-switch-when=select ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <option ng-repeat="attribute in ::attribute.choices" value="{{ ::attribute }}"> {{ ::attribute }} </option> </select> <input name={{::attribute.name}} ng-required=attribute.required ng-switch-when=date ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{::attribute.name}} ng-required=attribute.required ng-switch-when=datetime ui-date=attrCtrl.dateOptions ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <input name={{::attribute.name}} ng-required=attribute.required ng-switch-default ng-model=attrCtrl.properties[attribute.name] ng-change=attrCtrl.handleInputChange(attribute.name); class=form-control type=text> <div ng-show="form.$submitted || form[attribute.name].$touched"> <p class=text-danger ng-show=form[attribute.name].$error.required> {{\'This field is required\' | translate}} </p> </div> </div> </div> </div> </fieldset> ');
     $templateCache.put('ngeo/popup.html', '<h4 class="popover-title ngeo-popup-title"> <span ng-bind-html=title></span> <button type=button class=close ng-click="open = false"> &times;</button> </h4> <div class=popover-content ng-bind-html=content></div> ');
-    $templateCache.put('ngeo/grid.html', '<div class=ngeo-grid-table-container> <table float-thead=ctrl.floatTheadConfig ng-model=ctrl.configuration.data class="table table-bordered table-striped table-hover"> <thead class=table-header> <tr> <th ng-repeat="columnDefs in ctrl.configuration.columnDefs" ng-click=ctrl.sort(columnDefs.name)>{{columnDefs.name | translate}} <i ng-show="ctrl.sortedBy !== columnDefs.name" class="fa fa-fw"></i> <i ng-show="ctrl.sortedBy === columnDefs.name && ctrl.sortAscending === true" class="fa fa-caret-up"></i> <i ng-show="ctrl.sortedBy === columnDefs.name && ctrl.sortAscending === false" class="fa fa-caret-down"></i> </th> </tr> </thead> <tbody> <tr ng-repeat="attributes in ctrl.configuration.data" ng-class="[\'row-\' + ctrl.configuration.getRowUid(attributes), ctrl.configuration.isRowSelected(attributes) ? \'active\': \'\']" ng-click="ctrl.clickRow(attributes, $event)" ng-mousedown=ctrl.preventTextSelection($event)> <td ng-repeat="columnDefs in ctrl.configuration.columnDefs" ng-bind-html="attributes[columnDefs.name] | ngeoTrustHtml"></td> </tr> </tbody> </table> </div> ');
+    $templateCache.put('ngeo/grid.html', '<div class=ngeo-grid-table-container> <table float-thead=ctrl.floatTheadConfig ng-model=ctrl.configuration.data class="table table-bordered table-striped table-hover"> <thead class=table-header> <tr> <th ng-repeat="columnDefs in ctrl.configuration.columnDefs" ng-click=ctrl.sort(columnDefs.name)>{{columnDefs.name | translate}} <i ng-show="ctrl.sortedBy !== columnDefs.name" class="fa fa-fw"></i> <i ng-show="ctrl.sortedBy === columnDefs.name && ctrl.sortAscending === true" class="fa fa-caret-up"></i> <i ng-show="ctrl.sortedBy === columnDefs.name && ctrl.sortAscending === false" class="fa fa-caret-down"></i> </th> </tr> </thead> <tbody> <tr ng-repeat="attributes in ctrl.configuration.data" ng-class="[\'row-\' + ctrl.configuration.getRowUid(attributes), ctrl.configuration.isRowSelected(attributes) ? \'ngeo-grid-active\': \'\']" ng-click="ctrl.clickRow(attributes, $event)" ng-mousedown=ctrl.preventTextSelection($event)> <td ng-repeat="columnDefs in ctrl.configuration.columnDefs" ng-bind-html="attributes[columnDefs.name] | ngeoTrustHtml"></td> </tr> </tbody> </table> </div> ');
     $templateCache.put('ngeo/scaleselector.html', '<div class="btn-group btn-block" ng-class="::{\'dropup\': scaleselectorCtrl.options.dropup}"> <button type=button class="btn btn-default dropdown-toggle" data-toggle=dropdown aria-expanded=false> <span ng-bind-html=scaleselectorCtrl.currentScale|ngeoScalify></span>&nbsp;<i class=caret></i> </button> <ul class="dropdown-menu btn-block" role=menu> <li ng-repeat="zoomLevel in ::scaleselectorCtrl.zoomLevels"> <a href ng-click=scaleselectorCtrl.changeZoom(zoomLevel) ng-bind-html=::scaleselectorCtrl.getScale(zoomLevel)|ngeoScalify> </a> </li> </ul> </div> ');
     $templateCache.put('ngeo/datepicker.html', '<div class=ngeo-datepicker> <form name=dateForm class=ngeo-datepicker-form novalidate> <div ng-if="::datepickerCtrl.time.widget === \'datepicker\'"> <div class=ngeo-datepicker-start-date> <span ng-if="::datepickerCtrl.time.mode === \'range\'" translate>From:</span> <span ng-if="::datepickerCtrl.time.mode !== \'range\'" translate>Date:</span> <input name=sdate ui-date=datepickerCtrl.sdateOptions ng-model=datepickerCtrl.sdate required> </div> <div class=ngeo-datepicker-end-date ng-if="::datepickerCtrl.time.mode === \'range\'"> <span translate>To:</span> <input name=edate ui-date=datepickerCtrl.edateOptions ng-model=datepickerCtrl.edate required> </div> </div> </form> </div> ');
     $templateCache.put('ngeo/layertree.html', '<span ng-if=::!layertreeCtrl.isRoot>{{::layertreeCtrl.node.name}}</span> <input type=checkbox ng-if="::layertreeCtrl.node && !layertreeCtrl.node.children" ng-model=layertreeCtrl.getSetActive ng-model-options="{getterSetter: true}"> <ul ng-if=::layertreeCtrl.node.children> <li ng-repeat="node in ::layertreeCtrl.node.children" ngeo-layertree=::node ngeo-layertree-notroot ngeo-layertree-map=layertreeCtrl.map ngeo-layertree-nodelayerexpr=layertreeCtrl.nodelayerExpr ngeo-layertree-listenersexpr=layertreeCtrl.listenersExpr> </li> </ul> ');
