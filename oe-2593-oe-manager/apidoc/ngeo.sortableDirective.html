@@ -67,7 +67,7 @@ It is required.</p>
 <p>This directives uses <code>$watchCollection</code> to watch the &quot;sortable&quot; array. So
 if some outside code adds/removes elements to/from the &quot;sortable&quot; array,
 the &quot;ngeoSortable&quot; directive will pick it up.</p>
-<p>See our live example: <code>../examples/layerorder.html</code></p>
+<p>See our live example: <a href="../examples/layerorder.html">../examples/layerorder.html</a></p>
 </div>
 
 
@@ -92,6 +92,8 @@ the &quot;ngeoSortable&quot; directive will pick it up.</p>
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -118,6 +120,14 @@ the &quot;ngeoSortable&quot; directive will pick it up.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
@@ -128,7 +138,7 @@ the &quot;ngeoSortable&quot; directive will pick it up.</p>
 
         <tr>
             
-                <td class="name"><code>ngeo-sortable</code></td>
+                <td class="name"><code>ngeo-sortable-options</code></td>
             
 
             <td class="type">
@@ -141,10 +151,86 @@ the &quot;ngeoSortable&quot; directive will pick it up.</p>
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
             <td class="description last">The options.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ngeo-sortable-callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function">function</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Callback function called after the move end. The Function will be called
+    with the element and the sort array as arguments.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>ngeo-sortable-callback-ctx</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Context to apply at
+    the call of the callback function.</td>
         </tr>
 
     
@@ -187,7 +273,7 @@ the &quot;ngeoSortable&quot; directive will pick it up.</p>
     <dd class="tag-source"><ul class="dummy"><li>
     
         <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/sortable.js">src/directives/sortable.js</a>,
-        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/sortable.js#L56">line 56</a>
+        <a href="https://github.com/camptocamp/ngeo/blob/master/src/directives/sortable.js#L61">line 61</a>
     </li></ul></dd>
     
 
