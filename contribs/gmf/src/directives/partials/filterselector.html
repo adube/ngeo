@@ -10,10 +10,9 @@
     <option value="" translate>-- Layer to filter --</option>
   </select>
 
-  <ngeo-filter
-      ng-if="fsCtrl.customRules && fsCtrl.directedRules && fsCtrl.readyDataSource"
-      custom-rules="fsCtrl.customRules"
-      datasource="fsCtrl.readyDataSource"
-      directed-rules="fsCtrl.directedRules">
-  </ngeo-filter>
+  <!-- This is where the ngeo.Filter directive will go... -->
+  <div ng-if="fsCtrl.readyDataSource">
+    {{ fsCtrl.readyDataSource.name }} is ready to be filtered!
+  </div>
+
 </div>
